@@ -1,2 +1,2 @@
 # Projet_stratego
-aaa
+Rules
