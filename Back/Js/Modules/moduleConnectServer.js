@@ -20,3 +20,7 @@ io.on('connection',(socket) =>{
 	});
 });
 
+
+http.listen(4200, () => {
+  console.log('Serveur lancé sur le port 4200');
+});
