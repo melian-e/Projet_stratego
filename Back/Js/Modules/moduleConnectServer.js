@@ -3,10 +3,10 @@ const app = express();
 const http = require('http').Server(app);
 const io=require('socket.io')(http);
 
-app.use(express.static(_dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
+app.use(express.static(__dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
 
 app.get('/', (req,res) =>{
-	res.sendFile(_dirname + '/project/front/html/frontpage.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/project/front/html/frontpage.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 });
 

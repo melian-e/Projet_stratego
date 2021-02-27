@@ -69,7 +69,12 @@ let winnerAttack = function(attaquant, attaque){
     }
 
     if(attaque.getPower() == -1){       // attaque de bombe
-        return (attaquant.getPower() == 3)? attaquant : undefined;
+        if( game.getBombRules() == true) {          // A contre check
+            return (attaquant.getPower() == 3)? attaquant : attaque;
+        }
+        else {
+            return (attaquant.getPower() == 3)? attaquant : undefined;
+        }
     }
 
     return (attaquant.getPower() > attaque.getPower()) ? attaquant : attaque;
