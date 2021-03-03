@@ -3,6 +3,16 @@ class GameGrid {
         this.grid = Array(10);
         for (let i =0; i< 10; i++){
             grid[i] = Array(10);
+            for(let j = 0; j < 10; j++) {
+                boardGame.grid[i][j] = new Entite(0);
+            }
+        }
+    
+        for(let x = 4; x < 6; x++){
+            for(let y = 2; y < 4; y++){
+                boardGame.grid[x][y] = new Entite(2);
+                boardGame.grid[x][y+4] = new Entite(2);
+            }
         }
     }
     getBox(x, y){
