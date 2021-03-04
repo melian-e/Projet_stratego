@@ -24,3 +24,10 @@ io.on('connection',(socket) =>{
 http.listen(4200, () => {
   console.log('Serveur lancé sur le port 4200');
 });
+
+const con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "projet_stratego"
+})
