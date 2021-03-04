@@ -30,4 +30,4 @@ const con = mysql.createConnection({
 	user: "root",
 	password: "",
 	database: "projet_stratego"
-})
+});
