@@ -123,5 +123,104 @@ QUnit.test('test de attack', function(assert){
 });
 
 QUnit.test('test de move', function(assert){
-    assert.ok(true);
+    let partie1 = new Game(123, 456, true, true, true);
+    let partie2 = new Game(123, 456, false, false, false);
+
+    let piece = new Piece(0, partie1.player1);
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 1, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    piece.power = -1;
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 1, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    piece.power = 4;
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 2, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    piece.owner = partie1.player2;
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 1, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    piece.owner = partie1.player1;
+    partie1.grid[2][3] = piece;
+    partie1.grid[1][3] = new Piece(5, partie1.player1);
+    move.eventMove(partie1, partie1.grid[2][3], 1, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    move.eventMove(partie1, partie1.grid[2][3], 0, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    piece.power = 2;
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 1, 2);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    move.eventMove(partie1, partie1.grid[2][3], 6, 3);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    partie1.grid[2][6] = new Piece(6,456); 
+    move.eventMove(partie1, partie1.grid[2][3], 2, 6);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    partie2.grid = partie1.grid;
+    move.eventMove(partie2, partie2.grid[2][3], 2, 6);
+    assert.equal(2, partie2.getHistoryMove(0).length);
+    assert.equal(1, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,3));
+
+    piece.power = 5;
+    partie1.grid[2][3] = piece; 
+    move.eventMove(partie1, partie1.grid[2][3], 1, 2);
+    assert.equal([], partie1.getHistoryMove(0));
+    assert.equal(0, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,3));
+
+    move.eventMove(partie1, partie1.grid[2][3], 2, 2);
+    assert.equal(2, partie2.getHistoryMove(0).length);
+    assert.equal(1, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,3));
+    move.eventMove(partie1, partie1.grid[2][2], 2, 3);
+    assert.equal(3, partie2.getHistoryMove(0).length);
+    assert.equal(0, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,2));
+    move.eventMove(partie1, partie1.grid[2][3], 2, 2);
+    assert.equal(4, partie2.getHistoryMove(0).length);
+    assert.equal(1, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,3));
+    move.eventMove(partie1, partie1.grid[2][2], 2, 3);
+    assert.equal(5, partie2.getHistoryMove(0).length);
+    assert.equal(0, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,2));
+    move.eventMove(partie1, partie1.grid[2][3], 2, 2);
+    assert.equal(6, partie2.getHistoryMove(0).length);
+    assert.equal(1, partie2.getCurrentPlayer());
+    assert.equal(new Entite(0), partie2.getBox(2,3));
+    move.eventMove(partie1, partie1.grid[2][2], 2, 3);
+    assert.equal(6, partie2.getHistoryMove(0).length);
+    assert.equal(1, partie1.getCurrentPlayer());
+    assert.equal(piece, partie1.getBox(2,2));
+
 });

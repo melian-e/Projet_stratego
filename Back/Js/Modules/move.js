@@ -6,13 +6,13 @@ let move = (function(){
         return (piece.getCoord().x == x && piece.getCoord().y == y) ? false : true;
     }
     function isMyPiece(game, piece){    // Vérifie que la pièce que l'on veut bouger est bien la sienne
-        return (piece.getProprety() != game.getCurrentPlayer()) ? false : true;
+        return (piece.getProprety() != game.getCurrentPlayer()) ? false : true; // vérifier la val de piece.proprety
     }
     function isAuthorizedMove(boxEntity, currentPlayer){    // Vérifie que la case de destination est libre ou occupé par l'ennemi
         return (boxEntity.getOccupe() == 2 || 
         (boxEntity.getOccupe() == 1 && boxEntity.getProprety() == currentPlayer)) ? false : true;
     }
-    function isAlternation(game, piece, destinationCoord){  // Vérifie l'alternance sur 3 tours
+    function isAlternation(game, piece, destinationCoord){  // Vérifie l'alternance entre 2 cases
         let historyMove = game.getHistoryMove(game.getCurrentPlayer());
         let currentBox = historyMove.filter(elem => (elem[0] == piece.getPower() && elem[1] == piece.getCoord()));
         let destinationBox = historyMove.filter(elem => (elem[0] == piece.getPower() && elem[1] == destinationCoord));
