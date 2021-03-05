@@ -15,6 +15,15 @@ class GameGrid {
             }
         }
     }
+    superpose(table){
+        for(let x = 0; x < 10; x++){
+            for(let y = 0; y < 10; y++){
+                if(table[x][y] == 1){    // occupe par une pièce
+                    
+                }
+            }
+        }
+    }
     getBox(x, y){
         return this.grid[x][y];
     }

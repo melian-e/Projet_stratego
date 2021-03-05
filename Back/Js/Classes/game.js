@@ -16,6 +16,9 @@ class Game extends GameGrid {
     play(){
         this.currentPlayer = (this.currentPlayer + 1)%2;
     }
+    getPlayers(){
+        return [this.player1, this.player2];
+    }
     isFinished(){
         let allPieces = this.grid.allPiecesOnGrid();
             

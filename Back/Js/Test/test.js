@@ -1,3 +1,15 @@
+QUnit.test('prototype - method existance', function(assert) {
+    assert.equal(typeof GameGrid.prototype.getBox, 'function');
+    assert.equal(typeof GameGrid.prototype.move, 'function');
+    assert.equal(typeof Game.prototype.getCurrentPlayer, 'function');
+    assert.equal(typeof Game.prototype.play, 'function');
+  });
+  
+  QUnit.test('Game inherit from GameGrid', function(assert) {
+    assert.ok(Game.prototype instanceof GameGrid);
+  });
+
+
 QUnit.test('test de GameGrid', function(assert){
     let boardGame = new GameGrid();
 
@@ -40,6 +52,7 @@ QUnit.test('test de Game', function(assert){
     partie1.grid[9][0] = new Piece(0, 456);
     partie1.grid[7][0] = new Piece(8, 123);
 
+    assert.aqual([123,456], partie1.getPlayers());
     assert.ok(partie1.isFinished());
     assert.equal(456,partie1.getWinner());
     partie1.grid[8][0] = new Piece(8, 456);
