@@ -15,11 +15,11 @@ class GameGrid {
             }
         }
     }
-    superpose(table){
+    superpose(table, player){
         for(let x = 0; x < 10; x++){
             for(let y = 0; y < 10; y++){
-                if(table[x][y] == 1){    // occupe par une pièce
-                    
+                if(table[x][y] != 30){    // occupe par une pièce
+                    grid[x][y] = new Piece(table[x][y], player);
                 }
             }
         }
