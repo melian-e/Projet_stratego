@@ -47,7 +47,7 @@ let move = (function(){
 
                 if(canMove){
                     game.addMove(piece, new Coordonnees(x,y));
-                    piece.move(x,y);
+                    (game.isAttack(game.getCurrentPlayer(),x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
                     game.play();
                 }
             }

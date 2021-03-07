@@ -29,7 +29,6 @@ class Game extends GameGrid {
         red.every(elem => elem.power < 1) || red.every(elem => elem.power < 1)) ? true : false;
     }
     getWinner(){
-
         let allPieces = this.grid.allPiecesOnGrid();
             
         let red = allPieces.filter(elem => elem.proprety == this.player1);

@@ -27,9 +27,14 @@ class GameGrid {
     getBox(x, y){
         return this.grid[x][y];
     }
-    move(piece, x, y){  // A appeler avant de modifier les coordonnées de la pièce
+    move(piece, x, y){  
         this.grid[piece.getCoord().x][piece.getCoord().y] = new Entite(0);
         this.grid[x][y] = piece;
+        piece.move(x,y);
+    }
+    isAttack(currentPlayer,x,y){
+        return (this.grid[x][y].getOccupe() == 1 && 
+        this.grid[x][y].getProprety() != currentPlayer) ? true : false;
     }
     isObstacleOnTheWay(start, end){
         let obstacle = false;

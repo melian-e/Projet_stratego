@@ -18,7 +18,7 @@ let attack = (function(){
         return (attacker.getPower() > attacked.getPower()) ? attacker : attacked;
     }
 
-    return {
+    return{
         eventAttack(game, attacker, attacked){
             winner = winnerAttack(attacker, attacked);
             //attackAnimation(attacker, attacked, winner);
@@ -27,6 +27,7 @@ let attack = (function(){
             }
             else if(winner == attacker){
                 game.remove(attacked);
+                game.move(piece,attacked.getCoord().x,attacked.getCoord().y);
             }
             else {
                 game.remove(attacked);
