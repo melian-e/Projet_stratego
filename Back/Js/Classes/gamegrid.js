@@ -33,8 +33,8 @@ class GameGrid {
         piece.move(x,y);
     }
     isAttack(currentPlayer,x,y){
-        return (this.grid[x][y].getOccupe() == 1 && 
-        this.grid[x][y].getProprety() != currentPlayer) ? true : false;
+        return (this.grid[x][y].getOccupy() == 1 && 
+        this.grid[x][y].getOwner() != currentPlayer) ? true : false;
     }
     isObstacleOnTheWay(start, end){
         let obstacle = false;
@@ -47,10 +47,10 @@ class GameGrid {
             let y = smaller.y+1
             while(y < taller.y+1 && obstacle != true){
                 if(x == taller.x && y == taller.y){
-                    if(this.grid.getBox(x, y).occupe == 2) obstacle = true;
+                    if(this.grid.getBox(x, y).occupy == 2) obstacle = true;
                 }
                 else{
-                    if(this.grid.getBox(x, y).occupe != 0) obstacle = true;
+                    if(this.grid.getBox(x, y).occupy != 0) obstacle = true;
                 }
                 y++;
             }
@@ -63,7 +63,7 @@ class GameGrid {
         let entite = [];
     
         for (let i = 0; i < this.grid.length(); i++){
-            entite = entite.concat(this.grid[i].filter(elem => elem.occupe == 1));
+            entite = entite.concat(this.grid[i].filter(elem => elem.occupy == 1));
         }
 
         return entite;

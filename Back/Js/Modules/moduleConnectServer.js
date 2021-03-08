@@ -6,7 +6,7 @@ const io=require('socket.io')(http);
 const funcitons = require('../mainGame.js');
 
 
-app.use(express.static(__dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
+app.use(express.static(__dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à Lobbyir de /project/ .
 
 app.get('/', (req,res) =>{
 	res.sendFile(__dirname + '/project/front/html/frontpage.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
@@ -14,7 +14,7 @@ app.get('/', (req,res) =>{
 });
 
 let room = 0;
-let allCurrentsParts = Array();
+let allCurrentsGames = Array();
 
 io.on('connection',(socket) =>{
 	//console.log(socket);
@@ -24,7 +24,7 @@ io.on('connection',(socket) =>{
 		let table = funcitons.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 
 		if(table.length == 2) {				// 2 joueurs veulent jouer
-			funcitons.newGame(io.sockets.sockets,allCurrentsParts,'room'+room,socket);
+			funcitons.newGame(io.sockets.sockets,allCurrentsGames,'room'+room,socket);
 			room++;
 
 			// redirection vers la page de jeu
@@ -32,17 +32,17 @@ io.on('connection',(socket) =>{
 	});
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
-		funcitons.ready(table, socket.id, allCurrentsParts);
+		funcitons.ready(table, socket.id, allCurrentsGames);
 	});
 
 	socket.on('click', (xPiece, yPiece, xMove, yMove) => {
-		let part = funcitons.researchPart(socket.id, allCurrentsParts);
-		move.eventMove(part, part.getBox(xPiece, yPiece), xMove, yMove);
-		io.to(functions.researchRoom(socket.rooms)).emit('move', part.grid);	// Modifier pour avoir une table lisible du front
+		let Lobby = funcitons.researchGame(socket.id, allCurrentsGames);
+		move.eventMove(Lobby, Lobby.getBox(xPiece, yPiece), xMove, yMove);
+		io.to(functions.researchRoom(socket.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
 
-		if(part.isFinished()){
-			io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(part.getWinner()));	// Si la partie est terminé
-			functions.suppress(part,allCurrentsParts,io.sockets.sockets);
+		if(Lobby.isFinished()){
+			io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(Lobby.getWinner()));	// Si la partie est terminé
+			functions.suppress(Lobby,allCurrentsGames,io.sockets.sockets);
 		}
 	});
 

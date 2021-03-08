@@ -3,6 +3,12 @@ QUnit.test('prototype - method existance', function(assert) {
     assert.equal(typeof GameGrid.prototype.move, 'function');
     assert.equal(typeof Game.prototype.getCurrentPlayer, 'function');
     assert.equal(typeof Game.prototype.play, 'function');
+    assert.equal(typeof Piece.prototype.move, 'function');
+    assert.equal(typeof Piece.prototype.getPower, 'function');
+    assert.equal(typeof Piece.prototype.getCoord, 'function');
+    assert.equal(typeof Piece.prototype.getOwner, 'function');
+    assert.equal(typeof Piece.prototype.getOcupy, 'function');
+    assert.equal(typeof Piece.prototype.getVisible, 'function');
   });
   
   QUnit.test('Game inherit from GameGrid', function(assert) {
@@ -23,6 +29,7 @@ QUnit.test('test de GameGrid', function(assert){
 
     let piece = boardGame.grid[5][3];
     boardGame.move(boardGame.grid[5][3], 2, 3);
+    piece.coord = new Coordonnees(2,3);
 
     assert.equal(new Entite(0), boardGame.grid[5][3]);
     assert.equal(piece, boardGame.grid[2][3]);
@@ -37,12 +44,39 @@ QUnit.test('test de GameGrid', function(assert){
     assert.ok(!boardGame.isObstacleOnTheWay(new Coordonnees(2, 3), new Coordonnees(3,3)));
     assert.ok(!boardGame.isObstacleOnTheWay(new Coordonnees(0, 3), new Coordonnees(2,3)));    
     
-    piece.coord = new Coordonnees(2,3);
+    bordGame[6][3]  = new Piece(4,123);
+    assert.ok(!boardGame.isAttack(123, 5,4));
+    assert.ok(!boardGame.isAttack(123, 6,3));
+    bordGame[6][3].owner  = 456;
+    assert.ok(boardGame.isAttack(123, 6,3));
+
     boardGame.remove(piece);
 
     assert.equal(new Entite(0), boardGame.grid[2][3]);
     assert.equal([], boardGame.allPiecesOnGrid());
 
+    let table1 = Array(10);
+    let table2 = Array(10);
+    for(let i = 0; i <10; i++){
+        table1[i]=Array(10);
+        table2[i]=Array(10);
+        for(let j = 0; j < 10; j++){
+            table1[i][j] = 30;
+            table2[i][j] = 30;
+        }
+    }
+    
+    table1[3][6] = 5;
+    table1[7][9] = 3;
+    bordGame.superpose(table1, 123);
+    assert.equal(new Piece(5, 123), bordGame[3][6]);
+    assert.equal(new Piece(3, 123), bordGame[7][9]);
+
+    table2[1][1] = 6;
+    table2[9][9] = -1;
+    bordGame.superpose(table2, 123);
+    assert.equal(new Piece(6, 123), bordGame[1][1]);
+    assert.equal(new Piece(-1, 123), bordGame[9][9]);
 });
 
 QUnit.test('test de Game', function(assert){
@@ -102,19 +136,19 @@ QUnit.test('test de attack', function(assert){
     assert.equal(new Piece(4, 456), partie1.getBox(4,0));
     partie1.grid[3][0] = new Piece(2, 123);
     attack.eventAttack(partie1, partie1.getBox(4,0), partie1.getBox(3,0));
-    assert.equal(new Entite(0), partie1.getBox(3,0));
-    assert.equal(new Piece(4, 456), partie1.getBox(4,0));
-    partie1.grid[3][0] = new Piece(4, 123);
+    assert.equal(new Entite(0), partie1.getBox(4,0));
+    assert.equal(new Piece(4, 456), partie1.getBox(3,0));//
+    partie1.grid[4][0] = new Piece(4, 123);
     attack.eventAttack(partie1, partie1.getBox(4,0), partie1.getBox(3,0));
     assert.equal(new Entite(0), partie1.getBox(3,0));
     assert.equal(new Entite(0), partie1.getBox(4,0));
     partie1.grid[3][0] = new Piece(1, 123);
     partie1.grid[4][0] = new Piece(10, 456);
     attack.eventAttack(partie1, partie1.getBox(3,0), partie1.getBox(4,0));
-    assert.equal(new Piece(1, 123), partie1.getBox(3,0));
-    assert.equal(new Entite(0), partie1.getBox(4,0));
-    partie1.grid[4][0] = new Piece(10, 456);
-    attack.eventAttack(partie1, partie1.getBox(4,0), partie1.getBox(3,0));
+    assert.equal(new Piece(1, 123), partie1.getBox(4,0));//
+    assert.equal(new Entite(0), partie1.getBox(3,0));
+    partie1.grid[3][0] = new Piece(10, 456);
+    attack.eventAttack(partie1, partie1.getBox(3,0), partie1.getBox(4,0));
     assert.equal(new Entite(0), partie1.getBox(3,0));
     assert.equal(new Piece(10, 456), partie1.getBox(4,0));
     partie1.grid[3][0] = new Piece(-1, 123);
@@ -129,10 +163,10 @@ QUnit.test('test de attack', function(assert){
     partie1.grid = partie2.grid;
     attack.eventAttack(partie1, partie1.getBox(4,0), partie1.getBox(3,0));
     attack.eventAttack(partie2, partie2.getBox(4,0), partie2.getBox(3,0));
-    assert.equal(new Entite(0), partie1.getBox(3,0));
-    assert.equal(new Piece(3, 456), partie1.getBox(4,0));
-    assert.equal(new Entite(0), partie2.getBox(3,0));
-    assert.equal(new Piece(3, 456), partie2.getBox(4,0));
+    assert.equal(new Entite(0), partie1.getBox(4,0));
+    assert.equal(new Piece(3, 456), partie1.getBox(3,0));
+    assert.equal(new Entite(0), partie2.getBox(4,0));
+    assert.equal(new Piece(3, 456), partie2.getBox(3,0));
 });
 
 QUnit.test('test de move', function(assert){

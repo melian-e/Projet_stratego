@@ -13,6 +13,9 @@ class Game extends GameGrid {
     getCurrentPlayer(){
         return this.currentPlayer;
     }
+    getCurrentPlayerName(){
+        return (this.currentPlayer == 0) ? this.player1 : this.player2;
+    }
     play(){
         this.currentPlayer = (this.currentPlayer + 1)%2;
     }

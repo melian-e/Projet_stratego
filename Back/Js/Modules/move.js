@@ -6,11 +6,11 @@ let move = (function(){
         return (piece.getCoord().x == x && piece.getCoord().y == y) ? false : true;
     }
     function isMyPiece(game, piece){    // Vérifie que la pièce que l'on veut bouger est bien la sienne
-        return (piece.getProprety() != game.getCurrentPlayer()) ? false : true; // vérifier la val de piece.proprety
+        return (piece.getOwner() != game.getCurrentPlayer()) ? false : true; // vérifier la val de piece.proprety
     }
     function isAuthorizedMove(boxEntity, currentPlayer){    // Vérifie que la case de destination est libre ou occupé par l'ennemi
-        return (boxEntity.getOccupe() == 2 || 
-        (boxEntity.getOccupe() == 1 && boxEntity.getProprety() == currentPlayer)) ? false : true;
+        return (boxEntity.getOccupy() == 2 || 
+        (boxEntity.getOccupy() == 1 && boxEntity.getOwner() == currentPlayer)) ? false : true;
     }
     function isAlternation(game, piece, destinationCoord){  // Vérifie l'alternance entre 2 cases
         let historyMove = game.getHistoryMove(game.getCurrentPlayer());
@@ -27,7 +27,7 @@ let move = (function(){
             }
             if((game.scoutRule == true && 
                 Math.abs(piece.getCoord().x-x)+Math(abs(piece.getCoord().y-y) != 1) && 
-                game.getBox(x, y).getOccupe() != 0)){
+                game.getBox(x, y).getOccupy() != 0)){
                     canMove = false;
             }
         }
@@ -47,7 +47,7 @@ let move = (function(){
 
                 if(canMove){
                     game.addMove(piece, new Coordonnees(x,y));
-                    (game.isAttack(game.getCurrentPlayer(),x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
+                    (game.isAttack(game.getCurrentPlayerName(),x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
                     game.play();
                 }
             }

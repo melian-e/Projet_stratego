@@ -1,17 +1,17 @@
 /**
- * Trouver la partie d'un joueur
+ * Trouver la Lobbyie d'un joueur
  * @param { String } playerId
- * @param { Array } allCurrentsParts
+ * @param { Array } allCurrentsGames
  * @return { Game }
  */
-function researchPart(playerId, allCurrentsParts){
+function researchGame(playerId, allCurrentsGames){
     let x = 0;
 
-    while(!allCurrentsParts[x].getPlayers().some(elem => elem == playerId)){
+    while(!allCurrentsGames[x].getPlayers().some(elem => elem == playerId)){
         x++;
     }
 
-    return allCurrentsParts[x];
+    return allCurrentsGames[x];
 }
 
 /**
@@ -62,14 +62,14 @@ function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
 /**
  * Créer une nouvelle partie avec les 2 joueurs et les ajoute à une room
  * @param { Map } srvSockets 
- * @param { Array } allCurrentsParts 
+ * @param { Array } allCurrentsGames 
  * @param { String } room 
  * @param { Object } socket 
  */
-function newGame(srvSockets,allCurrentsParts,room,socket){
+function newGame(srvSockets,allCurrentsGames,room,socket){
     console.log("Nouvelle partie");
-    allCurrentsParts.push(new Game(table[0], table[1], socket.revealedRule,
-        socket.scoutRule, socket.bombRule));    // Ajout de la partie au tableau
+    allCurrentsGames.push(new Game(table[0], table[1], socket.revealedRule,
+        socket.scoutRule, socket.bombRule));    // Ajout de la Lobbieie au tableau
 
     srvSockets.forEach(user => {
         if(user.id == table[0] || user.id == table[1]) {
@@ -83,11 +83,11 @@ function newGame(srvSockets,allCurrentsParts,room,socket){
  * Ajoue des pions du joueur à la grid de jeu
  * @param { Array } table 
  * @param { String } playerId 
- * @param { Array } allCurrentsParts 
+ * @param { Array } allCurrentsGames 
  */
-function ready(table,playerId,allCurrentsParts){
-    let part = researchPart(playerId,allCurrentsParts);
-    part.superpose(table, playerId);
+function ready(table,playerId,allCurrentsGames){
+    let Lobby = researchLobby(playerId,allCurrentsGames);
+    Lobby.superpose(table, playerId);
 }
 
 /**
@@ -110,18 +110,18 @@ function getName(srvSockets, playerId){
 
 /**
  * Efface la partie un fois qu'elle est terminée
- * @param { Game } part 
- * @param { Array } allCurrentsParts 
+ * @param { Game } pobby 
+ * @param { Array } allCurrentsGames 
  * @param { Map } srvSockets 
  */
-function suppress(part,allCurrentsParts,srvSockets){
+function suppress(Lobby,allCurrentsGames,srvSockets){
     
     srvSockets.forEach(user => {
-        if( part.getPlayers().some(id => id == user.id)){
+        if( Lobby.getPlayers().some(id => id == user.id)){
             user.leave(researchRoom(user.rooms));
         }
     });
 
-    allCurrentsParts.splice(allCurrentsParts.indexOf(part), 1);
+    allCurrentsGames.splice(allCurrentsGames.indexOf(Lobby), 1);
 }
-module.exports = {researchPart, researchRoom, waiting, newGame, ready, getName, suppress};
+module.exports = {researchGame, researchRoom, waiting, newGame, ready, getName, suppress};
