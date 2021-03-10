@@ -23,19 +23,19 @@ class Game extends GameGrid {
         return [this.player1, this.player2];
     }
     isFinished(){
-        let allPieces = this.grid.allPiecesOnGrid();
+        let allPieces = this.allPiecesOnGrid();
             
-        let red = allPieces.filter(elem => elem.proprety == this.player1);
-        let blue = allPieces.filter(elem => elem.proprety == this.player2);
+        let red = allPieces.filter(elem => elem.owner == this.player1);
+        let blue = allPieces.filter(elem => elem.owner == this.player2);
 
         return (!red.some(elem => elem.power == 0) || !blue.some(elem => elem.power == 0) || 
-        red.every(elem => elem.power < 1) || red.every(elem => elem.power < 1)) ? true : false;
+        red.every(elem => elem.power < 1) || blue.every(elem => elem.power < 1)) ? true : false;
     }
     getWinner(){
-        let allPieces = this.grid.allPiecesOnGrid();
+        let allPieces = this.allPiecesOnGrid();
             
-        let red = allPieces.filter(elem => elem.proprety == this.player1);
-        let blue = allPieces.filter(elem => elem.proprety == this.player2);
+        let red = allPieces.filter(elem => elem.owner == this.player1);
+        let blue = allPieces.filter(elem => elem.owner == this.player2);
     
         let flagR = red.some(elem => elem.power == 0);
         let flagB = blue.some(elem => elem.power == 0);
