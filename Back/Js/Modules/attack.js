@@ -20,13 +20,12 @@ let attack = (function(){
     return{
         eventAttack(game, attacker, attacked){
             let winner = winnerAttack(attacker, attacked, game.bombRule);
-            console.log(attacker.getPower(), attacked.getPower(), winner);
             //attackAnimation(attacker, attacked, winner);
             if(winner == attacked){
                 game.remove(attacker);
             }
             else if(winner == attacker){
-                //game.remove(attacked);
+                game.remove(attacked);
                 game.move(attacker,attacked.getCoord().x,attacked.getCoord().y);
             }
             else {

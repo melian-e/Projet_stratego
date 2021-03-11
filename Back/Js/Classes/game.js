@@ -7,7 +7,7 @@ class Game extends GameGrid {
         this.startTime = Date.now();
         this.historyMove = [[],[]];
         this.revealedRule = revealedRule;// true si les pièces restent révélé après une attaque
-        this.scoutRule = scoutRule;     // true si l'éclaireur peut se déplaer et attaquer dans un seul tour
+        this.scoutRule = scoutRule;     // true si l'éclaireur peut se déplacer et attaquer dans un seul tour
         this.bombRule = bombRule;       // true si la bombe ne peut faire qu'une seule victime avant de s'auto détruire
     }
     getCurrentPlayer(){

@@ -52,7 +52,7 @@ function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
     srvSockets.forEach(user => {		// Recherche des personnes en recherche d'une partie
           if(user.handshake.wait == true && socket.handshake.revealedRule == revealedRule 
             && socket.handshake.scoutRule == scoutRule && socket.handshake.bombRule == bombRule){ 
-                table.push(user.id);
+                table.push(user.handshake.id);
         }
     });
 
@@ -68,11 +68,11 @@ function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
  */
 function newGame(srvSockets,allCurrentsGames,room,socket){
     console.log("Nouvelle partie");
-    allCurrentsGames.push(new Game(table[0], table[1], socket.revealedRule,
-        socket.scoutRule, socket.bombRule));    // Ajout de la Lobbieie au tableau
+    allCurrentsGames.push(new Game(table[0], table[1], socket.handshake.revealedRule,
+        socket.handshake.scoutRule, socket.handshake.bombRule));    // Ajout de la Lobbieie au tableau
 
     srvSockets.forEach(user => {
-        if(user.id == table[0] || user.id == table[1]) {
+        if(user.handshake.id == table[0] || user.handshake.id == table[1]) {
         user.handshake.wait = false;
         user.join(room);		// Ajout des joueur à une nouvelle room
         }
@@ -101,8 +101,8 @@ function getName(srvSockets, playerId){
     
     let name;
     srvSockets.forEach(user => {
-        if(user.id == playerId){
-            name = user.name;
+        if(user.handshake.id == playerId){
+            name = user.handshake.name;
         }
     });
     return name;
@@ -117,8 +117,8 @@ function getName(srvSockets, playerId){
 function suppress(Lobby,allCurrentsGames,srvSockets){
     
     srvSockets.forEach(user => {
-        if( Lobby.getPlayers().some(id => id == user.id)){
-            user.leave(researchRoom(user.rooms));
+        if( Lobby.getPlayers().some(id => id == user.handshake.id)){
+            user.leave(researchRoom(user.handshake.rooms));
         }
     });
 

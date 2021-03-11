@@ -3,10 +3,10 @@ let move = (function(){
         return (piece.getPower() < 1) ? false : true;
     }
     function isMovement(piece, x, y){   // Vérifie que la position de la pièce est différente de la nouvelle position
-        return (piece.getCoord().x == x && piece.getCoord().y == y) ? false : true;
+        return (piece.getCoord() == new Coordinates(x,y)) ? false : true;
     }
     function isMyPiece(game, piece){    // Vérifie que la pièce que l'on veut bouger est bien la sienne
-        return (piece.getOwner() != game.getCurrentPlayer()) ? false : true; // vérifier la val de piece.owner
+        return (piece.getOwner() != game.getCurrentPlayerName()) ? false : true; // vérifier la val de piece.owner
     }
     function isAuthorizedMove(boxEntity, currentPlayer){    // Vérifie que la case de destination est libre ou occupé par l'ennemi
         return (boxEntity.getOccupy() == 2 || 
@@ -14,8 +14,8 @@ let move = (function(){
     }
     function isAlternation(game, piece, destinationCoord){  // Vérifie l'alternance entre 2 cases
         let historyMove = game.getHistoryMove(game.getCurrentPlayer());
-        let currentBox = historyMove.filter(elem => (elem[0] == piece.getPower() && elem[1] == piece.getCoord()));
-        let destinationBox = historyMove.filter(elem => (elem[0] == piece.getPower() && elem[1] == destinationCoord));
+        let currentBox = historyMove.filter(elem => (elem[0] === piece.getPower() && piece.getCoord().isEqual(elem[1])));
+        let destinationBox = historyMove.filter(elem => (elem[0] === piece.getPower() && destinationCoord.isEqual(elem[1])));
 
         return (currentBox.length == 3 && destinationBox.length == 3) ? true : false;
     }
@@ -25,22 +25,22 @@ let move = (function(){
             if( !game.isObstacleOnTheWay(piece.getCoord(), new Coordinates(x,y))){
                 canMove = true;
             }
-            if((game.scoutRule == true && 
-                Math.abs(piece.getCoord().x-x)+Math(abs(piece.getCoord().y-y) != 1) && 
+            if((game.scoutRule == false && 
+                (Math.abs(piece.getCoord().x-x)+Math.abs(piece.getCoord().y-y) != 1) && 
                 game.getBox(x, y).getOccupy() != 0)){
                     canMove = false;
             }
         }
         return canMove;
     }
-    function pieceMove(piece){
-        return (Math.abs(piece.getCoord().x-x)+Math(abs(piece.getCoord().y-y) == 1)) ? true : false;
+    function pieceMove(piece,x,y){
+        return (Math.abs(piece.getCoord().x-x)+Math.abs(piece.getCoord().y-y) == 1) ? true : false;
     }
     return {
         eventMove(game, piece, x, y){
             
             if(isMovable(piece) && isMovement(piece, x, y) && isMyPiece(game, piece) && 
-            isAuthorizedMove(game.getBox(x, y), game.getCurrentPlayer()) && 
+            isAuthorizedMove(game.getBox(x, y), game.getCurrentPlayerName()) && 
             !isAlternation(game, piece, new Coordinates(x,y))){
 
                 let canMove = (piece.getPower() == 2) ? scoutMove(game, piece, x, y) : pieceMove(piece, x, y);

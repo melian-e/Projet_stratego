@@ -28,10 +28,7 @@ class GameGrid {
         return this.grid[x][y];
     }
     move(piece, x, y){  
-        //this.grid[x][y] = piece;
-        console.log(this.grid[piece.getCoord().x][piece.getCoord().y]);
         this.grid[piece.getCoord().x][piece.getCoord().y] = new Entity(0);
-        console.log(this.grid[piece.getCoord().x][piece.getCoord().y]);
         this.grid[x][y] = piece;
         piece.move(x,y);
     }

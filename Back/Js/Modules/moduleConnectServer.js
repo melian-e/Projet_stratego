@@ -3,7 +3,7 @@ const { readSync } = require('node:fs');
 const app = express();
 const http = require('http').Server(app);
 const io=require('socket.io')(http);
-const funcitons = require('../mainGame.js');
+const functions = require('../mainGame.js');
 
 
 app.use(express.static(__dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à Lobbyir de /project/ .
@@ -21,10 +21,10 @@ io.on('connection',(socket) =>{
 	io.emit('New challenger approaching');
 	
 	socket.on('search-game', (revealedRule, scoutRule,bombRule) => {		// Joueurs en recherche
-		let table = funcitons.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
+		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 
 		if(table.length == 2) {				// 2 joueurs veulent jouer
-			funcitons.newGame(io.sockets.sockets,allCurrentsGames,'room'+room,socket);
+			functions.newGame(io.sockets.sockets,allCurrentsGames,'room'+room,socket);
 			room++;
 
 			// redirection vers la page de jeu
@@ -32,16 +32,16 @@ io.on('connection',(socket) =>{
 	});
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
-		funcitons.ready(table, socket.id, allCurrentsGames);
+		functions.ready(table, socket.handshake.id, allCurrentsGames);
 	});
 
 	socket.on('click', (xPiece, yPiece, xMove, yMove) => {
-		let Lobby = funcitons.researchGame(socket.id, allCurrentsGames);
+		let Lobby = functions.researchGame(socket.handshake.id, allCurrentsGames);
 		move.eventMove(Lobby, Lobby.getBox(xPiece, yPiece), xMove, yMove);
-		io.to(functions.researchRoom(socket.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
+		io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
 
 		if(Lobby.isFinished()){
-			io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(Lobby.getWinner()));	// Si la partie est terminé
+			io.to(functions.researchRoom(socket.handshake.rooms)).emit('end', functions.getName(Lobby.getWinner()));	// Si la partie est terminé
 			functions.suppress(Lobby,allCurrentsGames,io.sockets.sockets);
 		}
 	});
