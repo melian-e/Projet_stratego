@@ -5,4 +5,7 @@ class Entity{
     getOccupy(){
         return this.occupy;
     }
+    convertCell(player){
+        return [this.occupy+20];
+    }
 }

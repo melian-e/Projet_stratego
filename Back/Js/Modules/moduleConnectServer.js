@@ -35,10 +35,22 @@ io.on('connection',(socket) =>{
 		functions.ready(table, socket.handshake.id, allCurrentsGames);
 	});
 
-	socket.on('click', (xPiece, yPiece, xMove, yMove) => {
+	socket.on('click', (numPiece, numMove) => {
 		let Lobby = functions.researchGame(socket.handshake.id, allCurrentsGames);
+		if(socket.id == Lobby.player1){
+			numPiece = 99 - numPiece;
+			numMove = 99 - numMove;
+		}
+		let xPiece = Math.floor(numPiece / 10);
+		let yPiece = numPiece % 10;
+		let xMove = Math.floor(numMove / 10);
+		let yMove = numMove % 10;
+
 		move.eventMove(Lobby, Lobby.getBox(xPiece, yPiece), xMove, yMove);
-		io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
+		//io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
+		io.to(Lobby.player1).emit('move', Lobby.convertGrid(Lobby.player1));
+		io.to(Lobby.player2).emit('move', Lobby.convertGrid(Lobby.player2));
+		io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.convertGrid('sepectator'));
 
 		if(Lobby.isFinished()){
 			io.to(functions.researchRoom(socket.handshake.rooms)).emit('end', functions.getName(Lobby.getWinner()));	// Si la partie est terminé

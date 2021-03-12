@@ -80,13 +80,17 @@ function newGame(srvSockets,allCurrentsGames,room,socket){
 }
 
 /**
- * Ajoue des pions du joueur à la grid de jeu
+ * Ajoute les pions du joueur à la grid de jeu
  * @param { Array } table 
  * @param { String } playerId 
  * @param { Array } allCurrentsGames 
  */
 function ready(table,playerId,allCurrentsGames){
-    let Lobby = researchLobby(playerId,allCurrentsGames);
+    let Lobby = researchGame(playerId,allCurrentsGames);
+    if(Lobby.getPlayers()[0] == playerId){
+        table.reverse();
+        table.forEach(elem => elem.reverse());
+    }
     Lobby.superpose(table, playerId);
 }
 
@@ -116,7 +120,7 @@ function getName(srvSockets, playerId){
  */
 function suppress(Lobby,allCurrentsGames,srvSockets){
     
-    srvSockets.forEach(user => {
+    srvSockets.forEach(user => {            // A modifier si spectateur
         if( Lobby.getPlayers().some(id => id == user.handshake.id)){
             user.leave(researchRoom(user.handshake.rooms));
         }

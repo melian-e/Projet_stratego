@@ -71,4 +71,18 @@ class GameGrid {
     remove(piece){
         this.grid[piece.getCoord().x][piece.getCoord().y] = new Entity(0);
     }
+    convertGrid(player){
+        let table = Array(10);
+        for(let x = 0; x < 10; x++){
+            table[x] = Array(10);
+            for(let y = 0; y < 10; y++){
+                table[x][y] = this.grid[x][y].convertCell(player);
+            }
+        }
+        if(this.player1 == player){
+            table.reverse();
+            table.forEach(elem => elem.reverse());
+        }
+        return table;
+    }
 }
