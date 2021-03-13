@@ -31,3 +31,5 @@ const con = mysql.createConnection({
 	password: "",
 	database: "projet_stratego"
 });
+
+//blabla
