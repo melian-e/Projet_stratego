@@ -3,14 +3,20 @@ function allowDrop(ev) {
 }
 
 function dragEnter(ev){
-    if(ev.target == "[object HTMLTableCellElement]" && ev.target.firstChild == null){
+    if(ev.target.nodeName == "TD"){
         ev.target.style.border = "solid red";
+    }
+    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
+        ev.target.parentNode.style.border = "solid red";
     }
 }
 
 function dragLeave(ev){
-    if(ev.target == "[object HTMLTableCellElement]"){
+    if(ev.target.nodeName == "TD"){
         ev.target.style.border = "2px solid black";
+    }
+    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
+        ev.target.parentNode.style.border = "2px solid black";
     }
 }
 
@@ -41,17 +47,41 @@ function drop(ev) {
     ev.target.style = "2px solid black;"
     let data = ev.dataTransfer.getData("div");
     let pion = document.getElementById(data);
-    alert(ev.target.parentElement.id)
-    if(ev.target == "[object HTMLTableCellElement]" && ev.target.firstChild == null){
+    let pionStock = document.getElementsByClassName("stock");
+
+    //////////////////////////////////////////pion mis dans une case du jeu
+    if(ev.target.nodeName == "TD" && ev.target.firstChild == null){ 
         ev.target.appendChild(pion);
         pion.style.border = "none";
         pion.style.width = "90%";
         pion.style.heigth = "100%";
         pion.style.position = "relative";
     }
-    if(ev.target == document.getElementById("pionStock") || ev.target.parentElement.id == document.getElementById("pionStock").id){
-        alert(document.getElementById("pionStock"))
-        let pionStock = document.getElementsByClassName("stock");
+    ///////////////////////////////////////////échange entre 2 pions
+    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){ 
+        let cases = ev.target.parentNode;
+        if(pion.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
+            pion.parentNode.appendChild(ev.target);
+            ev.target.style.border = "none";
+            ev.target.style.width = "90%";
+            ev.target.style.heigth = "100%";
+            ev.target.style.position = "relative";
+        }
+        else{
+            
+            pionStock[getCase(ev.target)].appendChild(ev.target); 
+            ev.target.style.width = "55px";
+            ev.target.style.heigth = "55px";
+            ev.target.style.position = "absolute";  
+        }
+        cases.appendChild(pion); 
+        pion.style.border = "none";
+        pion.style.width = "90%";
+        pion.style.heigth = "100%";
+        pion.style.position = "relative";
+    }
+    /////////////////////////////////////////////pion mis dans le stock de pièces
+    if(ev.target == document.getElementById("pionStock") || ev.target.parentNode.parentNode.parentNode.parentNode == document.getElementById("pionStock") || ev.target.parentNode.parentNode == document.getElementById("pionStock") || ev.target.parentNode.parentNode.parentNode == document.getElementById("pionStock")){
         pionStock[getCase(pion)].appendChild(pion);   
         pion.style.width = "55px";
         pion.style.heigth = "55px";
@@ -62,8 +92,8 @@ function drop(ev) {
 
 function reset(){
     let pion = document.getElementsByClassName("dot");
-    let pionStock = document.getElementsByClassName("stock")
-    for(let i = 0; i < pion.length; i++){
+    let pionStock = document.getElementsByClassName("stock");
+    for(let i = pion.length-1; i > -1 ; i--){
         pion[i].style.width = "55px";
         pion[i].style.heigth = "55px";
         pion[i].style.position = "absolute";
@@ -85,7 +115,7 @@ function randGrid(){
     let pion = document.getElementsByClassName("dot");
     let grid = document.getElementsByClassName("case");
     for(let i = 0; i < pion.length; i++){
-        if(pion[i].parentElement.parentElement.id != "game-board"){
+        if(pion[i].parentNode.parentNode.parentNode.parentNode != document.getElementById("game-table")){
             pion[i].style.width = "90%";
             pion[i].style.heigth = "100%";
             pion[i].style.position = "relative";
@@ -96,7 +126,7 @@ function randGrid(){
 function test(ev){
     let grid = document.getElementsByClassName("case");
     let i = 0;
-    while(grid[i] != ev.target.parentElement){
+    while(grid[i] != ev.target.parentNode){
         i += 1;
     }
     if(i-10>0 && grid[i-10].firstChild == null){
@@ -119,16 +149,16 @@ function start(){
     document.getElementById("random").remove();
     document.getElementById("start").remove();
     let pion = document.getElementsByClassName("dot");
-    //let bomb = document.getElementsByClassName("bomb");
+    let bomb = document.getElementsByClassName("bomb");
+    let flag = document.getElementById("p0");
     for(let i = 0; i < pion.length; i++){
-        console.log(pion[i]);
         pion[i].setAttribute("draggable", false);
         pion[i].setAttribute("ondragstart","");
         pion[i].setAttribute("onclick", "test(event)");
-        /*if(bomb.indexOf(pion[i]) == -1){
-            );
-        }*/
-       
+        for(let j = 0; j < bomb.length; j++) {
+           if(bomb[j] == pion[i]){pion[i].setAttribute("onclick", "")}
+        }
+        if(pion[i] == flag){pion[i].setAttribute("onclick", "")}
     }
     randGrid();
 }
