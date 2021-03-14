@@ -4,19 +4,19 @@ function allowDrop(ev) {
 
 function dragEnter(ev){
     if(ev.target.nodeName == "TD"){
-        ev.target.style.border = "solid red";
+        ev.target.style.border = "solid #B76554";
     }
     if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
-        ev.target.parentNode.style.border = "solid red";
+        ev.target.parentNode.style.border = "solid #B76554";
     }
 }
 
 function dragLeave(ev){
     if(ev.target.nodeName == "TD"){
-        ev.target.style.border = "2px solid black";
+        ev.target.style.border = "2px solid #3A5B2A";
     }
     if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
-        ev.target.parentNode.style.border = "2px solid black";
+        ev.target.parentNode.style.border = "2px solid #3A5B2A";
     }
 }
 
