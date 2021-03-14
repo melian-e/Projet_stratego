@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stratégiquement Stratego</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="Back/Js/Modules/moduleConnectServer.js"></script>
+</head>
+
+</html>
+<body>
+	<nav class="navbar navbar-expand-md" style="background-color:#241E4E">
+		
+		<div class="d-flex w-50 order-0">
+
+			<a href="page.php" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
+			
+			<button class="navbar-toggler" style="background-color:#241E4E; color:white;" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+				<i class="fa fa-bars" style="padding: 0 10px 0 10px" aria-hidden="true"></i>
+			</button>
+			
+			
+		</div>
+		<a style="font-size: 30px; text-align: center;background-color:#241E4E;color:white; margin:auto; min-width:200px">Magic Square</a>
+		<div class="navbar-collapse collapse order-2" id="collapsingNavbar">
+	
+			
+			<div class="modal fade" id="connection">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Log in :</h4>              
+							<button type="button" class="close" data-dismiss="modal">
+								<span>&times;</span>
+							</button>             
+						</div>
+							
+						<div class="modal-body row">
+							<form class="col" method="post" action="actionconnexion.php">
+								<div class="form-group">
+									<label for="email" class="form-control-label">Pseudo</label>
+									<input type="text" class="form-control" name ="pseudo" placeholder="Pseudo" required>
+								</div>
+									
+								<label for="password" class="form-control-label">Password</label>
+									
+								<div class="input-group mb-3">
+									<input type="password" class="form-control" name="password1" id="password1" placeholder="Password" required>
+									<div class="input-group-append">
+										<button type="button" class="btn" onclick="togglePassword('password1');">See</button>
+									</div>
+								</div>
+									
+								<div align="center">
+									<input type="checkbox" name="remember" value="true">Remember me
+								</div>
+							
+								<div align="center">
+									<button type="submit" class="btn center-block">Log in</button>
+								</div>
+							</form>
+						</div>
+							
+						<div class="modal-body row">
+							<form class="col" action="creationcompte.php">
+								<div align="center">
+									<p style="margin-top : 8px;"> No account ? Go register yourself here ! <p>
+									<button class="btn center-block" >Register</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<button class="btn dropdown dropdown-toggle" data-toggle="dropdown">
+				Scores
+				<div class="dropdown-menu dropdown-default">
+					<a class="dropdown-item" href="leaderboardlevel.php">By difficulty</a>
+					<a class="dropdown-item" href="leaderboardtimes.php">By time</a>
+				</div>
+			</button>
+			
+
+			<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#regle">Rules</button>
+			<div class="modal fade" id="regle">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Rules :</h4>
+							<button type="button" class="close" data-dismiss="modal">
+								<span>&times;</span>
+							</button>             
+						</div>
+						<div class="modal-body row">
+							<p style="margin: 5px;"> The goal of the magic square game is to put the numbers at your disposal in the grid, and to get the sum of the integers in each row, column and diagonal equal. 
+							</p>
+							<img src="Exemple.png" alt="Exemple" width='50%' style='margin:auto;'/>
+							<p style="margin: 5px;">An instance of an order 3 magic square.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</nav>        
+</body>
+
+<script>
+    function togglePassword(fieldId){
+        var field = document.getElementById(fieldId);
+        field.type = (field.type == "password") ? "text" : "password";
+        field.focus();
+        field.setSelectionRange(field.value.length, field.value.length);
+    }
+    
+    function autosubmit(){
+    $('#connection').modal('show');
+    }
+</script>
