@@ -74,9 +74,9 @@ QUnit.test('test de GameGrid', function(assert){
 
     table2[1][1] = 6;
     table2[9][9] = -1;
-    boardGame.superpose(table2, 123);
-    assert.deepEqual(new Piece(6,123,1,1), boardGame.grid[1][1]);
-    assert.deepEqual(new Piece(-1,123,9,9), boardGame.grid[9][9]);
+    boardGame.superpose(table2, 456);
+    assert.deepEqual(new Piece(6,456,1,1), boardGame.grid[1][1]);
+    assert.deepEqual(new Piece(-1,456,9,9), boardGame.grid[9][9]);
 });
 
 QUnit.test('test de Game', function(assert){
@@ -123,6 +123,61 @@ QUnit.test('test de Game', function(assert){
     partie1.addMove(partie1.getBox(7, 0), new Coordinates(7,4));
     assert.equal(6, partie1.getHistoryMove(0).length);
     assert.ok(!(partie1.getHistoryMove(0).some(elem => elem == [8,new Coordinates(7,0)])));
+
+    let boardGame = new Game(123,456,true,true,true);
+    let table1 = Array(10);
+    let table2 = Array(10);
+    for(let i = 0; i <10; i++){
+        table1[i]=Array(10);
+        table2[i]=Array(10);
+        for(let j = 0; j < 10; j++){
+            table1[i][j] = 30;
+            table2[i][j] = 30;
+        }
+    }
+    
+    table1[3][6] = 5;
+    table1[7][9] = 3;
+    boardGame.superpose(table1, 123);
+
+    table2[1][1] = 6;
+    table2[9][9] = -1;
+    boardGame.superpose(table2, 456);
+
+    for(let i = 0; i <10; i++){
+        for(let j = 0; j < 10; j++){
+            table1[i][j] = [20];
+            table2[i][j] = [20];
+        }
+    }
+
+    for(let x = 4; x < 6; x++){
+        for(let y = 2; y < 4; y++){
+            table1[x][y] = [22];
+            table1[x][y+4] = [22];
+            table2[x][y] = [22];
+            table2[x][y+4] = [22];
+        }
+    }
+
+    boardGame.grid[3][6].visible = true;
+    boardGame.grid[9][9].visible = true;
+
+    table1[3][6] = [5,1];
+    table1[7][9] = [3,1];
+    table1[1][1] = [15,2];
+    table1[9][9] = [-1,2];
+
+    table2[3][6] = [5,2];
+    table2[7][9] = [15,2];
+    table2[1][1] = [6,1];
+    table2[9][9] = [-1,1];
+
+    table1.reverse();
+    table1.forEach(elem => elem.reverse());
+
+    assert.deepEqual(table1, boardGame.convertGrid(123));
+    assert.deepEqual(table2, boardGame.convertGrid(456));
 });
 
 QUnit.test('test de attack', function(assert){
@@ -301,4 +356,10 @@ QUnit.test('test de move', function(assert){
     assert.equal(6, partie3.getHistoryMove(0).length);
     assert.equal(1, partie3.getCurrentPlayer());
     assert.deepEqual(new Entity(0), partie3.getBox(2,2));
+});
+
+QUnit.test("Tests de coordonnée", function(assert){
+    let coord = new Coordinates(4,5);
+    assert.ok(!coord.isEqual(new Coordinates(6,7)));
+    assert.ok(coord.isEqual(new Coordinates(4,5)));
 });
