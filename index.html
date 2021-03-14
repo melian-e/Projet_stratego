@@ -16,70 +16,79 @@
 
 </html>
 <body>
-	<nav class="navbar navbar-expand-md" style="background-color:#241E4E">
-		<a href="index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
+	<nav class="navbar navbar-expand-md" style="background-color:darkgrey; height:100px;">
+		<div class="navbar-collapse collapse" id="collapsingNavbar">
+			<ul class="navbar-nav">
+				<a href="index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
+			</ul>
 
-		<img class="navbar-brand mx-auto"style="height: 100px;" src="Front/Images/stratego_logo.png">
-
-		<div class="navbar-collapse" id="collapsingNavbar">
-			<button class="btn dropdown dropdown-toggle" data-toggle="dropdown">
-				Scores
-				<div class="dropdown-menu dropdown-default"> <!-- accès aux scores-->
-					<a class="dropdown-item" href=""></a>
-					<a class="dropdown-item" href=""></a>
-				</div>
-			</button>
-            
-            <button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
-            <div class="modal fade" id="connection">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Connexion :</h4>              
-							<button type="button" class="close" data-dismiss="modal">
-								<span>&times;</span>
-							</button>             
-						</div>
-							
-						<div class="modal-body row">
-							<form class="col" method="post" action=""><!--Connexion-->
-								<div class="form-group">
-									<label for="email" class="form-control-label">Pseudo</label>
-									<input type="text" class="form-control" name ="pseudo" placeholder="Pseudo" required>
-								</div>
-									
-								<label for="password" class="form-control-label">Mot de passe</label>
-									
-								<div class="input-group mb-3">
-									<input type="password" class="form-control" name="password1" id="password1" placeholder="Password" required>
-									<div class="input-group-append">
-										<button type="button" class="btn" onclick="togglePassword('password1');">Voir</button>
+			<ul class="navbar-nav mx-auto">
+			</ul>
+			
+			<ul class="navbar-nav">
+				<button class="btn dropdown dropdown-toggle" style="margin:20px;" data-toggle="dropdown">
+					Scores
+					<div class="dropdown-menu dropdown-default"> <!-- accès aux scores-->
+						<a class="dropdown-item" href=""></a>
+						<a class="dropdown-item" href=""></a>
+					</div>
+				</button>
+				
+				<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
+				<div class="modal fade" id="connection">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Connexion :</h4>              
+								<button type="button" class="close" data-dismiss="modal">
+									<span>&times;</span>
+								</button>             
+							</div>
+								
+							<div class="modal-body row">
+								<form class="col" method="post" action=""><!--Connexion-->
+									<div class="form-group">
+										<label for="email" class="form-control-label">Pseudo</label>
+										<input type="text" class="form-control" name ="pseudo" placeholder="Pseudo" required>
 									</div>
-								</div>
-<!-- cookie à programmer pour se rappeler de la session
+										
+									<label for="password" class="form-control-label">Mot de passe</label>
+										
+									<div class="input-group mb-3">
+										<input type="password" class="form-control" name="password1" id="password1" placeholder="Password" required>
+										<div class="input-group-append">
+											<button type="button" class="btn" onclick="togglePassword('password1');">Voir</button>
+										</div>
+									</div>
+	<!-- cookie à programmer pour se rappeler de la session
 
-								<div align="center">
-									<input type="checkbox" name="remember" value="true">Remember me
-								</div>
--->
-								<div align="center">
-									<button type="submit" class="btn center-block">Log in</button>
-								</div>
-							</form>
-						</div>
-							
-						<div class="modal-body row">
-							<form class="col" action=""><!--Creation compte-->
-								<div align="center">
-									<p style="margin-top : 8px;"> No account ? Go register yourself here ! <p>
-									<button class="btn center-block" >Register</button>
-								</div>
-							</form>
+									<div align="center">
+										<input type="checkbox" name="remember" value="true">Remember me
+									</div>
+	-->
+									<div align="center">
+										<button type="submit" class="btn center-block">Log in</button>
+									</div>
+								</form>
+							</div>
+								
+							<div class="modal-body row">
+								<form class="col" action=""><!--Creation compte-->
+									<div align="center">
+										<p style="margin-top : 8px;"> No account ? Go register yourself here ! <p>
+										<button class="btn center-block" >Register</button>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</ul>
 		</div>
-		
-	</nav>        
+	</nav>
+	
+	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); background-color: lightgrey; height:150px">
+		<img style="height: 100px; margin-top: 25px;" src="Front/Images/stratego_logo.png">
+	</div>
+
 </body>
