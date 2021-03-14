@@ -163,15 +163,15 @@ QUnit.test('test de Game', function(assert){
     boardGame.grid[3][6].visible = true;
     boardGame.grid[9][9].visible = true;
 
-    table1[3][6] = [5,1];
-    table1[7][9] = [3,1];
-    table1[1][1] = [15,2];
-    table1[9][9] = [-1,2];
+    table1[3][6] = [5,'blue'];
+    table1[7][9] = [3,'blue'];
+    table1[1][1] = [15,'red'];
+    table1[9][9] = [-1,'red'];
 
-    table2[3][6] = [5,2];
-    table2[7][9] = [15,2];
-    table2[1][1] = [6,1];
-    table2[9][9] = [-1,1];
+    table2[3][6] = [5,'blue'];
+    table2[7][9] = [15,'blue'];
+    table2[1][1] = [6,'red'];
+    table2[9][9] = [-1,'red'];
 
     table1.reverse();
     table1.forEach(elem => elem.reverse());

@@ -61,12 +61,13 @@ function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
 
 /**
  * Créer une nouvelle partie avec les 2 joueurs et les ajoute à une room
+ * @param { Array } table
  * @param { Map } srvSockets 
  * @param { Array } allCurrentsGames 
  * @param { String } room 
  * @param { Object } socket 
  */
-function newGame(srvSockets,allCurrentsGames,room,socket){
+function newGame(table,srvSockets,allCurrentsGames,room,socket){
     console.log("Nouvelle partie");
     allCurrentsGames.push(new Game(table[0], table[1], socket.handshake.revealedRule,
         socket.handshake.scoutRule, socket.handshake.bombRule));    // Ajout de la Lobbieie au tableau

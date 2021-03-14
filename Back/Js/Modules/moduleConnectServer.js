@@ -25,6 +25,10 @@ io.on('connection',(socket) =>{
 
 		if(table.length == 2) {				// 2 joueurs veulent jouer
 			functions.newGame(io.sockets.sockets,allCurrentsGames,'room'+room,socket);
+			
+			io.to(table[0]).emit('preparation', 'blue');		// A modifier en passant par redirection
+			io.to(table[1]).emit('preparation', 'red');
+			
 			room++;
 
 			// redirection vers la page de jeu

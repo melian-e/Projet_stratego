@@ -23,9 +23,10 @@ class Piece extends Entity {
     getVisible(){
         return this.visible;
     }
-    convertCell(player){
-            //return [15, 2] Pièce caché de l'adversaire
-        return (this.owner != player && this.visible == false)? [15,2]:
-        [this.power, (player == this.owner) ? 1 : 2];
+    convertCell(player, color){
+        let otherColor = (color == 'blue') ? 'red' : 'blue';
+        //return [15,..] Pièce caché de l'adversaire
+        return (this.owner != player && this.visible == false)? [15, otherColor]:
+        [this.power, (player == this.owner) ? color : otherColor];
     }
 }
