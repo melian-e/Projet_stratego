@@ -6,7 +6,7 @@ const io=require('socket.io')(http);
 const functions = require('../mainGame.js');
 
 
-app.use(express.static(__dirname + '/project/')); // on start toutes les opérations avec des chemins d'accés à Lobbyir de /project/ .
+app.use(express.static(__dirname + '/front/')); // on start toutes les opérations avec des chemins d'accés à lobbyir de /project/ .
 
 app.get('/', (req,res) =>{
 	res.sendFile(__dirname + '/project/front/html/frontpage.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
@@ -19,6 +19,25 @@ let allCurrentsGames = Array();
 io.on('connection',(socket) =>{
 	//console.log(socket);
 	io.emit('New challenger approaching');
+
+	socket.on('current-games', () => {
+		return functions.currentGames(allCurrentsGames);
+	});
+	
+	socket.on('new-secpator', numGame =>{
+		let srvSockets = io.sockets.sockets;
+		let rooms;
+		srvSockets.forEach(user => {
+			if(user == allCurrentsGames.player1){
+				rooms = user.handshake.rooms;
+			}
+		});
+		
+		socket.join(functions.researchRoom(rooms));
+
+		io.to(socket.handshake.id).emit('display', allCurrentsGames[numGame].convertGrid('sepectator'));
+
+	});
 	
 	socket.on('search-game', (revealedRule, scoutRule,bombRule) => {		// Joueurs en recherche
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
@@ -36,12 +55,30 @@ io.on('connection',(socket) =>{
 	});
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
-		functions.ready(table, socket.handshake.id, allCurrentsGames);
+		let lobby = researchGame(playerId,allCurrentsGames);    
+		functions.ready(table, socket.handshake.id, lobby);
+		let ready = Array();
+		if(lobby.getBox(0,0).getOccupy() == 1){
+			io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
+			ready.push(lobby.player1);
+		}
+		if(lobby.getBox(9,9).getOccupy() == 1){
+			io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
+			ready.push(lobby.player2);
+		}
+		if(ready.length == 2){
+			lobby.startTime = Date.now(); // remise à zéro du compteur
+			displayed(lobby);
+			io.to(functions.researchRoom(socket.handshake.rooms)).emit('start');
+		}
+		else{
+			io.to(ready[0]).emit('display', lobby.convertGrid(ready[0]));
+		}
 	});
 
 	socket.on('click', (numPiece, numMove) => {
-		let Lobby = functions.researchGame(socket.handshake.id, allCurrentsGames);
-		if(socket.id == Lobby.player1){
+		let lobby = functions.researchGame(socket.handshake.id, allCurrentsGames);
+		if(socket.handshake.id == lobby.player1){
 			numPiece = 99 - numPiece;
 			numMove = 99 - numMove;
 		}
@@ -50,15 +87,12 @@ io.on('connection',(socket) =>{
 		let xMove = Math.floor(numMove / 10);
 		let yMove = numMove % 10;
 
-		move.eventMove(Lobby, Lobby.getBox(xPiece, yPiece), xMove, yMove);
-		//io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.grid);	// Modifier pour avoir une table lisible du front
-		io.to(Lobby.player1).emit('move', Lobby.convertGrid(Lobby.player1));
-		io.to(Lobby.player2).emit('move', Lobby.convertGrid(Lobby.player2));
-		io.to(functions.researchRoom(socket.handshake.rooms)).emit('move', Lobby.convertGrid('sepectator'));
+		move.eventMove(lobby, lobby.getBox(xPiece, yPiece), xMove, yMove);
+		displayed(lobby);
 
-		if(Lobby.isFinished()){
-			io.to(functions.researchRoom(socket.handshake.rooms)).emit('end', functions.getName(Lobby.getWinner()));	// Si la partie est terminé
-			functions.suppress(Lobby,allCurrentsGames,io.sockets.sockets);
+		if(lobby.isFinished()){
+			io.to(functions.researchRoom(socket.handshake.rooms)).emit('end', functions.getName(lobby.getWinner()));	// Si la partie est terminé
+			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets);
 		}
 	});
 
@@ -67,6 +101,12 @@ io.on('connection',(socket) =>{
 												//chat intégrer au site ( a vous de voir si vous voulez faire ça j'ai trouvé ça sympa).
 	});
 });
+
+function displayed(lobby){
+	io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
+	io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
+	io.to(functions.researchRoom(socket.handshake.rooms)).emit('display', lobby.convertGrid('sepectator'));
+}
 
 
 http.listen(4200, () => {

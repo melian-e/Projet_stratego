@@ -1,5 +1,5 @@
 /**
- * Trouver la Lobbyie d'un joueur
+ * Trouver la partie d'un joueur
  * @param { String } playerId
  * @param { Array } allCurrentsGames
  * @return { Game }
@@ -31,6 +31,18 @@ function researchRoom(rooms){
 	return room + x;
 }
 
+function currentGames(allCurrentsGames){
+    let table = Array();
+    for(let x = 0; x < allCurrentsGames.length; x++){
+        let time = Date.now() - allCurrentsGames[x].startTime;
+        let min = Math.floor(time/60000) % 60;
+        let hours = Math.floor((time - min)/60) % 24;
+        
+        table.push([allCurrentsGames[x].getPlayers(), hours+':'+min]);
+    }
+    return table;
+}
+
 /**
  * Ajout de variables à la session et recherche un partenaire de jeu
  * @param { Map } srvSockets 
@@ -60,7 +72,7 @@ function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
 }
 
 /**
- * Créer une nouvelle partie avec les 2 joueurs et les ajoute à une room
+ * Créer une nouvelle partie avec les 2 joueurs et les ajoutent à une room
  * @param { Array } table
  * @param { Map } srvSockets 
  * @param { Array } allCurrentsGames 
@@ -84,15 +96,14 @@ function newGame(table,srvSockets,allCurrentsGames,room,socket){
  * Ajoute les pions du joueur à la grid de jeu
  * @param { Array } table 
  * @param { String } playerId 
- * @param { Array } allCurrentsGames 
+ * @param { Game } lobby
  */
-function ready(table,playerId,allCurrentsGames){
-    let Lobby = researchGame(playerId,allCurrentsGames);
-    if(Lobby.getPlayers()[0] == playerId){
+function ready(table,playerId,lobby){
+    if(lobby.getPlayers()[0] == playerId){
         table.reverse();
         table.forEach(elem => elem.reverse());
     }
-    Lobby.superpose(table, playerId);
+    lobby.superpose(table, playerId);
 }
 
 /**
@@ -119,14 +130,14 @@ function getName(srvSockets, playerId){
  * @param { Array } allCurrentsGames 
  * @param { Map } srvSockets 
  */
-function suppress(Lobby,allCurrentsGames,srvSockets){
+function suppress(lobby,allCurrentsGames,srvSockets){
     
     srvSockets.forEach(user => {            // A modifier si spectateur
-        if( Lobby.getPlayers().some(id => id == user.handshake.id)){
+        if( lobby.getPlayers().some(id => id == user.handshake.id)){
             user.leave(researchRoom(user.handshake.rooms));
         }
     });
 
-    allCurrentsGames.splice(allCurrentsGames.indexOf(Lobby), 1);
+    allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
 }
-module.exports = {researchGame, researchRoom, waiting, newGame, ready, getName, suppress};
+module.exports = {researchGame, researchRoom, currentGames, waiting, newGame, ready, getName, suppress};
