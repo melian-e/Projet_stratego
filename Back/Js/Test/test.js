@@ -144,10 +144,14 @@ QUnit.test('test de Game', function(assert){
     table2[9][9] = -1;
     boardGame.superpose(table2, 456);
 
+    let table3 = Array(10)
+
     for(let i = 0; i <10; i++){
+        table3[i] = Array(10);
         for(let j = 0; j < 10; j++){
             table1[i][j] = [20];
             table2[i][j] = [20];
+            table3[i][j] = [20];
         }
     }
 
@@ -157,6 +161,8 @@ QUnit.test('test de Game', function(assert){
             table1[x][y+4] = [22];
             table2[x][y] = [22];
             table2[x][y+4] = [22];
+            table3[x][y] = [22];
+            table3[x][y+4] = [22];
         }
     }
 
@@ -173,11 +179,17 @@ QUnit.test('test de Game', function(assert){
     table2[1][1] = [6,'red'];
     table2[9][9] = [-1,'red'];
 
+    table3[3][6] = [5,'blue'];
+    table3[7][9] = [15,'blue'];
+    table3[1][1] = [15,'red'];
+    table3[9][9] = [-1,'red'];
+
     table1.reverse();
     table1.forEach(elem => elem.reverse());
 
     assert.deepEqual(table1, boardGame.convertGrid(123));
     assert.deepEqual(table2, boardGame.convertGrid(456));
+    assert.deepEqual(table3, boardGame.convertGrid('spectator'));
 });
 
 QUnit.test('test de attack', function(assert){
