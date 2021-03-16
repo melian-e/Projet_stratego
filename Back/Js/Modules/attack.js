@@ -36,3 +36,5 @@ let attack = (function(){
         }
     }
 })();
+
+module.exports = {attack};

@@ -1,3 +1,6 @@
+const Entity = require('./entity.js');
+const Coordinates = require('./coordinates.js');
+
 class Piece extends Entity {
     constructor(power, owner, x, y){
         super(1);
@@ -38,3 +41,5 @@ class Piece extends Entity {
             (this.owner == player2) ? color : otherColor];
     }
 }
+
+module.exports = Piece;

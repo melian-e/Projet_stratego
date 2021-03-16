@@ -9,3 +9,5 @@ class Entity{
         return [this.occupy+20];
     }
 }
+
+module.exports = Entity;

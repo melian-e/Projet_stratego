@@ -1,3 +1,5 @@
+const GameGrid = require('./gamegrid.js');
+
 class Game extends GameGrid {
     constructor(player1, player2, revealedRule, scoutRule,bombRule){
         super();
@@ -66,3 +68,5 @@ class Game extends GameGrid {
         }
     }
 }
+
+module.exports = Game;

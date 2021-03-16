@@ -54,3 +54,5 @@ let move = (function(){
         }
     }
 })();
+
+module.exports = {move};

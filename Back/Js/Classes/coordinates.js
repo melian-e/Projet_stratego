@@ -7,3 +7,5 @@ class Coordinates{
         return (this.x == other.x && this.y == other.y) ? true : false;
     }
 }
+
+module.exports = Coordinates;

@@ -2,16 +2,26 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io=require('socket.io')(http);
-const functions = require('mainGame.js');
 
+const Coordinates = require('./Back/Js/Classes/coordinates.js');
+const Entity = require('./Back/Js/Classes/entity.js');
+const Piece = require('./Back/Js/Classes/piece.js');
+const GameGrid = require('./Back/Js/Classes/gamegrid.js');
+const Game = require('./Back/Js/Classes/game.js');
+const attack = require('./Back/Js/Modules/attack.js');
+const move = require('./Back/Js/Modules/move.js');
+const functions = require('./Back/Js/mainGame');
 
-app.use("/", express.static(__dirname + '/Modules/')); // on start toutes les opérations avec des chemins d'accés à lobbyir de /project/ .
+app.use("/", express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à lobbyir de /project/ .
 
 app.get('/', (req,res) =>{
-	console.log(__dirname);
-	res.sendFile(__dirname + 'html/test.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/html/test.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
+});
+
+app.get('/Front/html/display.html', (req, res) => {
+	res.sendFile(__dirname + '/Front/html/display.html');
 });
 
 let room = 0;
@@ -39,7 +49,7 @@ io.on('connection',(socket) =>{
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 
 		if(table.length == 2) {				// 2 joueurs veulent jouer
-			functions.newGame(io.sockets.sockets,allCurrentsGames,'room'+room,socket);
+			functions.newGame(table,io.sockets.sockets,allCurrentsGames,'room'+room,revealedRule, scoutRule,bombRule);
 			
 			io.to(table[0]).emit('preparation', 'blue');		// A modifier en passant par redirection
 			io.to(table[1]).emit('preparation', 'red');
@@ -47,6 +57,9 @@ io.on('connection',(socket) =>{
 			room++;
 
 			// redirection vers la page de jeu
+			app.get('/Front/html/display.html' );
+
+
 		}
 	});
 

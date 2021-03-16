@@ -1,3 +1,6 @@
+const Entity = require('./entity.js');
+const Piece = require('./piece.js');
+
 class GameGrid {
     constructor(){
         this.grid = Array(10);
@@ -88,3 +91,5 @@ class GameGrid {
         return table;
     }
 }
+
+module.exports = GameGrid;
