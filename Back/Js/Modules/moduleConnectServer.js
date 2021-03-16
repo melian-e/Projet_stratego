@@ -21,18 +21,13 @@ io.on('connection',(socket) =>{
 	io.emit('New challenger approaching');
 
 	socket.on('current-games', () => {
-		return functions.currentGames(allCurrentsGames);
+		let srvSockets = io.sockets.sockets;
+		return functions.currentGames(srvSockets, allCurrentsGames);
 	});
 	
 	socket.on('new-secpator', numGame =>{
 		let srvSockets = io.sockets.sockets;
-		let rooms;
-		srvSockets.forEach(user => {
-			if(user == allCurrentsGames.player1){
-				rooms = user.handshake.rooms;
-			}
-		});
-		
+		let rooms = researchRoomById(srvSockets, allCurrentsGames[numGame].player1);
 		socket.join(functions.researchRoom(rooms));
 
 		io.to(socket.handshake.id).emit('display', allCurrentsGames[numGame].convertGrid('sepectator'));

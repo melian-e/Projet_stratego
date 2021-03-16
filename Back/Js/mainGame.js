@@ -30,17 +30,39 @@ function researchRoom(rooms){
 	}
 	return room + x;
 }
-
-function currentGames(allCurrentsGames){
+/**
+ * Faire un tableua contenant le nom des joueurs et la duré de leur parti pour toutes les game en cours afin de les proproser à un spectateur
+ * @param { Map } srvSockets 
+ * @param { Array } allCurrentsGames 
+ * @returns { Array }
+ */
+function currentGames(srvSockets, allCurrentsGames){
     let table = Array();
     for(let x = 0; x < allCurrentsGames.length; x++){
         let time = Date.now() - allCurrentsGames[x].startTime;
         let min = Math.floor(time/60000) % 60;
         let hours = Math.floor((time - min)/60) % 24;
+        let players = allCurrentsGames[x].getPlayers(); 
         
-        table.push([allCurrentsGames[x].getPlayers(), hours+':'+min]);
+        table.push([getName(srvSockets, players[0]), getName(srvSockets, players[1]), hours+':'+min]);
     }
     return table;
+}
+
+function researchRoomById(srvSockets, player){
+    
+    let x = 0;
+
+    while(srvSockets[x].id != player){
+        x++;
+    }
+    
+    return srvSockets[x].handshake.rooms;
+    /*srvSockets.forEach(user => {
+        if(user == player){
+            rooms = user.handshake.rooms;
+        }
+    });*/
 }
 
 /**
@@ -140,4 +162,4 @@ function suppress(lobby,allCurrentsGames,srvSockets){
 
     allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
 }
-module.exports = {researchGame, researchRoom, currentGames, waiting, newGame, ready, getName, suppress};
+module.exports = {researchGame, researchRoom, currentGames, researchRoomById, waiting, newGame, ready, getName, suppress};
