@@ -67,7 +67,7 @@ module.exports = {
             x++;
         }
         
-        return srvSockets[x].handshake.rooms;
+        return srvSockets[x].rooms;
         /*srvSockets.forEach(user => {
             if(user == player){
                 rooms = user.handshake.rooms;
@@ -85,18 +85,20 @@ module.exports = {
      * @return { Array }
      */
     waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
-        socket.handshake.wait = true;
-        socket.handshake.revealedRule = revealedRule;
-        socket.handshake.scoutRule = scoutRule;
-        socket.handshake.bombRule = bombRule;
+        socket.handshake.session.wait = true;
+        socket.handshake.session.revealedRule = revealedRule;
+        socket.handshake.session.scoutRule = scoutRule;
+        socket.handshake.session.bombRule = bombRule;
 
         let table = Array();
         console.log("Quelqu'un s'est connecté, il y a maintenant",srvSockets.size,"personnes connectés");
 
         srvSockets.forEach(user => {		// Recherche des personnes en recherche d'une partie
-            if(user.handshake.wait == true && socket.handshake.revealedRule == revealedRule 
-                && socket.handshake.scoutRule == scoutRule && socket.handshake.bombRule == bombRule){ 
-                    table.push(user.handshake.id);
+        console.log(user.handshake.session);
+            if(user.handshake.session.wait == true && socket.handshake.session.revealedRule == revealedRule 
+                && socket.handshake.session.scoutRule == scoutRule && socket.handshake.session.bombRule == bombRule){ 
+                    console.log(table);
+                    table.push(user.handshake.session.id);
             }
         });
 
@@ -116,9 +118,13 @@ module.exports = {
         allCurrentsGames.push(new Game(table[0], table[1], rules[0],rules[1],rules[2])); // Ajout de la Lobbieie au tableau
 
         srvSockets.forEach(user => {
-            if(user.handshake.id == table[0] || user.handshake.id == table[1]) {
-            user.handshake.wait = false;
-            user.join(room);		// Ajout des joueur à une nouvelle room
+            console.log("yup forEach :",user.handshake.session.id);
+            if(user.handshake.session.id == table[0] || user.handshake.session.id == table[1]) {
+                console.log(user.handshake.session.id);
+                user.handshake.session.wait = false;
+                user.join(room);		// Ajout des joueur à une nouvelle room
+                user.join(user.handshake.session.id);
+                
             }
         });
     },
@@ -148,8 +154,8 @@ module.exports = {
         
         let name;
         srvSockets.forEach(user => {
-            if(user.handshake.id == playerId){
-                name = user.handshake.name;
+            if(user.handshake.session.id == playerId){
+                name = user.handshake.session.name;
             }
         });
         return name;
@@ -164,8 +170,8 @@ module.exports = {
     suppress(lobby,allCurrentsGames,srvSockets){
         
         srvSockets.forEach(user => {            // A modifier si spectateur
-            if( lobby.getPlayers().some(id => id == user.handshake.id)){
-                user.leave(researchRoom(user.handshake.rooms));
+            if( lobby.getPlayers().some(id => id == user.handshake.session.id)){
+                user.leave(researchRoom(user.rooms));
             }
         });
 
