@@ -1,10 +1,7 @@
-function togglePassword(fieldId){
-    const field = document.getElementById(fieldId);
-    field.type = (field.type == "password") ? "text" : "password";
-    field.focus();
-    field.setSelectionRange(field.value.length, field.value.length);
-}
+let mdp = document.getElementById('password1');
+let mdpbutton = document.getElementById('togglePassword');
 
-function autosubmit(){
-    $('#connection').modal('show');
-}
+mdpbutton.addEventListener('click', event=> {
+    mdp.type = (mdp.type == "password") ? "text" : "password";
+    mdp.focus();
+});

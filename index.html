@@ -3,7 +3,6 @@
 <head>
     <title>Stratégiquement Stratego</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="Front/Script/moduleConnection.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -14,7 +13,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 
-</html>
 <body>
 	<nav class="navbar navbar-expand-md" style="background-color:darkgrey; height:100px;">
 		<div class="navbar-collapse collapse" id="collapsingNavbar">
@@ -46,7 +44,7 @@
 							</div>
 								
 							<div class="modal-body row">
-								<form class="col" method="post" action=""><!--Connexion-->
+								<form class="col" method="post" id="form" action=""><!--Connexion-->
 									<div class="form-group">
 										<label for="email" class="form-control-label">Pseudo</label>
 										<input type="text" class="form-control" name ="pseudo" placeholder="Pseudo" required>
@@ -57,7 +55,7 @@
 									<div class="input-group mb-3">
 										<input type="password" class="form-control" name="password1" id="password1" placeholder="Password" required>
 										<div class="input-group-append">
-											<button type="button" class="btn" onclick="togglePassword('password1');">Voir</button>
+											<button type="button" class="btn" id="togglePassword">Voir</button>
 										</div>
 									</div>
 	<!-- cookie à programmer pour se rappeler de la session
@@ -91,4 +89,8 @@
 		<img style="height: 100px; margin-top: 25px;" src="Front/Images/stratego_logo.png">
 	</div>
 
+
 </body>
+
+<script type="text/javascript" src="Front/Script/moduleConnection.js"></script>
+</html>
