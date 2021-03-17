@@ -20,7 +20,7 @@ app.get('/', (req,res) =>{
 
 });
 
-app.get('/Front/html/display.html', (req, res) => {
+app.get("show", (req, res) => {
 	res.sendFile(__dirname + '/Front/html/display.html');
 });
 
@@ -57,7 +57,7 @@ io.on('connection',(socket) =>{
 			room++;
 
 			// redirection vers la page de jeu
-			app.get('/Front/html/display.html' );
+			app.get('show');
 
 
 		}
