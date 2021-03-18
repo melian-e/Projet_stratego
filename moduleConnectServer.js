@@ -55,10 +55,10 @@ io.on('connection',(socket) =>{
 
 	socket.on('current-games', () => {
 		let srvSockets = io.sockets.sockets;
-		return functions.currentGames(srvSockets, allCurrentsGames);
+		io.to(socket.handshake.session.id).emit('current-games', functions.currentGames(srvSockets, allCurrentsGames));
 	});
 	
-	socket.on('new-secpator', numGame =>{
+	socket.on('new-spectator', numGame =>{
 		let srvSockets = io.sockets.sockets;
 		let rooms = researchRoomById(srvSockets, allCurrentsGames[numGame].player1);
 		socket.join(functions.researchRoom(rooms));
@@ -67,16 +67,15 @@ io.on('connection',(socket) =>{
 
 	});
 	
-	socket.on('search-game', (revealedRule, scoutRule,bombRule) => {		// Joueurs en recherche
+	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 		//console.log(socket.handshake);
 		
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
-		console.log(table);
 		
 		if(table.length == 2) {				// 2 joueurs veulent jouer
 			functions.newGame(table,io.sockets.sockets,allCurrentsGames,'room'+room,revealedRule, scoutRule,bombRule);
 			
-			console.log(socket.rooms);
+			//console.log(socket.rooms);
 
 			io.to(functions.researchRoom(socket.rooms)).emit('game-redirect');
 			io.to(table[0]).emit('preparation', 'blue');		// A modifier en passant par redirection
@@ -87,21 +86,25 @@ io.on('connection',(socket) =>{
 		}
 	});
 
+	socket.on('preparation', () => {
+		//console.log(socket.rooms);
+	});
+
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
-		let lobby = researchGame(playerId,allCurrentsGames);    
+		let lobby = functions.researchGame(socket.handshake.session.id,allCurrentsGames);    
 		functions.ready(table, socket.handshake.session.id, lobby);
 		let ready = Array();
 		if(lobby.getBox(0,0).getOccupy() == 1){
-			io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
+			//io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
 			ready.push(lobby.player1);
 		}
 		if(lobby.getBox(9,9).getOccupy() == 1){
-			io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
+			//io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
 			ready.push(lobby.player2);
 		}
 		if(ready.length == 2){
 			lobby.startTime = Date.now(); // remise à zéro du compteur
-			displayed(lobby);
+			displayed(lobby, socket.rooms);
 			io.to(functions.researchRoom(socket.rooms)).emit('start');
 		}
 		else{
@@ -121,10 +124,21 @@ io.on('connection',(socket) =>{
 		let yMove = numMove % 10;
 
 		move.eventMove(lobby, lobby.getBox(xPiece, yPiece), xMove, yMove);
-		displayed(lobby);
+		displayed(lobby, socket.rooms);
 
 		if(lobby.isFinished()){
-			io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(lobby.getWinner()));	// Si la partie est terminé
+			let winner = lobby.getWinner();
+			let loser = (winner == lobby.player1) ? lobby.player2 : lobby.player1;
+			console.log(winner, loser);
+			if(winner != undefined){
+				io.to(winner).emit('end', 'Tu as gagné.');
+				io.to(loser).emit('end', 'Tu as perdu.');
+				io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(winner) + ' as gagné.');	// Si la partie est terminé
+			}
+			else{
+				io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(winner));
+			}
+
 			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets);
 		}
 	});
@@ -135,10 +149,10 @@ io.on('connection',(socket) =>{
 	});
 });
 
-function displayed(lobby){
+function displayed(lobby, rooms){
 	io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
 	io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
-	io.to(functions.researchRoom(socket.rooms)).emit('display', lobby.convertGrid('sepectator'));
+	io.to(functions.researchRoom(rooms)).emit('display', lobby.convertGrid('sepectator'));
 }
 
 

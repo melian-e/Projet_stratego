@@ -94,10 +94,9 @@ module.exports = {
         console.log("Quelqu'un s'est connecté, il y a maintenant",srvSockets.size,"personnes connectés");
 
         srvSockets.forEach(user => {		// Recherche des personnes en recherche d'une partie
-        console.log(user.handshake.session);
+        //console.log(user.handshake.session);
             if(user.handshake.session.wait == true && socket.handshake.session.revealedRule == revealedRule 
                 && socket.handshake.session.scoutRule == scoutRule && socket.handshake.session.bombRule == bombRule){ 
-                    console.log(table);
                     table.push(user.handshake.session.id);
             }
         });
@@ -118,9 +117,7 @@ module.exports = {
         allCurrentsGames.push(new Game(table[0], table[1], rules[0],rules[1],rules[2])); // Ajout de la Lobbieie au tableau
 
         srvSockets.forEach(user => {
-            console.log("yup forEach :",user.handshake.session.id);
             if(user.handshake.session.id == table[0] || user.handshake.session.id == table[1]) {
-                console.log(user.handshake.session.id);
                 user.handshake.session.wait = false;
                 user.join(room);		// Ajout des joueur à une nouvelle room
                 user.join(user.handshake.session.id);
@@ -141,6 +138,8 @@ module.exports = {
             table.forEach(elem => elem.reverse());
         }
         lobby.superpose(table, playerId);
+
+
     },
 
     /**

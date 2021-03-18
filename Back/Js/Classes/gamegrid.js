@@ -80,7 +80,6 @@ class GameGrid {
         for(let x = 0; x < 10; x++){
             table[x] = Array(10);
             for(let y = 0; y < 10; y++){
-                console.log(table);
                 table[x][y] = this.grid[x][y].convertCell(player, myColor, this.player2);
             }
         }
