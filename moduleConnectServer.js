@@ -10,18 +10,13 @@ const session = require("express-session")({
 	  maxAge: 2 * 60 * 60 * 1000,
 	  secure: false
 	}
-  });
-  const sharedsession = require("express-socket.io-session");
-  const bodyParser = require('body-parser');
+});
+const sharedsession = require("express-socket.io-session");
+const bodyParser = require('body-parser');
 
-const Coordinates = require('./Back/Js/Classes/coordinates.js');
-const Entity = require('./Back/Js/Classes/entity.js');
-const Piece = require('./Back/Js/Classes/piece.js');
-const GameGrid = require('./Back/Js/Classes/gamegrid.js');
-const Game = require('./Back/Js/Classes/game.js');
-const attack = require('./Back/Js/Modules/attack.js');
 const move = require('./Back/Js/Modules/move.js');
 const functions = require('./Back/Js/mainGame');
+const research = require('./Back/js/research.js');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -55,29 +50,27 @@ io.on('connection',(socket) =>{
 
 	socket.on('current-games', () => {
 		let srvSockets = io.sockets.sockets;
-		io.to(socket.handshake.session.id).emit('current-games', functions.currentGames(srvSockets, allCurrentsGames));
+		let table = functions.currentGames(srvSockets, allCurrentsGames);
+		io.to(socket.id).emit('current-games', table);
 	});
 	
 	socket.on('new-spectator', numGame =>{
 		let srvSockets = io.sockets.sockets;
-		let rooms = researchRoomById(srvSockets, allCurrentsGames[numGame].player1);
-		socket.join(functions.researchRoom(rooms));
+		let rooms = research.roomById(srvSockets, allCurrentsGames[numGame].player1);
+		socket.join(research.room(rooms));
 
-		io.to(socket.handshake.session.id).emit('display', allCurrentsGames[numGame].convertGrid('sepectator'));
+		io.to(socket.id).emit('display', allCurrentsGames[numGame].convertGrid('spectator'));
 
 	});
 	
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
-		//console.log(socket.handshake);
 		
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 		
-		if(table.length == 2) {				// 2 joueurs veulent jouer
-			functions.newGame(table,io.sockets.sockets,allCurrentsGames,'room'+room,revealedRule, scoutRule,bombRule);
-			
-			//console.log(socket.rooms);
+		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
+			functions.newGame(table,io.sockets.sockets,allCurrentsGames,'room'+room,revealedRule, scoutRule,bombRule);			
 
-			io.to(functions.researchRoom(socket.rooms)).emit('game-redirect');
+			io.to(research.room(socket.rooms)).emit('game-redirect');
 			io.to(table[0]).emit('preparation', 'blue');		// A modifier en passant par redirection
 			io.to(table[1]).emit('preparation', 'red');
 			//io.to(socket.id).emit('preparation', 'blue');
@@ -91,7 +84,7 @@ io.on('connection',(socket) =>{
 	});
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
-		let lobby = functions.researchGame(socket.handshake.session.id,allCurrentsGames);    
+		let lobby = research.game(socket.handshake.session.id,allCurrentsGames);    
 		functions.ready(table, socket.handshake.session.id, lobby);
 		let ready = Array();
 		if(lobby.getBox(0,0).getOccupy() == 1){
@@ -105,7 +98,7 @@ io.on('connection',(socket) =>{
 		if(ready.length == 2){
 			lobby.startTime = Date.now(); // remise à zéro du compteur
 			displayed(lobby, socket.rooms);
-			io.to(functions.researchRoom(socket.rooms)).emit('start');
+			io.to(research.room(socket.rooms)).emit('start');
 		}
 		else{
 			io.to(ready[0]).emit('display', lobby.convertGrid(ready[0]));
@@ -113,8 +106,8 @@ io.on('connection',(socket) =>{
 	});
 
 	socket.on('click', (numPiece, numMove) => {
-		let lobby = functions.researchGame(socket.handshake.session.id, allCurrentsGames);
-		if(socket.handshake.id == lobby.player1){
+		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
+		if(socket.handshake.session.id == lobby.player1){
 			numPiece = 99 - numPiece;
 			numMove = 99 - numMove;
 		}
@@ -129,17 +122,17 @@ io.on('connection',(socket) =>{
 		if(lobby.isFinished()){
 			let winner = lobby.getWinner();
 			let loser = (winner == lobby.player1) ? lobby.player2 : lobby.player1;
-			console.log(winner, loser);
+			let rooms = research.room(socket.rooms);
 			if(winner != undefined){
 				io.to(winner).emit('end', 'Tu as gagné.');
 				io.to(loser).emit('end', 'Tu as perdu.');
-				io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(winner) + ' as gagné.');	// Si la partie est terminé
+				io.to(rooms).emit('end', research.getName(winner) + ' as gagné.');	// Si la partie est terminé
 			}
 			else{
-				io.to(functions.researchRoom(socket.rooms)).emit('end', functions.getName(winner));
+				io.to(rooms).emit('end', research.getName(winner));
 			}
 
-			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets);
+			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets, rooms);
 		}
 	});
 
@@ -150,9 +143,10 @@ io.on('connection',(socket) =>{
 });
 
 function displayed(lobby, rooms){
+	io.to(research.room(rooms)).emit('display', lobby.convertGrid('spectator'));
 	io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
 	io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
-	io.to(functions.researchRoom(rooms)).emit('display', lobby.convertGrid('sepectator'));
+	
 }
 
 

@@ -6,6 +6,7 @@ class Game extends GameGrid {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = 0;
+        this.numStrokes = 0;
         this.startTime = Date.now();
         this.historyMove = [[],[]];
         this.revealedRule = revealedRule;// true si les pièces restent révélé après une attaque
@@ -20,6 +21,7 @@ class Game extends GameGrid {
     }
     play(){
         this.currentPlayer = (this.currentPlayer + 1)%2;
+        if(this.currentPlayer == 0) this.numStrokes++;
     }
     getPlayers(){
         return [this.player1, this.player2];

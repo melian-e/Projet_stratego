@@ -17,7 +17,7 @@ let createLine = function(){
                 i++;
             }
             
-            socket.emit('click', i, 1);
+            socket.emit('click', 98, i);
         });
         line.appendChild(col);
     }
@@ -58,11 +58,11 @@ wait.addEventListener('click', () => {
 });
 
 currentGame.addEventListener('click', () => {
-    socket.emit('current-game');
+    socket.emit('current-games');
 });
 
 spectator.addEventListener('click', () => {
-    socket.emit('new-spectator');
+    socket.emit('new-spectator', 0);    
 });
 
 ready.addEventListener('click', () => {
@@ -75,14 +75,15 @@ ready.addEventListener('click', () => {
         }
     }
 
-    table[9][9] = 2;
+    table[9][9] = 0;
+    table[9][8] = 8;
 
     
     socket.emit('ready', table);
 });
 
 click.addEventListener('click', () => {
-    socket.emit('click', 99,0);
+    socket.emit('click', 98,97);
 })
 
 socket.on('game-redirect', () => {
@@ -105,7 +106,7 @@ socket.on('current-games', (table) => {
 });
 
 socket.on('display', (game) => {
-    console.log('display');
+    console.log(game);
     MaJ(game);
 });
 

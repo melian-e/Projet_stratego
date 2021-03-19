@@ -1,4 +1,4 @@
-let attack = (function(){
+module.exports = (function(){
     
     function winnerAttack(attacker, attacked, bombRule){
 
@@ -36,5 +36,3 @@ let attack = (function(){
         }
     }
 })();
-
-module.exports = {attack};

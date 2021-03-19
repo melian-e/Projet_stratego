@@ -1,45 +1,7 @@
-const Coordinates = require('./Classes/coordinates.js');
-const Entity = require('./Classes/entity.js');
-const Piece = require('./Classes/piece.js');
-const GameGrid = require('./Classes/gamegrid.js');
 const Game = require('./Classes/game.js');
-const attack = require('./Modules/attack.js');
-const move = require('./Modules/move.js');
+const research = require('./research.js');
 
 module.exports = {
-    /**
-     * Trouver la partie d'un joueur
-     * @param { String } playerId
-     * @param { Array } allCurrentsGames
-     * @return { Game }
-     */
-    researchGame(playerId, allCurrentsGames){
-        let x = 0;
-
-        while(!allCurrentsGames[x].getPlayers().some(elem => elem == playerId)){
-            x++;
-        }
-
-        return allCurrentsGames[x];
-    },
-
-    /**
-     * Recherche la room de la partie 
-     * @param { Set } rooms 
-     * @return { String }
-     */
-    researchRoom(rooms){
-        let x = 0;
-        let room = 'room';
-    
-        if(rooms.size != 1){
-        while(!rooms.has(room+x)){
-            x++;
-        }
-        }
-        return room + x;
-    },
-
     /**
      * Faire un tableua contenant le nom des joueurs et la duré de leur parti pour toutes les game en cours afin de les proproser à un spectateur
      * @param { Map } srvSockets 
@@ -50,29 +12,14 @@ module.exports = {
         let table = Array();
         for(let x = 0; x < allCurrentsGames.length; x++){
             let time = Date.now() - allCurrentsGames[x].startTime;
-            let min = Math.floor(time/60000) % 60;
-            let hours = Math.floor((time - min)/60) % 24;
+            let sec = Math.floor((time / 1000) % 60);
+            let min = Math.floor(Math.floor(Math.floor(time/1000) / 60) % 60);
+            let hours = Math.floor( Math.floor(time/1000) / 3600);
             let players = allCurrentsGames[x].getPlayers(); 
             
-            table.push([getName(srvSockets, players[0]), getName(srvSockets, players[1]), hours+':'+min]);
+            table.push([research.getName(srvSockets, players[0]), research.getName(srvSockets, players[1]), hours+':'+min+':'+sec]);
         }
         return table;
-    },
-
-    researchRoomById(srvSockets, player){
-        
-        let x = 0;
-
-        while(srvSockets[x].id != player){
-            x++;
-        }
-        
-        return srvSockets[x].rooms;
-        /*srvSockets.forEach(user => {
-            if(user == player){
-                rooms = user.handshake.rooms;
-            }
-        });*/
     },
 
     /**
@@ -141,36 +88,17 @@ module.exports = {
 
 
     },
-
-    /**
-     * Trouve le nom du joueur à partir de l'ID de sa session
-     * @param { Map } srvSockets 
-     * @param { String } playerId 
-     * @return { String } 
-     */
-    getName(srvSockets, playerId){
-        if(playerId == undefined) return 'mate';
-        
-        let name;
-        srvSockets.forEach(user => {
-            if(user.handshake.session.id == playerId){
-                name = user.handshake.session.name;
-            }
-        });
-        return name;
-    },
-
     /**
      * Efface la partie un fois qu'elle est terminée
      * @param { Game } pobby 
      * @param { Array } allCurrentsGames 
      * @param { Map } srvSockets 
      */
-    suppress(lobby,allCurrentsGames,srvSockets){
+    suppress(lobby,allCurrentsGames,srvSockets, rooms){
         
         srvSockets.forEach(user => {            // A modifier si spectateur
-            if( lobby.getPlayers().some(id => id == user.handshake.session.id)){
-                user.leave(researchRoom(user.rooms));
+            if( user.rooms.has(rooms)){
+                user.leave(rooms);
             }
         });
 
