@@ -45,17 +45,17 @@ let MaJ = function(table){
     }
 }
 
-createTab();
-
 let wait = document.getElementById("wait");
 let currentGame = document.getElementById("current-game");
 let spectator = document.getElementById("spectator");
 let ready = document.getElementById("ready");
 let click = document.getElementById("click");
 
-wait.addEventListener('click', () => {
-    socket.emit('search-game');
-});
+if(wait != undefined){
+    wait.addEventListener('click', () => {
+        socket.emit('search-game');
+    });
+}
 
 currentGame.addEventListener('click', () => {
     socket.emit('current-games');
@@ -88,7 +88,7 @@ click.addEventListener('click', () => {
 
 socket.on('game-redirect', () => {
     console.log('redirect');
-    //window.location.href = "/html/display.html";
+    window.location.href = "/html/display.html";
 
     /*$.ajax({
         type: "POST",
@@ -119,6 +119,7 @@ socket.on('start', () => {
 });
 
 socket.on('preparation', (color) => {
+    console.log('preparation');
     let td = document.getElementsByTagName('td');
     let i = 0;
 

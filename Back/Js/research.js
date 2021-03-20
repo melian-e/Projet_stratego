@@ -37,14 +37,20 @@ module.exports = {
      * @param { String } player 
      * @returns { Set }
      */
-    roomById(srvSockets, player){
+    roomById(srvSockets, player, allRooms){
         
-        let room;
+        /*let room;
         srvSockets.forEach(user =>{
             if(user.handshake.session.id == player) room = user.rooms;
-        })
+        })*/
+
+        let x = 0;
+
+        while(x < allRooms.length && !allRooms[x].people.some(elem => elem == player)){
+            x++;
+        }
         
-        return room;
+        return x;
     },
 
     /**
@@ -54,7 +60,7 @@ module.exports = {
      * @return { String } 
      */
      getName(srvSockets, playerId){
-        if(playerId == undefined) return 'mate';
+        if(playerId == undefined) return 'égalité';
         
         let name;
         srvSockets.forEach(user => {
@@ -64,4 +70,14 @@ module.exports = {
         });
         return name;
     },
+
+    idOf(srvSockets, playerId){
+        let id;
+        srvSockets.forEach(user => {
+            if(user.handshake.session.id == playerId){
+                id = user.id;
+            }
+        });
+        return id;
+    }
 }

@@ -1,4 +1,5 @@
 const Game = require('./Classes/game.js');
+const Room = require('./Classes/room.js');
 const research = require('./research.js');
 
 module.exports = {
@@ -59,18 +60,19 @@ module.exports = {
      * @param { String } room 
      * @param { Array } rules
      */
-    newGame(table,srvSockets,allCurrentsGames,room,...rules){
+    newGame(table,srvSockets,allCurrentsGames,allRooms,...rules){
         console.log("Nouvelle partie");
         allCurrentsGames.push(new Game(table[0], table[1], rules[0],rules[1],rules[2])); // Ajout de la Lobbieie au tableau
 
         srvSockets.forEach(user => {
             if(user.handshake.session.id == table[0] || user.handshake.session.id == table[1]) {
                 user.handshake.session.wait = false;
-                user.join(room);		// Ajout des joueur à une nouvelle room
-                user.join(user.handshake.session.id);
-                
+                /*user.join(room);		// Ajout des joueur à une nouvelle room
+                user.join(user.handshake.session.id);*/                
             }
         });
+
+        allRooms.push(new Room(table))
     },
 
     /**
@@ -85,8 +87,6 @@ module.exports = {
             table.forEach(elem => elem.reverse());
         }
         lobby.superpose(table, playerId);
-
-
     },
     /**
      * Efface la partie un fois qu'elle est terminée
@@ -94,14 +94,16 @@ module.exports = {
      * @param { Array } allCurrentsGames 
      * @param { Map } srvSockets 
      */
-    suppress(lobby,allCurrentsGames,srvSockets, rooms){
+    suppress(lobby,allCurrentsGames,srvSockets, allRooms){
         
-        srvSockets.forEach(user => {            // A modifier si spectateur
-            if( user.rooms.has(rooms)){
+        let x = research.roomById(srvSockets, lobby.player1);
+        
+        /*srvSockets.forEach(user => {            // A modifier si spectateur
+            /*if( user.rooms.has(rooms)){
                 user.leave(rooms);
             }
-        });
-
+        });*/
+        allRooms.splice(x, 1);
         allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
     },
 };

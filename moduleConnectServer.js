@@ -14,6 +14,7 @@ const session = require("express-session")({
 const sharedsession = require("express-socket.io-session");
 const bodyParser = require('body-parser');
 
+module.exports = {emitRoom};
 const move = require('./Back/Js/Modules/move.js');
 const functions = require('./Back/Js/mainGame');
 const research = require('./Back/js/research.js');
@@ -43,10 +44,9 @@ app.get('/', (req,res) =>{
 
 let room = 0;
 let allCurrentsGames = Array();
+let allRooms =Array();
 
 io.on('connection',(socket) =>{
-	//console.log(socket);
-	io.emit('New challenger approaching');
 
 	socket.on('current-games', () => {
 		let srvSockets = io.sockets.sockets;
@@ -56,8 +56,10 @@ io.on('connection',(socket) =>{
 	
 	socket.on('new-spectator', numGame =>{
 		let srvSockets = io.sockets.sockets;
-		let rooms = research.roomById(srvSockets, allCurrentsGames[numGame].player1);
-		socket.join(research.room(rooms));
+		let room = research.roomById(srvSockets, allCurrentsGames[numGame].player1, allRooms);
+		//socket.join(research.room(rooms));
+
+		allRooms[room].join(socket.handshake.session.id);
 
 		io.to(socket.id).emit('display', allCurrentsGames[numGame].convertGrid('spectator'));
 
@@ -68,11 +70,17 @@ io.on('connection',(socket) =>{
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 		
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
-			functions.newGame(table,io.sockets.sockets,allCurrentsGames,'room'+room,revealedRule, scoutRule,bombRule);			
+			let srvSockets = io.sockets.sockets;
+			functions.newGame(table,srvSockets,allCurrentsGames,allRooms,revealedRule, scoutRule,bombRule);			
 
-			io.to(research.room(socket.rooms)).emit('game-redirect');
-			io.to(table[0]).emit('preparation', 'blue');		// A modifier en passant par redirection
-			io.to(table[1]).emit('preparation', 'red');
+			//io.to(research.room(socket.rooms)).emit('game-redirect');
+			let x = research.roomById(srvSockets, socket.handshake.session.id, allRooms);
+			allRooms[x].simpleEvent(srvSockets, 'game-redirect');
+
+			
+			//console.log(socket.id, research.idOf(srvSockets,table[0]), research.idOf(srvSockets,table[1]));
+			io.to(research.idOf(srvSockets,table[0])).emit('preparation', 'blue');// A modifier en passant par redirection
+			io.to(research.idOf(srvSockets,table[1])).emit('preparation', 'red');
 			//io.to(socket.id).emit('preparation', 'blue');
 			
 			room++;
@@ -81,27 +89,32 @@ io.on('connection',(socket) =>{
 
 	socket.on('preparation', () => {
 		//console.log(socket.rooms);
+		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
+		io.to(socket.id).emit('preparation', (lobby.player1 == socket.handshake.session.id) ? 'blue' : 'red');
 	});
 
-	socket.on('ready', table =>{		// Quand le joueur a placé ces pions
+	socket.on('ready', table =>{		// Quand le joueur a placé ces pions		
+		let srvSockets = io.sockets.sockets;
 		let lobby = research.game(socket.handshake.session.id,allCurrentsGames);    
 		functions.ready(table, socket.handshake.session.id, lobby);
 		let ready = Array();
 		if(lobby.getBox(0,0).getOccupy() == 1){
-			//io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
 			ready.push(lobby.player1);
 		}
 		if(lobby.getBox(9,9).getOccupy() == 1){
-			//io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
 			ready.push(lobby.player2);
 		}
+		
 		if(ready.length == 2){
 			lobby.startTime = Date.now(); // remise à zéro du compteur
-			displayed(lobby, socket.rooms);
-			io.to(research.room(socket.rooms)).emit('start');
+			/*displayed(lobby, socket.rooms);
+			io.to(research.room(socket.rooms)).emit('start');*/
+			let x = research.roomById(srvSockets, socket.handshake.session.id, allRooms);
+			allRooms[x].display(srvSockets, lobby);
+			allRooms[x].simpleEvent(srvSockets, 'start');
 		}
 		else{
-			io.to(ready[0]).emit('display', lobby.convertGrid(ready[0]));
+			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]));
 		}
 	});
 
@@ -117,10 +130,14 @@ io.on('connection',(socket) =>{
 		let yMove = numMove % 10;
 
 		move.eventMove(lobby, lobby.getBox(xPiece, yPiece), xMove, yMove);
-		displayed(lobby, socket.rooms);
+		//displayed(lobby, socket.rooms);
+		let x = research.roomById(io.sockets.sockets, socket.handshake.session.id, allRooms);
+		allRooms[x].display(io.sockets.sockets, lobby);
 
 		if(lobby.isFinished()){
-			let winner = lobby.getWinner();
+			allRooms[x].end(io.sockets.sockets, lobby);
+			
+			/*let winner = lobby.getWinner();
 			let loser = (winner == lobby.player1) ? lobby.player2 : lobby.player1;
 			let rooms = research.room(socket.rooms);
 			if(winner != undefined){
@@ -130,7 +147,7 @@ io.on('connection',(socket) =>{
 			}
 			else{
 				io.to(rooms).emit('end', research.getName(winner));
-			}
+			}*/
 
 			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets, rooms);
 		}
@@ -142,13 +159,15 @@ io.on('connection',(socket) =>{
 	});
 });
 
-function displayed(lobby, rooms){
+/*function displayed(lobby, rooms){
 	io.to(research.room(rooms)).emit('display', lobby.convertGrid('spectator'));
 	io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
 	io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
-	
-}
+}*/
 
+function emitRoom(player, eventName, arg){
+	io.to(player).emit(eventName, arg);
+}
 
 http.listen(4200, () => {
   console.log('Serveur lancé sur le port 4200');

@@ -5,12 +5,21 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        <p id = "color">Yes</p>
+        <div id = "div">
+
+        </div>
+        <Button id = "wait">Wait</Button>
+        <Button id = "current-game">Current game</Button>
+        <Button id = "spectator">New spectator</Button>
+        <Button id = "ready">Ready</Button>
+        <Button id = "click">Click</Button>
     </body>
 
     <script>
         let socket = io();
     </script>
+    <script src="../js/test.js"></script>
     <script src="../js/display.js"></script>
+    <script>createTab();</script>
 
 </html>
