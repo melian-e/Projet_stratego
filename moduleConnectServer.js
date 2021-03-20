@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io=require('socket.io')(http);
+const io = require('socket.io')(http);
 const session = require("express-session")({
 	secret: "a15a7a8df5a9a9d0d1851fa03ce4ebf0f67f140bdee167310b206887d85ec783",
 	resave: true,
@@ -56,22 +56,26 @@ io.on('connection',(socket) =>{
 	
 	socket.on('new-spectator', numGame =>{
 		let srvSockets = io.sockets.sockets;
-		let room = research.roomById(srvSockets, allCurrentsGames[numGame].player1, allRooms);
+		let room = research.roomById(srvSockets, allCurrentsGames[numGame].player1.id, allRooms);
 		//socket.join(research.room(rooms));
 
 		allRooms[room].join(socket.handshake.session.id);
+		io.to(socket.id).emit('game-redirect');
 
-		io.to(socket.id).emit('display', allCurrentsGames[numGame].convertGrid('spectator'));
+		//io.to(socket.id).emit('display', allCurrentsGames[numGame].convertGrid('spectator'));
 
 	});
 	
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
-		
+
 		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
 		
+		console.log(table);
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
 			let srvSockets = io.sockets.sockets;
 			functions.newGame(table,srvSockets,allCurrentsGames,allRooms,revealedRule, scoutRule,bombRule);			
+
+			//srvSockets.forEach(user => console.log(user.handshake.session.wait));
 
 			//io.to(research.room(socket.rooms)).emit('game-redirect');
 			let x = research.roomById(srvSockets, socket.handshake.session.id, allRooms);
@@ -89,8 +93,14 @@ io.on('connection',(socket) =>{
 
 	socket.on('preparation', () => {
 		//console.log(socket.rooms);
-		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
-		io.to(socket.id).emit('preparation', (lobby.player1 == socket.handshake.session.id) ? 'blue' : 'red');
+		let x = research.roomById(io.sockets.sockets, socket.handshake.session.id, allRooms);
+		let lobby = allCurrentsGames[research.gameByRoom(allRooms[x], allCurrentsGames)];
+		//let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
+		//io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color);
+
+		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
+		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color) : 
+		io.to(socket.id).emit('display', lobby.convertGrid('spectator'));
 	});
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions		
@@ -99,10 +109,10 @@ io.on('connection',(socket) =>{
 		functions.ready(table, socket.handshake.session.id, lobby);
 		let ready = Array();
 		if(lobby.getBox(0,0).getOccupy() == 1){
-			ready.push(lobby.player1);
+			ready.push(lobby.player1.id);
 		}
 		if(lobby.getBox(9,9).getOccupy() == 1){
-			ready.push(lobby.player2);
+			ready.push(lobby.player2.id);
 		}
 		
 		if(ready.length == 2){
@@ -120,7 +130,7 @@ io.on('connection',(socket) =>{
 
 	socket.on('click', (numPiece, numMove) => {
 		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
-		if(socket.handshake.session.id == lobby.player1){
+		if(socket.handshake.session.id == lobby.player1.id){
 			numPiece = 99 - numPiece;
 			numMove = 99 - numMove;
 		}

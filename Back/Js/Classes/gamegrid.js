@@ -75,15 +75,15 @@ class GameGrid {
         this.grid[piece.getCoord().x][piece.getCoord().y] = new Entity(0);
     }
     convertGrid(player){
-        let myColor = (player == this.player1) ? 'blue' : 'red';
+        let myColor = (player == this.player1.id) ? this.player1.color : this.player2.color;
         let table = Array(10);
         for(let x = 0; x < 10; x++){
             table[x] = Array(10);
             for(let y = 0; y < 10; y++){
-                table[x][y] = this.grid[x][y].convertCell(player, myColor, this.player2);
+                table[x][y] = this.grid[x][y].convertCell(player, myColor, this.player2.id);
             }
         }
-        if(this.player1 == player){
+        if(this.player1.id == player){
             table.reverse();
             table.forEach(elem => elem.reverse());
         }

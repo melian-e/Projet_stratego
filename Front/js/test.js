@@ -53,7 +53,7 @@ let click = document.getElementById("click");
 
 if(wait != undefined){
     wait.addEventListener('click', () => {
-        socket.emit('search-game');
+        socket.emit('search-game', true, true, true);
     });
 }
 
@@ -68,18 +68,20 @@ spectator.addEventListener('click', () => {
 ready.addEventListener('click', () => {
     let table = Array(10);
     let td = document.getElementsByTagName('td');
-    for(let i = 0; i < 10; i++){
-        table[i] = Array(10);
-        for(let j = 0; j < 10; j++){
-            table[i][j] = (td[10*i+j].innerHTML == '') ? 30 : 3;//(td[10*i+j].innerHTML.split(',')[0] == 30) ? 30 : 3;
+    if(td[0].style.backgroundColor != 'white'){
+        for(let i = 0; i < 10; i++){
+            table[i] = Array(10);
+            for(let j = 0; j < 10; j++){
+                table[i][j] = (td[10*i+j].innerHTML == '') ? 30 : 3;//(td[10*i+j].innerHTML.split(',')[0] == 30) ? 30 : 3;
+            }
         }
-    }
 
-    table[9][9] = 0;
-    table[9][8] = 8;
+        table[9][9] = 0;
+        table[9][8] = 8;
 
     
     socket.emit('ready', table);
+    }
 });
 
 click.addEventListener('click', () => {

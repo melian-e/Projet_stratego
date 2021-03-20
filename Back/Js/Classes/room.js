@@ -11,6 +11,9 @@ class Room {
     leave(playerId){
         this.people.splice(this.people.indexOf(playerId), 1);
     }
+    isPresent(playerId){
+        return this.people.some(user => user == playerId);
+    }
     display(srvSockets, lobby){
         let playerId;
         let grid;
@@ -24,11 +27,11 @@ class Room {
     }
     end(srvSockets, lobby){
         let winner = lobby.getWinner();
-        let loser = (winner == lobby.player1) ? lobby.player2 : lobby.player1;
+        let loser = (winner == lobby.player1.id) ? lobby.player2.id : lobby.player1.id;
         
         srvSockets.forEach(user => {
             let playerId = user.handshake.session.id;
-            if(this.people.some(playerId == elem)){
+            if(this.people.some(elem => playerId == elem)){
                 if(winner != undefined){
                     let message = (playerId == winner) ? 'Tu as gagné.' : (playerId == loser) ? 'Tu as perdu.':
                     research.getName(winner) + ' as gagné.';
@@ -40,10 +43,10 @@ class Room {
             }
         });
     }
-    simpleEvent(srvSockets, eventName){
+    simpleEvent(srvSockets, eventName, arg){
         srvSockets.forEach(user => {
             if(this.people.some(elem => user.handshake.session.id == elem)){
-                emit.emitRoom(user.id, eventName);
+                emit.emitRoom(user.id, eventName, arg);
             }
         });
     }

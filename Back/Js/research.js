@@ -15,6 +15,15 @@ module.exports = {
         return allCurrentsGames[x];
     },
 
+    gameByRoom(room, allCurrentsGames){
+        let x = 0;
+        while(!room.isPresent(allCurrentsGames[x].player1.id)){
+            x++;
+        };
+
+        return x;
+    },
+
     /**
      * Recherche la room de la partie 
      * @param { Set } rooms 

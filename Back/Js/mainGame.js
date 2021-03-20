@@ -33,19 +33,21 @@ module.exports = {
      * @return { Array }
      */
     waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
+        //console.log('wait',socket.handshake.session.wait);
         socket.handshake.session.wait = true;
         socket.handshake.session.revealedRule = revealedRule;
         socket.handshake.session.scoutRule = scoutRule;
         socket.handshake.session.bombRule = bombRule;
 
-        let table = Array();
+        let table = [];
         console.log("Quelqu'un s'est connecté, il y a maintenant",srvSockets.size,"personnes connectés");
 
         srvSockets.forEach(user => {		// Recherche des personnes en recherche d'une partie
-        //console.log(user.handshake.session);
-            if(user.handshake.session.wait == true && socket.handshake.session.revealedRule == revealedRule 
-                && socket.handshake.session.scoutRule == scoutRule && socket.handshake.session.bombRule == bombRule){ 
-                    table.push(user.handshake.session.id);
+            console.log('waiting:',user.handshake.session.wait);
+            if(user.handshake.session.wait == true && user.handshake.session.revealedRule == revealedRule && user.handshake.session.scoutRule == scoutRule && user.handshake.session.bombRule == bombRule){ 
+                console.log('waiting:',user.handshake.session.wait);
+                table.push(user.handshake.session.id);
+                console.log(table.length);
             }
         });
 
@@ -65,8 +67,11 @@ module.exports = {
         allCurrentsGames.push(new Game(table[0], table[1], rules[0],rules[1],rules[2])); // Ajout de la Lobbieie au tableau
 
         srvSockets.forEach(user => {
-            if(user.handshake.session.id == table[0] || user.handshake.session.id == table[1]) {
+            if(table.some(id => id == user.handshake.session.id)) {
+                console.log('new Game 1', user.handshake.session.wait);
                 user.handshake.session.wait = false;
+                console.log('new Game 2', user.handshake.session.wait);
+                //console.log(user.handshake.session);
                 /*user.join(room);		// Ajout des joueur à une nouvelle room
                 user.join(user.handshake.session.id);*/                
             }
@@ -96,7 +101,7 @@ module.exports = {
      */
     suppress(lobby,allCurrentsGames,srvSockets, allRooms){
         
-        let x = research.roomById(srvSockets, lobby.player1);
+        let x = research.roomById(srvSockets, lobby.player1.id);
         
         /*srvSockets.forEach(user => {            // A modifier si spectateur
             /*if( user.rooms.has(rooms)){

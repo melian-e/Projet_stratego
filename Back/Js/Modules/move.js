@@ -11,7 +11,7 @@ module.exports = (function(){
         return (piece.getCoord() == new Coordinates(x,y)) ? false : true;
     }
     function isMyPiece(game, piece){    // Vérifie que la pièce que l'on veut bouger est bien la sienne
-        return (piece.getOwner() != game.getCurrentPlayerName()) ? false : true; // vérifier la val de piece.owner
+        return (piece.getOwner() != game.getCurrentPlayerName().id) ? false : true; // vérifier la val de piece.owner
     }
     function isAuthorizedMove(boxEntity, currentPlayer){    // Vérifie que la case de destination est libre ou occupé par l'ennemi
         return (boxEntity.getOccupy() == 2 || 
@@ -51,8 +51,8 @@ module.exports = (function(){
                 let canMove = (piece.getPower() == 2) ? scoutMove(game, piece, x, y) : pieceMove(piece, x, y);
 
                 if(canMove){
-                    game.addMove(piece, new Coordinates(x,y));
-                    (game.isAttack(game.getCurrentPlayerName(),x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
+                    game.getCurrentPlayerName().addMove(piece, new Coordinates(x,y));
+                    (game.isAttack(game.getCurrentPlayerName().id,x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
                     game.play();
                 }
             }
