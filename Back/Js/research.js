@@ -8,7 +8,7 @@ module.exports = {
      game(playerId, allCurrentsGames){
         let x = 0;
         
-        while(!allCurrentsGames[x].getPlayers().some(elem => elem == playerId)){
+        while(x < allCurrentsGames.length && !allCurrentsGames[x].getPlayers().some(elem => elem == playerId)){
             x++;
         }
 
@@ -23,29 +23,12 @@ module.exports = {
      */
     gameByRoom(room, allCurrentsGames){
         let x = 0;
-        while(!room.isPresent(allCurrentsGames[x].player1.id)){
+        while(x < allCurrentsGames.length && !room.isPresent(allCurrentsGames[x].player1.id)){
             x++;
         };
 
         return allCurrentsGames[x];
     },
-
-    /**
-     * Recherche la room de la partie 
-     * @param { Set } rooms 
-     * @return { String }
-     */
-    /*room(rooms){
-        let x = 0;
-        let room = 'room';
-    
-        if(rooms.size != 1){
-        while(!rooms.has(room+x)){
-            x++;
-        }
-        }
-        return room + x;
-    },*/
 
     /**
      * Permet de trouver la room du joueur

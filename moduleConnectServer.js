@@ -40,10 +40,6 @@ app.get('/', (req,res) =>{
 
 });
 
-/*app.get('/test', (req, res) => {
-	res.sendFile(__dirname + '/Front/html/display.html');
-});*/
-
 let allCurrentsGames = Array();
 let allRooms = Array();
 
@@ -56,8 +52,6 @@ io.on('connection',(socket) =>{
 	});
 	
 	socket.on('new-spectator', numGame =>{
-		let srvSockets = io.sockets.sockets;
-
 		let room = research.roomById(allCurrentsGames[numGame].player1.id, allRooms);
 
 		allRooms[room].join(socket.handshake.session.id);
@@ -67,9 +61,9 @@ io.on('connection',(socket) =>{
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 
 		let srvSockets = io.sockets.sockets;
-
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
-		
+
+
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
 			
 			functions.newGame(table,allCurrentsGames,allRooms,revealedRule, scoutRule,bombRule);
@@ -135,22 +129,16 @@ io.on('connection',(socket) =>{
 
 		if(lobby.isFinished()){
 			allRooms[x].end(io.sockets.sockets, lobby);
-			functions.suppress(lobby,allCurrentsGames, allRooms);
 		}
 	});
 
 	socket.on('quit', () => {
-		let x = research.roomById(socket.handshake.session.id, allRooms);
-		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
-
-		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
-		functions.suppress(lobby, allCurrentsGames, allRooms) : 
-		allRooms[x].leave(socket.handshake.session.id);
+		functions.quit(allCurrentsGames, allRooms);
 	});
 
 	socket.on('disconnect', ()=>{
-		io.emit("This place ain't for the weak")//ici rajouter le pseudo du joueur qui s'en va, ainsi seuls les personnes connectés peuvent parler dans un 
-												//chat intégrer au site ( a vous de voir si vous voulez faire ça j'ai trouvé ça sympa).
+		functions.quit(allCurrentsGames, allRooms);
+
 	});
 });
 

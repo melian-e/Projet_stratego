@@ -93,4 +93,21 @@ module.exports = {
         allRooms.splice(x, 1);
         allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
     },
+
+    /**
+     * Supprime une presonne d'une room et supprime si besoin une partie
+     * @param { Array } allCurrentsGames 
+     * @param { Array } allRooms 
+     */
+    quit(allCurrentsGames, allRooms){
+        let x = research.roomById(socket.handshake.session.id, allRooms);
+        
+		if(x < allRooms.length){
+            let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
+            allRooms[x].leave(socket.handshake.session.id);
+
+            if(allRooms[x].length == 0) functions.suppress(lobby, allCurrentsGames, allRooms);
+
+		}
+    }
 };
