@@ -22,6 +22,8 @@ const research = require('./Back/js/research.js');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use("/", express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à lobbyir de /project/ .
+
+
 app.use(urlencodedParser);
 app.use(session);
 
@@ -38,13 +40,12 @@ app.get('/', (req,res) =>{
 
 });
 
-/*app.get('/Front/html/display.html', (req, res) => {
+/*app.get('/test', (req, res) => {
 	res.sendFile(__dirname + '/Front/html/display.html');
 });*/
 
-let room = 0;
 let allCurrentsGames = Array();
-let allRooms =Array();
+let allRooms = Array();
 
 io.on('connection',(socket) =>{
 
@@ -56,47 +57,34 @@ io.on('connection',(socket) =>{
 	
 	socket.on('new-spectator', numGame =>{
 		let srvSockets = io.sockets.sockets;
-		let room = research.roomById(srvSockets, allCurrentsGames[numGame].player1.id, allRooms);
-		//socket.join(research.room(rooms));
+
+		let room = research.roomById(allCurrentsGames[numGame].player1.id, allRooms);
 
 		allRooms[room].join(socket.handshake.session.id);
 		io.to(socket.id).emit('game-redirect');
-
-		//io.to(socket.id).emit('display', allCurrentsGames[numGame].convertGrid('spectator'));
-
 	});
 	
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 
-		let table = functions.waiting(io.sockets.sockets,socket,revealedRule,scoutRule,bombRule);
+		let srvSockets = io.sockets.sockets;
+
+		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
 		
-		console.log(table);
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
-			let srvSockets = io.sockets.sockets;
-			functions.newGame(table,srvSockets,allCurrentsGames,allRooms,revealedRule, scoutRule,bombRule);			
+			
+			functions.newGame(table,allCurrentsGames,allRooms,revealedRule, scoutRule,bombRule);
 
-			//srvSockets.forEach(user => console.log(user.handshake.session.wait));
+			let x = research.roomById(socket.handshake.session.id, allRooms);
 
-			//io.to(research.room(socket.rooms)).emit('game-redirect');
-			let x = research.roomById(srvSockets, socket.handshake.session.id, allRooms);
 			allRooms[x].simpleEvent(srvSockets, 'game-redirect');
-
-			
-			//console.log(socket.id, research.idOf(srvSockets,table[0]), research.idOf(srvSockets,table[1]));
-			io.to(research.idOf(srvSockets,table[0])).emit('preparation', 'blue');// A modifier en passant par redirection
-			io.to(research.idOf(srvSockets,table[1])).emit('preparation', 'red');
-			//io.to(socket.id).emit('preparation', 'blue');
-			
-			room++;
 		}
 	});
 
 	socket.on('preparation', () => {
-		//console.log(socket.rooms);
-		let x = research.roomById(io.sockets.sockets, socket.handshake.session.id, allRooms);
-		let lobby = allCurrentsGames[research.gameByRoom(allRooms[x], allCurrentsGames)];
-		//let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
-		//io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color);
+		socket.handshake.session.wait = false;
+
+		let x = research.roomById(socket.handshake.session.id, allRooms);
+		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
 
 		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
 		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color) : 
@@ -105,9 +93,11 @@ io.on('connection',(socket) =>{
 
 	socket.on('ready', table =>{		// Quand le joueur a placé ces pions		
 		let srvSockets = io.sockets.sockets;
-		let lobby = research.game(socket.handshake.session.id,allCurrentsGames);    
-		functions.ready(table, socket.handshake.session.id, lobby);
+		let lobby = research.game(socket.handshake.session.id,allCurrentsGames);
 		let ready = Array();
+
+		functions.ready(table, socket.handshake.session.id, lobby);
+
 		if(lobby.getBox(0,0).getOccupy() == 1){
 			ready.push(lobby.player1.id);
 		}
@@ -117,9 +107,7 @@ io.on('connection',(socket) =>{
 		
 		if(ready.length == 2){
 			lobby.startTime = Date.now(); // remise à zéro du compteur
-			/*displayed(lobby, socket.rooms);
-			io.to(research.room(socket.rooms)).emit('start');*/
-			let x = research.roomById(srvSockets, socket.handshake.session.id, allRooms);
+			let x = research.roomById(socket.handshake.session.id, allRooms);
 			allRooms[x].display(srvSockets, lobby);
 			allRooms[x].simpleEvent(srvSockets, 'start');
 		}
@@ -140,27 +128,24 @@ io.on('connection',(socket) =>{
 		let yMove = numMove % 10;
 
 		move.eventMove(lobby, lobby.getBox(xPiece, yPiece), xMove, yMove);
-		//displayed(lobby, socket.rooms);
-		let x = research.roomById(io.sockets.sockets, socket.handshake.session.id, allRooms);
+
+		let x = research.roomById(socket.handshake.session.id, allRooms);
+
 		allRooms[x].display(io.sockets.sockets, lobby);
 
 		if(lobby.isFinished()){
 			allRooms[x].end(io.sockets.sockets, lobby);
-			
-			/*let winner = lobby.getWinner();
-			let loser = (winner == lobby.player1) ? lobby.player2 : lobby.player1;
-			let rooms = research.room(socket.rooms);
-			if(winner != undefined){
-				io.to(winner).emit('end', 'Tu as gagné.');
-				io.to(loser).emit('end', 'Tu as perdu.');
-				io.to(rooms).emit('end', research.getName(winner) + ' as gagné.');	// Si la partie est terminé
-			}
-			else{
-				io.to(rooms).emit('end', research.getName(winner));
-			}*/
-
-			functions.suppress(lobby,allCurrentsGames,io.sockets.sockets, rooms);
+			functions.suppress(lobby,allCurrentsGames, allRooms);
 		}
+	});
+
+	socket.on('quit', () => {
+		let x = research.roomById(socket.handshake.session.id, allRooms);
+		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
+
+		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
+		functions.suppress(lobby, allCurrentsGames, allRooms) : 
+		allRooms[x].leave(socket.handshake.session.id);
 	});
 
 	socket.on('disconnect', ()=>{
@@ -168,12 +153,6 @@ io.on('connection',(socket) =>{
 												//chat intégrer au site ( a vous de voir si vous voulez faire ça j'ai trouvé ça sympa).
 	});
 });
-
-/*function displayed(lobby, rooms){
-	io.to(research.room(rooms)).emit('display', lobby.convertGrid('spectator'));
-	io.to(lobby.player1).emit('display', lobby.convertGrid(lobby.player1));
-	io.to(lobby.player2).emit('display', lobby.convertGrid(lobby.player2));
-}*/
 
 function emitRoom(player, eventName, arg){
 	io.to(player).emit(eventName, arg);

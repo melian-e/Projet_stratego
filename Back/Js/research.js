@@ -7,7 +7,7 @@ module.exports = {
      */
      game(playerId, allCurrentsGames){
         let x = 0;
-
+        
         while(!allCurrentsGames[x].getPlayers().some(elem => elem == playerId)){
             x++;
         }
@@ -15,13 +15,19 @@ module.exports = {
         return allCurrentsGames[x];
     },
 
+    /**
+     * Trouver la partie associé à une room
+     * @param { Room } room 
+     * @param { Array } allCurrentsGames 
+     * @returns { Number }
+     */
     gameByRoom(room, allCurrentsGames){
         let x = 0;
         while(!room.isPresent(allCurrentsGames[x].player1.id)){
             x++;
         };
 
-        return x;
+        return allCurrentsGames[x];
     },
 
     /**
@@ -29,7 +35,7 @@ module.exports = {
      * @param { Set } rooms 
      * @return { String }
      */
-    room(rooms){
+    /*room(rooms){
         let x = 0;
         let room = 'room';
     
@@ -39,19 +45,15 @@ module.exports = {
         }
         }
         return room + x;
-    },
+    },*/
+
     /**
-     * Permet de trouver les rooms du joueur souahité
-     * @param { Map } srvSockets 
-     * @param { String } player 
+     * Permet de trouver la room du joueur
+     * @param { String } player  
+     * @param { Array } allRooms
      * @returns { Set }
      */
-    roomById(srvSockets, player, allRooms){
-        
-        /*let room;
-        srvSockets.forEach(user =>{
-            if(user.handshake.session.id == player) room = user.rooms;
-        })*/
+    roomById(player, allRooms){
 
         let x = 0;
 
@@ -80,8 +82,15 @@ module.exports = {
         return name;
     },
 
+    /**
+     * Retourner l'id du playeur en focntion de son handshake.session.id
+     * @param { Map } srvSockets 
+     * @param { String } playerId 
+     * @returns { String }
+     */
     idOf(srvSockets, playerId){
         let id;
+
         srvSockets.forEach(user => {
             if(user.handshake.session.id == playerId){
                 id = user.id;

@@ -8,7 +8,6 @@ let createLine = function(){
         col.style.height = '70px';
         col.style.border = '2px black solid';
         col.addEventListener('click', (event) => {
-            //console.log("Pret à evoyer", event.currentTarget);
 
             let i=0;
             let td = document.getElementsByTagName('td');
@@ -49,7 +48,7 @@ let wait = document.getElementById("wait");
 let currentGame = document.getElementById("current-game");
 let spectator = document.getElementById("spectator");
 let ready = document.getElementById("ready");
-let click = document.getElementById("click");
+let quit = document.getElementById("quit");
 
 if(wait != undefined){
     wait.addEventListener('click', () => {
@@ -84,8 +83,8 @@ ready.addEventListener('click', () => {
     }
 });
 
-click.addEventListener('click', () => {
-    socket.emit('click', 98,97);
+quit.addEventListener('click', () => {
+    socket.emit('quit');
 })
 
 socket.on('game-redirect', () => {

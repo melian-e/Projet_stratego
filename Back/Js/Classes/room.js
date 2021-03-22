@@ -34,11 +34,11 @@ class Room {
             if(this.people.some(elem => playerId == elem)){
                 if(winner != undefined){
                     let message = (playerId == winner) ? 'Tu as gagné.' : (playerId == loser) ? 'Tu as perdu.':
-                    research.getName(winner) + ' as gagné.';
+                    research.getName(io.sockets.sockets, winner) + ' as gagné.';
                     emit.emitRoom(user.id, 'end', message);
                 }
                 else{
-                    emit.emitRoom(user.id, 'end', research.getName(winner));
+                    emit.emitRoom(user.id, 'end', research.getName(io.sockets.sockets, winner));
                 }
             }
         });
