@@ -33,7 +33,7 @@ io.use(sharedsession(session, {
 
 
 app.get('/', (req,res) =>{
-	res.sendFile(__dirname + '/Front/html/......');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/html/index.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
 });
@@ -42,6 +42,11 @@ let allCurrentsGames = Array();
 let allRooms = Array();
 
 io.on('connection',(socket) =>{
+
+	// Pour conaitre le nom de l'utilisateur
+	socket.on('user-name', () => {
+		io.to(socket.id).emit('user-name', socket.handshake.session.userName);
+	});
 
 	// Pour connaitre toutes les parties en cours sous forme de tableau [[player1,player2,temps],[player1,player2,temps]]
 	socket.on('current-games', () => {
@@ -78,6 +83,7 @@ io.on('connection',(socket) =>{
 	// Pour connaitre sa couleur avant de placer les pions
 	socket.on('preparation', () => {
 		socket.handshake.session.wait = false;
+		socket.handshake.session.inGame = true;
 
 		let x = research.roomById(socket.handshake.session.id, allRooms);
 		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
@@ -138,12 +144,14 @@ io.on('connection',(socket) =>{
 
 	// Quand on veut partir de la partie
 	socket.on('quit', () => {
+		socket.handshake.session.inGame = false;
 		functions.quit(allCurrentsGames, allRooms);
+
 	});
 	// Quand on quitte la page
 	socket.on('disconnect', ()=>{
+		socket.handshake.session.inGame = false;
 		functions.quit(allCurrentsGames, allRooms);
-
 	});
 });
 
