@@ -1,0 +1,91 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    background-image: url(Pictures/Fond.png);
+}
+#row{
+    height: 100%;  
+    margin: 0;
+}
+.column{
+    float: left;
+    height: 100%;
+    
+}
+#menu{
+    width: 25%;
+}
+#game-board{
+    width: 50%;
+}
+
+#game-table{
+    border: 5px solid #3A5B2A;
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+.case {
+    border: 2px solid #3A5B2A;
+    width: 10%;
+    height: 10%;
+}
+
+#pions{
+    width: 25%;
+}
+.dot {
+    height: 55px;
+    width: 55px;
+    background-color: #3366FF;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: no-repeat;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    color: white;
+}
+
+.grey {
+    background-color: grey;
+}
+
+#chrono{
+    border: 1px solid black;
+    font-size: 2em;
+    width: 99%;
+    margin-left: 0px;
+    text-align: center;
+    display: block;
+}
+
+.p10{
+    background-image: url(Pictures/Marechal.jpg);
+}
+.p0{
+    background-image: url(Pictures/flag.png);
+}
+.bomb{
+    background-image: url(Pictures/bomb.png);
+}
+button{
+    width: 49%;
+}
+#random{
+    right: 0;
+}
+#start{
+    width: 99%;
+}
+
+#pionStock{
+    height: 40%;
+    width: 99%;
+    margin-bottom: 30px;
+}
+
+.lake{
+    border: 0px;
+}
