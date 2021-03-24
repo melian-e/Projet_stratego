@@ -44,7 +44,7 @@ function getCase(pion){
 
 function drop(ev) {
     ev.preventDefault();
-    ev.target.style = "2px solid black;"
+    ev.target.style = "2px solid #3A5B2A"
     let data = ev.dataTransfer.getData("div");
     let pion = document.getElementById(data);
     let pionStock = document.getElementsByClassName("stock");
@@ -123,25 +123,64 @@ function randGrid(){
         }
     }
 }
+
+function resetGameBoard(){
+    let grid = document.getElementsByClassName("case");
+    for(let i = 0; i < grid.length; i++){
+        if(i != 42 && i != 43 && i != 46 && i != 47 && i != 52 && i != 53 && i != 56 && i != 57){
+            grid[i].style.border = "2px solid #3A5B2A";
+        }
+        else{
+            grid[i].style.border = "none";
+        }
+    }
+}
+
 function test(ev){
     let grid = document.getElementsByClassName("case");
     let i = 0;
     while(grid[i] != ev.target.parentNode){
         i += 1;
     }
+    /*document.addEventListener('click',event=>{
+        resetGameBoard();
+    });*/
+
     if(i-10>0 && grid[i-10].firstChild == null){
         grid[i-10].style.border = "solid red";
+        grid[i-10].addEventListener('click', event=>{
+            grid[i-10].appendChild(grid[i].childNodes[0]);
+            resetGameBoard();
+            return;
+        });
     }
     if(i+10<99 && grid[i+10].firstChild == null){
         grid[i+10].style.border = "solid red";
+        grid[i+10].addEventListener('click', event=>{
+            grid[i+10].appendChild(grid[i].childNodes[0]);
+            resetGameBoard();
+            return;
+        });
     }
     if(i%10!=0 && grid[i-1].firstChild == null){
         grid[i-1].style.border = "solid red";
+        grid[i-1].addEventListener('click', event=>{
+            grid[i-1].appendChild(grid[i].childNodes[0]);
+            resetGameBoard();
+            return;
+        });
     }
     if((i+1)%10!=0 && grid[i+1].firstChild == null){
         grid[i+1].style.border = "solid red";
+        grid[i+1].addEventListener('click', event=>{
+            grid[i+1].appendChild(grid[i].childNodes[0]);
+            resetGameBoard();
+            return;
+        });
     }
+
 }
+
 function start(){
     document.getElementById("chrono").setAttribute("display", "none");
     //document.getElementById("chrono").remove();
@@ -176,7 +215,6 @@ function counter(time){
         else{
             document.getElementById("chrono").innerHTML = minutes + ":" + seconds;
         }
-        
     
     if(document.getElementById("chrono").getAttribute("display") == "none" || distance < 1){
         clearInterval(x);
@@ -186,10 +224,7 @@ function counter(time){
 
     if (distance < 1) {
         start();
-        
       }
-
-    
     }, 1000);
 }
 
