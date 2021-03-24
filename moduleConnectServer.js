@@ -21,13 +21,11 @@ const research = require('./Back/js/research.js');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.use("/", express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à lobbyir de /project/ .
+app.use("/", express.static(__dirname + '/Front/')); 
 
 
 app.use(urlencodedParser);
 app.use(session);
-
-// Configure socket io with session middleware
 io.use(sharedsession(session, {
   // Session automatiquement sauvegardée en cas de modification
   autoSave: true
@@ -35,7 +33,7 @@ io.use(sharedsession(session, {
 
 
 app.get('/', (req,res) =>{
-	res.sendFile(__dirname + '/Front/html/test.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/html/......');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
 });
@@ -45,12 +43,14 @@ let allRooms = Array();
 
 io.on('connection',(socket) =>{
 
+	// Pour connaitre toutes les parties en cours sous forme de tableau [[player1,player2,temps],[player1,player2,temps]]
 	socket.on('current-games', () => {
 		let srvSockets = io.sockets.sockets;
 		let table = functions.currentGames(srvSockets, allCurrentsGames);
 		io.to(socket.id).emit('current-games', table);
 	});
 	
+	// Pour ajouter un spectateur à une partie
 	socket.on('new-spectator', numGame =>{
 		let room = research.roomById(allCurrentsGames[numGame].player1.id, allRooms);
 
@@ -58,6 +58,7 @@ io.on('connection',(socket) =>{
 		io.to(socket.id).emit('game-redirect');
 	});
 	
+	// Lorsque on ets en attente d'adversaire
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 
 		let srvSockets = io.sockets.sockets;
@@ -74,6 +75,7 @@ io.on('connection',(socket) =>{
 		}
 	});
 
+	// Pour connaitre sa couleur avant de placer les pions
 	socket.on('preparation', () => {
 		socket.handshake.session.wait = false;
 
@@ -85,7 +87,8 @@ io.on('connection',(socket) =>{
 		io.to(socket.id).emit('display', lobby.convertGrid('spectator'));
 	});
 
-	socket.on('ready', table =>{		// Quand le joueur a placé ces pions		
+	// Quand le joueur a placé ces pions		
+	socket.on('ready', table =>{		
 		let srvSockets = io.sockets.sockets;
 		let lobby = research.game(socket.handshake.session.id,allCurrentsGames);
 		let ready = Array();
@@ -110,6 +113,7 @@ io.on('connection',(socket) =>{
 		}
 	});
 
+	// Lors d'un mouvement
 	socket.on('click', (numPiece, numMove) => {
 		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
 		if(socket.handshake.session.id == lobby.player1.id){
@@ -132,10 +136,11 @@ io.on('connection',(socket) =>{
 		}
 	});
 
+	// Quand on veut partir de la partie
 	socket.on('quit', () => {
 		functions.quit(allCurrentsGames, allRooms);
 	});
-
+	// Quand on quitte la page
 	socket.on('disconnect', ()=>{
 		functions.quit(allCurrentsGames, allRooms);
 
