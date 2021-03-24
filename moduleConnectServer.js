@@ -33,7 +33,7 @@ io.use(sharedsession(session, {
 
 
 app.get('/', (req,res) =>{
-	res.sendFile(__dirname + '/Front/html/index.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/html/test.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
 });
@@ -139,19 +139,18 @@ io.on('connection',(socket) =>{
 
 		if(lobby.isFinished()){
 			allRooms[x].end(io.sockets.sockets, lobby);
+			socket.handshake.session.inGame = false;
 		}
 	});
 
 	// Quand on veut partir de la partie
 	socket.on('quit', () => {
-		socket.handshake.session.inGame = false;
-		functions.quit(allCurrentsGames, allRooms);
+		functions.quit(allCurrentsGames, allRooms, socket);
 
 	});
 	// Quand on quitte la page
 	socket.on('disconnect', ()=>{
-		socket.handshake.session.inGame = false;
-		functions.quit(allCurrentsGames, allRooms);
+		//functions.quit(allCurrentsGames, allRooms, socket);
 	});
 });
 

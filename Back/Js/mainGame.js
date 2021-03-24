@@ -2,14 +2,14 @@ const Game = require('./Classes/game.js');
 const Room = require('./Classes/room.js');
 const research = require('./research.js');
 
-module.exports = {
+//module.exports = {
     /**
      * Faire un tableau contenant le nom des joueurs et la duré de leur parti pour toutes les games en cours afin de les proproser à un spectateur
      * @param { Map } srvSockets 
      * @param { Array } allCurrentsGames 
      * @returns { Array }
      */
-    currentGames(srvSockets, allCurrentsGames){
+    function currentGames(srvSockets, allCurrentsGames){
         let table = Array();
         for(let x = 0; x < allCurrentsGames.length; x++){
             let time = Date.now() - allCurrentsGames[x].startTime;
@@ -21,7 +21,7 @@ module.exports = {
             table.push([research.getName(srvSockets, players[0].id), research.getName(srvSockets, players[1].id), hours+':'+min+':'+sec]);
         }
         return table;
-    },
+    }
 
     /**
      * Ajout de variables à la session et recherche un partenaire de jeu
@@ -32,7 +32,7 @@ module.exports = {
      * @param { Boolean } bombRule 
      * @return { Array }
      */
-    waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
+     function waiting(srvSockets,socket,revealedRule,scoutRule,bombRule){
         socket.handshake.session.wait = true;
         socket.handshake.session.revealedRule = revealedRule;
         socket.handshake.session.scoutRule = scoutRule;
@@ -52,7 +52,7 @@ module.exports = {
         });
 
         return table;
-    },
+    }
 
     /**
      * Créer une nouvelle partie avec les 2 joueurs et créé une nouvelle room pour la partie
@@ -61,11 +61,11 @@ module.exports = {
      * @param { Array } allRooms
      * @param { Array } rules
      */
-    newGame(table,allCurrentsGames,allRooms,...rules){
+     function newGame(table,allCurrentsGames,allRooms,...rules){
         console.log("Nouvelle partie");
         allCurrentsGames.push(new Game(table[0], table[1], rules[0],rules[1],rules[2]));
         allRooms.push(new Room(table));
-    },
+    }
 
     /**
      * Ajoute les pions du joueur à la grid de jeu
@@ -73,41 +73,47 @@ module.exports = {
      * @param { String } playerId 
      * @param { Game } lobby
      */
-    ready(table,playerId,lobby){
+     function ready(table,playerId,lobby){
         if(lobby.getPlayers()[0] == playerId){
             table.reverse();
             table.forEach(elem => elem.reverse());
         }
         lobby.superpose(table, playerId);
-    },
+    }
+
     /**
      * Efface la partie et la room uns fois terminée
      * @param { Game } lobby 
      * @param { Array } allCurrentsGames 
      * @param { Array } allRooms 
      */
-    suppress(lobby,allCurrentsGames, allRooms){
+     function suppress(lobby,allCurrentsGames, allRooms){
         
         let x = research.roomById(lobby.player1.id, allRooms);
         
         allRooms.splice(x, 1);
         allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
-    },
+    }
 
     /**
      * Supprime une presonne d'une room et supprime si besoin une partie
      * @param { Array } allCurrentsGames 
      * @param { Array } allRooms 
+     * @param { Map } Socket
      */
-    quit(allCurrentsGames, allRooms){
+    function quit(allCurrentsGames, allRooms, socket){
         let x = research.roomById(socket.handshake.session.id, allRooms);
         
 		if(x < allRooms.length){
             let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
             allRooms[x].leave(socket.handshake.session.id);
 
-            if(allRooms[x].length == 0) functions.suppress(lobby, allCurrentsGames, allRooms);
+            if(allRooms[x].people.length == 0){
+                suppress(lobby, allCurrentsGames, allRooms);
+            }
 
 		}
     }
-};
+//};
+
+module.exports = {currentGames, waiting, newGame, ready, suppress, quit}
