@@ -60,14 +60,14 @@ module.exports = {
         let name;
         srvSockets.forEach(user => {
             if(user.handshake.session.id == playerId){
-                name = user.handshake.session.name;
+                name = user.handshake.session.userName;
             }
         });
         return name;
     },
 
     /**
-     * Retourner l'id du playeur en focntion de son handshake.session.id
+     * Retourner l'id du playeur en fonction de son handshake.session.id
      * @param { Map } srvSockets 
      * @param { String } playerId 
      * @returns { String }

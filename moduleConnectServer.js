@@ -33,7 +33,7 @@ io.use(sharedsession(session, {
 
 
 app.get('/', (req,res) =>{
-	res.sendFile(__dirname + '/Front/html/test.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/index.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
 });
@@ -60,7 +60,9 @@ io.on('connection',(socket) =>{
 		let room = research.roomById(allCurrentsGames[numGame].player1.id, allRooms);
 
 		allRooms[room].join(socket.handshake.session.id);
-		io.to(socket.id).emit('game-redirect');
+		socket.handshake.session.redirect = true;
+
+		io.to(socket.id).emit('game-redirect');		
 	});
 	
 	// Lorsque on ets en attente d'adversaire
@@ -101,15 +103,17 @@ io.on('connection',(socket) =>{
 
 		functions.ready(table, socket.handshake.session.id, lobby);
 
-		if(lobby.getBox(0,0).getOccupy() == 1){
+		let pieces = lobby.allPiecesOnGrid();
+
+		if(pieces.filter(elem => elem.getOwner() == lobby.player1.id).length != 0){
 			ready.push(lobby.player1.id);
 		}
-		if(lobby.getBox(9,9).getOccupy() == 1){
+		if(pieces.filter(elem => elem.getOwner() == lobby.player2.id).length != 0){
 			ready.push(lobby.player2.id);
 		}
 		
 		if(ready.length == 2){
-			lobby.startTime = Date.now(); // remise à zéro du compteur
+			lobby.startTime = Date.now(); // remise à zéro du timer
 			let x = research.roomById(socket.handshake.session.id, allRooms);
 			allRooms[x].display(srvSockets, lobby);
 			allRooms[x].simpleEvent(srvSockets, 'start');
@@ -150,7 +154,8 @@ io.on('connection',(socket) =>{
 	});
 	// Quand on quitte la page
 	socket.on('disconnect', ()=>{
-		//functions.quit(allCurrentsGames, allRooms, socket);
+		(socket.handshake.session.redirect == true) ? socket.handshake.session.redirect = false :
+		functions.quit(allCurrentsGames, allRooms, socket);
 	});
 });
 
