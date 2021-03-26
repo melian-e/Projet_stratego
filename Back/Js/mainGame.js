@@ -106,15 +106,15 @@ function quit(allCurrentsGames, allRooms, socket){
     if(x < allRooms.length){
         let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
 
-        if(lobby.allPiecesOnGrid().length != 0){
-            
-            allRooms[x].leave(socket.handshake.session.id);
+        allRooms[x].leave(socket.handshake.session.id);
 
-            if(allRooms[x].people.length == 0){
-                suppress(lobby, allCurrentsGames, allRooms);
-            }
+        if(lobby != undefined && !(lobby.getPlayers().some(player => allRooms[x].isPresent(player)))){
+            suppress(lobby, allCurrentsGames, allRooms);
         }
 
+        if(allRooms[x].people.length == 0){
+            allRooms.splice(x,1);
+        }
     }
 }
 

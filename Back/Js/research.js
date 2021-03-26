@@ -24,7 +24,7 @@ module.exports = {
     gameByRoom(room, allCurrentsGames){
         let x = 0;
 
-        while(x < allCurrentsGames.length && !room.isPresent(allCurrentsGames[x].player1.id)){
+        while(x < allCurrentsGames.length && ! allCurrentsGames[x].getPlayers().some(player => room.isPresent(player))){
             x++;
         };
 

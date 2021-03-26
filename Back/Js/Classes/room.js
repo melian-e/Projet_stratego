@@ -46,6 +46,9 @@ class Room {
     simpleEvent(srvSockets, eventName, arg){
         srvSockets.forEach(user => {
             if(this.people.some(elem => user.handshake.session.id == elem)){
+                if(eventName == 'game-redirect'){
+                    user.handshake.session.redirect = true;
+                }
                 emit.emitRoom(user.id, eventName, arg);
             }
         });
