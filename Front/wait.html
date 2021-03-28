@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr"> 
+<head>      
+<meta charset="utf-8">      
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<script src="/socket.io/socket.io.js"></script>
+<title>Stratego wait</title>
+</head>
+<body>
+    <div>
+        <p>Wait</p>
+    </div>
+    <script>
+        let socket = io();
+
+        socket.emit('search-game', true, true, true);
+
+        socket.on('game-redirect', () => {
+            window.location.href = "game.html";
+        });
+    </script>
+</body>
+</html>

@@ -3,8 +3,7 @@
 <head>      
 <meta charset="utf-8">      
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<script type="text/javascript" src="interaction.js"></script>
-<link rel="stylesheet" href="style.css"> 
+<script src="/socket.io/socket.io.js"></script>
 <link rel="icon" type="image/png" href="Pictures/flags.png">
 <title>Stratego</title>   
 </head>
@@ -12,7 +11,7 @@
     <div id="row">
     <div class="column" id="menu"></div>
     <div class="column" id="game-board">
-    <table id="game-table">
+    <!--<table id="game-table">
         <tr>
             <td class="case"></td>
             <td class="case"></td>
@@ -133,7 +132,7 @@
             <td class="case" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></td>
             <td class="case" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></td>       
         </tr>
-    </table>
+    </table>-->
     </div>
     <div class="column" id="pions">
         <div id="chrono"></div>
@@ -214,5 +213,10 @@
             </table>
     </div>
     </div>
+    <script>
+        let socket = io();
+    </script>
+    <script type="text/javascript" src="interaction.js"></script>
+    <link rel="stylesheet" href="style.css"> 
 </body>
 </html>
