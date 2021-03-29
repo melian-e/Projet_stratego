@@ -6,7 +6,7 @@ class Entity{
         return this.occupy;
     }
     convertCell(player, color, player2){
-        return [this.occupy+20];
+        return [this.occupy+20, 'none'];
     }
 }
 

@@ -15,13 +15,14 @@ class Room {
         return this.people.some(user => user == playerId);
     }
     display(srvSockets, lobby){
-        let playerId;
-        let grid;
+        let playerId, grid, color, turn;
         srvSockets.forEach(user => {
             playerId = user.handshake.session.id;
             if(this.people.some(elem => playerId == elem)){
                 grid = lobby.convertGrid((lobby.getPlayers().some(elem => playerId == elem)) ? playerId : 'spectator');
-                emit.emitRoom(user.id, 'display', grid);
+                color = (playerId == lobby.player1.id) ? lobby.player1.color : (playerId == lobby.player2.id) ? lobby.player2.color : 'none'
+                turn = (playerId == lobby.getCurrentPlayerName().id) ? true : false;
+                emit.emitRoom(user.id, 'display', grid, color, turn);
             }
         });
     }
