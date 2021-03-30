@@ -22,6 +22,7 @@ class Room {
                 grid = lobby.convertGrid((lobby.getPlayers().some(elem => playerId == elem)) ? playerId : 'spectator');
                 color = (playerId == lobby.player1.id) ? lobby.player1.color : (playerId == lobby.player2.id) ? lobby.player2.color : 'none'
                 turn = (playerId == lobby.getCurrentPlayerName().id) ? true : false;
+                
                 emit.emitRoom(user.id, 'display', grid, color, turn);
             }
         });

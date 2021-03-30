@@ -38,14 +38,12 @@ html, body{
 .dot {
     height: 55px;
     width: 55px;
-    background-color: #3366FF;
     margin-left: auto;
     margin-right: auto;
     background-repeat: no-repeat;
     padding: 0;
-    text-align: center;
+
     position: absolute;
-    color: white;
 }
 
 .grey {
@@ -62,34 +60,34 @@ html, body{
 }
 
 .blue.p10{
-    background-image: url(Pictures/blue/Marechal.jpg);
+    background-image: url(Pictures/blue/marechal.jpg);
 }
 .blue.p9{
-    background-image: url(Pictures/blue/general.jpg);
+    background-image: url(Pictures/blue/general.png);
 }
 .blue.p8{
-    background-image: url(Pictures/blue/colonel.jpg);
+    background-image: url(Pictures/blue/colonel.png);
 }
 .blue.p7{
-    background-image: url(Pictures/blue/major.jpg);
+    background-image: url(Pictures/blue/major.png);
 }
 .blue.p6{
-    background-image: url(Pictures/blue/capitain.jpg);
+    background-image: url(Pictures/blue/capitain.png);
 }
 .blue.p5{
-    background-image: url(Pictures/blue/lieutenant.jpg);
+    background-image: url(Pictures/blue/lieutenant.png);
 }
 .blue.p4{
-    background-image: url(Pictures/blue/sergeant.jpg);
+    background-image: url(Pictures/blue/sergeant.png);
 }
 .blue.p3{
-    background-image: url(Pictures/blue/demineur.jpg);
+    background-image: url(Pictures/blue/demineur.png);
 }
 .blue.p2{
-    background-image: url(Pictures/blue/scout.jpg);
+    background-image: url(Pictures/blue/scout.png);
 }
 .blue.p1{
-    background-image: url(Pictures/blue/spy.jpg);
+    background-image: url(Pictures/blue/spy.png);
 }
 .blue.p0{
     background-image: url(Pictures/blue/flag.png);
@@ -98,38 +96,38 @@ html, body{
     background-image: url(Pictures/blue/bomb.png);
 }
 .blue.back{
-    background-image: url(Pictures/blue/black.png);
+    background-image: url(Pictures/blue/back.png);
 }
 
 .red.p10{
-    background-image: url(Pictures/red/Marechal.jpg);
+    background-image: url(Pictures/red/marechal.png);
 }
 .red.p9{
-    background-image: url(Pictures/red/general.jpg);
+    background-image: url(Pictures/red/general.png);
 }
 .red.p8{
-    background-image: url(Pictures/red/colonel.jpg);
+    background-image: url(Pictures/red/colonel.png);
 }
 .red.p7{
-    background-image: url(Pictures/red/major.jpg);
+    background-image: url(Pictures/red/major.png);
 }
 .red.p6{
-    background-image: url(Pictures/red/capitain.jpg);
+    background-image: url(Pictures/red/capitain.png);
 }
 .red.p5{
-    background-image: url(Pictures/red/lieutenant.jpg);
+    background-image: url(Pictures/red/lieutenant.png);
 }
 .red.p4{
-    background-image: url(Pictures/red/sergeant.jpg);
+    background-image: url(Pictures/red/sergeant.png);
 }
 .red.p3{
-    background-image: url(Pictures/red/demineur.jpg);
+    background-image: url(Pictures/red/demineur.png);
 }
 .red.p2{
-    background-image: url(Pictures/red/scout.jpg);
+    background-image: url(Pictures/red/scout.png);
 }
 .red.p1{
-    background-image: url(Pictures/red/spy.jpg);
+    background-image: url(Pictures/red/spy.png);
 }
 .red.p0{
     background-image: url(Pictures/red/flag.png);
@@ -138,7 +136,7 @@ html, body{
     background-image: url(Pictures/red/bomb.png);
 }
 .red.back{
-    background-image: url(Pictures/red/black.png);
+    background-image: url(Pictures/red/back.png);
 }
 
 button{

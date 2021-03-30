@@ -119,7 +119,7 @@ io.on('connection',(socket) =>{
 			allRooms[x].simpleEvent(srvSockets, 'start');
 		}
 		else{
-			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]));
+			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]), ['none', false]);
 		}
 	});
 
@@ -138,6 +138,8 @@ io.on('connection',(socket) =>{
 		move.eventMove(lobby, lobby.getBox(xPiece, yPiece), xMove, yMove);
 
 		let x = research.roomById(socket.handshake.session.id, allRooms);
+
+		console.log('click');////////////////////////////////////////////////////
 
 		allRooms[x].display(io.sockets.sockets, lobby);
 
@@ -159,8 +161,8 @@ io.on('connection',(socket) =>{
 	});
 });
 
-function emitRoom(player, eventName, arg){
-	io.to(player).emit(eventName, arg);
+function emitRoom(player, eventName, arg, ...rest){
+	(rest.length == 0) ? io.to(player).emit(eventName, arg) : io.to(player).emit(eventName, arg, rest);
 }
 
 http.listen(4200, () => {

@@ -91,8 +91,6 @@ function drop(ev) {
 }
 
 function dropGame(event){
-    event.preventDefault();
-    event.target.style = "2px solid #3A5B2A"
     let data = event.dataTransfer.getData("div");
     let pion = document.getElementById(data);
 
@@ -194,15 +192,15 @@ function test(ev){
 }
 
 function start(){
-    document.getElementById("chrono").setAttribute("display", "none");
+    //document.getElementById("chrono").setAttribute("display", "none");
     //document.getElementById("chrono").remove();
     document.getElementById("reset").remove();
     document.getElementById("random").remove();
     document.getElementById("start").remove();
     /*let pion = document.getElementsByClassName("dot");
     let bomb = document.getElementsByClassName("bomb");
-    let flag = document.getElementById("p0");
-    for(let i = 0; i < pion.length; i++){
+    let flag = document.getElementById("p0");*/
+    /*for(let i = 0; i < pion.length; i++){
         pion[i].setAttribute("draggable", false);
         pion[i].removeEventListener("dragstart", event => drag(event));
         pion[i].addEventListener("click", event=> test(event));
@@ -211,6 +209,12 @@ function start(){
         }
         if(pion[i] == flag){pion[i].setAttribute("onclick", "")}
     }*/
+
+    let td = document.getElementsByClassName('case');
+    for(let i = 99; i > 59; i--){
+        td[i].removeEventListener('drop', event => drop(event));
+    }
+
     randGrid();
     ready();
 }
@@ -251,8 +255,8 @@ function ready(){
         table[i] = Array(10);
         
         for( let j = 0; j < 10; j++){
-            
-            let classList = td[10*i+j].firstElementChild.getAttribute("class").split(' ');
+
+            let classList = (td[10*i+j].firstElementChild == null)? [] : td[10*i+j].firstElementChild.getAttribute("class").split(' ');
             
             if(classList.some(elem => elem == "p2")){
                 table[i][j] = 2;
@@ -299,13 +303,22 @@ function ready(){
     socket.emit('ready', table);
 }
 
-socket.on('display', (table, color, turn) => {
+socket.on('start', () => {
+    document.getElementById("chrono").setAttribute("display", "none");
+});
+
+socket.on('display', (table, rest) => {
     let td = document.getElementsByClassName("case");
+    let color = rest[0];
+    let turn = rest[1];
+
+    console.log("display");
+    console.log(rest);
 
     for( let i = 0; i < 10; i++){
         for( let j = 0; j < 10; j++){  
 
-            td[10*i+j].firstElementChild.remove();
+            //td[10*i+j].firstElementChild.remove();
             let div = document.createElement("div");
             div.classList.add("dot");
             div.classList.add(table[i][j][1]);
@@ -326,43 +339,48 @@ socket.on('display', (table, color, turn) => {
             else if(table[i][j][0] == 2){
                 div.classList.add("p2");
             }
-            else if(table[i][j][0] = -1){
+            else if(table[i][j][0] == -1){
                 div.classList.add("bomb");
             }
-            else if(table[i][j][0] = 6){
+            else if(table[i][j][0] == 6){
                 div.classList.add("p6");
             }
-            else if(table[i][j][0] = 5){
+            else if(table[i][j][0] == 5){
                 div.classList.add("p5");
             }
-            else if(table[i][j][0] = 4){
+            else if(table[i][j][0] == 4){
                 div.classList.add("p4");
             }
-            else if(table[i][j][0] = 3){
+            else if(table[i][j][0] == 3){
                 div.classList.add("p3");
             }
-            else if(table[i][j][0] = 7){
+            else if(table[i][j][0] == 7){
                 div.classList.add("p7");
             }
-            else if(table[i][j][0] = 8){
+            else if(table[i][j][0] == 8){
                 div.classList.add("p8");
             }
-            else if(table[i][j] = 1){
+            else if(table[i][j][0] == 1){
                 div.classList.add("p1");
             }
-            else if(table[i][j][0] = 9){
+            else if(table[i][j][0] == 9){
                 div.classList.add("p9");
             }
-            else if(table[i][j][0] = 0){
+            else if(table[i][j][0] == 0){
                 div.classList.add("p0");
             }
-            else if(table[i][j][0] = 10){
+            else if(table[i][j][0] == 10){
                 div.classList.add("p10");
             }
 
             if(table[i][j][0] < 20){
+                div.style.border = "none";
+                div.style.width = "90%";
+                div.style.heigth = "100%";
+                div.style.position = "relative";
                 if(table[i][j][1] == color && turn == true) div.draggable = true;
-                td[10*i+j].appendChild(div);
+                let old = td[10*i+j].firstElementChild;
+                (old == null) ? td[10*i+j].appendChild(div) : td[10*i+j].replaceChild(div, old);
             }
         }
     }
