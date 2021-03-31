@@ -1,9 +1,0 @@
-diff a/Back/Js/Modules/moduleConnectServer.js b/Back/Js/Modules/moduleConnectServer.js	(rejected hunks)
-@@ -20,3 +20,7 @@
- 	});
- });
- 
-+
-+http.listen(4200, () => {
-+  console.log('Serveur lancé sur le port 4200');
-+});

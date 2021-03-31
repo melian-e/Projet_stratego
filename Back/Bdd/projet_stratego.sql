@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 04 mars 2021 à 21:15
+-- Généré le :  mer. 24 mars 2021 à 13:01
 -- Version du serveur :  5.7.28
 -- Version de PHP :  5.6.40
 
@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(12) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(12) NOT NULL,
+  `mmr` int(11) NOT NULL COMMENT 'valeur permettant le classement du joueur',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)

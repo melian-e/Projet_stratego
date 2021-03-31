@@ -6,15 +6,16 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="Front/Css/style.css">
+	<link rel="stylesheet" href="../Css/style.css">
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 
-<body>
-	<nav class="navbar navbar-expand-md" style="background-color:darkgrey; height:100px;">
+<body style="background-color: darkgrey;">
+	<!--début de l'entête-->
+	<nav class="navbar navbar-expand-md" style="background-color:grey; height:100px;">
 		<div class="navbar-collapse collapse" id="collapsingNavbar">
 			<ul class="navbar-nav">
 				<a href="index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
@@ -58,25 +59,22 @@
 											<button type="button" class="btn" id="togglePassword">Voir</button>
 										</div>
 									</div>
-	<!-- cookie à programmer pour se rappeler de la session
+
+	<!-- cookie à programmer pour se rappeler de la session ------||| ajout à faire plus tard |||
 
 									<div align="center">
 										<input type="checkbox" name="remember" value="true">Remember me
 									</div>
 	-->
+
 									<div align="center">
 										<button type="submit" class="btn center-block">Log in</button>
 									</div>
 								</form>
 							</div>
 								
-							<div class="modal-body row">
-								<form class="col" action=""><!--Creation compte-->
-									<div align="center">
-										<p style="margin-top : 8px;"> No account ? Go register yourself here ! <p>
-										<button class="btn center-block" >Register</button>
-									</div>
-								</form>
+							<div class="modal-body col" align="center">
+								<p> No account ? Go register yourself <a href="createAccount.html">here</a> ! </p>
 							</div>
 						</div>
 					</div>
@@ -86,11 +84,32 @@
 	</nav>
 	
 	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); background-color: lightgrey; height:150px">
-		<img style="height: 100px; margin-top: 25px;" src="Front/Images/stratego_logo.png">
+		<img style="height: 100px; margin-top: 25px;" src="../Images/stratego_logo.png">
 	</div>
+	<!--fin de l'entête-->
+
+
+
+	<div class="wrapper">
+		<div class="classement" style="background-color: white;">
+			Classement
+		</div>
+
+		<button type="button" class="jouer">jouer</button>
+
+		<button type="button" class="spectate">regarder</button>
+		<div class="profil" style="background-color: white;">
+			Profil
+		</div>
+		<div class="history" style="background-color: white;">
+			Historique			
+		</div>
+	</div>
+
+
 
 
 </body>
 
-<script type="text/javascript" src="Front/Script/moduleConnection.js"></script>
+<script type="text/javascript" src="../Script/moduleConnection.js"></script>
 </html>
