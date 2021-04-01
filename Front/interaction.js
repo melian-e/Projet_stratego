@@ -152,73 +152,51 @@ function randGrid(){
 function resetGameBoard(){
     let grid = document.getElementsByClassName("case");
     for(let i = 0; i < grid.length; i++){
-        if(i != 42 && i != 43 && i != 46 && i != 47 && i != 52 && i != 53 && i != 56 && i != 57){
-            grid[i].style.border = "2px solid #3A5B2A";
-        }
-        else{
-            grid[i].style.border = "none";
-        }
+        grid[i].style.border = (grid[i].className.search("lake") == -1) ? "2px solid #3A5B2A" : "none";
     }
 }
 
-function test(ev){
+function canMove(i, x){
+    let grid = document.getElementsByClassName("case");
+    let red = 0, blue = 0, lake;
+
+    if(grid[x].firstChild != null){
+        (grid[x].firstElementChild.className.search("red") == -1) ? blue++ : red++;
+        (grid[i].firstElementChild.className.search("red") == -1) ? blue++ : red++;
+    }
+    else{
+        lake = grid[x].className.search("lake");
+    }
+
+    return ((grid[x].firstChild == null && lake == -1)|| (blue == red && blue != 0 && red != 0)) ? true : false;
+}
+
+function moveOnClick(ev){
     let grid = document.getElementsByClassName("case");
     let i = 0;
+
     while(grid[i] != ev.target.parentNode){
         i += 1;
     }
-    /*document.addEventListener('click',event=>{
-        resetGameBoard();
-    });*/
 
-    if(i-10>0 && grid[i-10].firstChild == null){
-        grid[i-10].style.border = "solid red";
-        grid[i-10].addEventListener('click', event=>{
-            grid[i-10].appendChild(grid[i].childNodes[0]);
-            resetGameBoard();
-        });
-    }
-    if(i+10<99 && grid[i+10].firstChild == null){
-        grid[i+10].style.border = "solid red";
-        grid[i+10].addEventListener('click', event=>{
-            grid[i+10].appendChild(grid[i].childNodes[0]);
-            resetGameBoard();
-        });
-    }
-    if(i%10!=0 && grid[i-1].firstChild == null){
-        grid[i-1].style.border = "solid red";
-        grid[i-1].addEventListener('click', event=>{
-            grid[i-1].appendChild(grid[i].childNodes[0]);
-            resetGameBoard();
-        });
-    }
-    if((i+1)%10!=0 && grid[i+1].firstChild == null){
-        grid[i+1].style.border = "solid red";
-        grid[i+1].addEventListener('click', event=>{
-            grid[i+1].appendChild(grid[i].childNodes[0]);
-            resetGameBoard();
-        });
+    for(let x = 10; x > 0; x-=9){
+        for(let y = -1; y < 2; y+=2){
+            if((i+x*y)>-1 && (i+x*y) < 100 && canMove(i, i+x*y)){
+                grid[i+x*y].style.border = "solid red";
+                grid[i+x*y].addEventListener('click', ()  =>{
+                    resetGameBoard();
+                    socket.emit('click', i, i+x*y);
+                });
+            }
+        }
     }
 }
 
 function start(){
-    //document.getElementById("chrono").setAttribute("display", "none");
-    //document.getElementById("chrono").remove();
+
     document.getElementById("reset").remove();
     document.getElementById("random").remove();
     document.getElementById("start").remove();
-    /*let pion = document.getElementsByClassName("dot");
-    let bomb = document.getElementsByClassName("bomb");
-    let flag = document.getElementById("p0");*/
-    /*for(let i = 0; i < pion.length; i++){
-        pion[i].setAttribute("draggable", false);
-        pion[i].removeEventListener("dragstart", event => drag(event));
-        pion[i].addEventListener("click", event=> test(event));
-        for(let j = 0; j < bomb.length; j++) {
-           if(bomb[j] == pion[i]){pion[i].setAttribute("onclick", "")}
-        }
-        if(pion[i] == flag){pion[i].setAttribute("onclick", "")}
-    }*/
 
     let td = document.getElementsByClassName('case');
     for(let i = 99; i > 59; i--){
@@ -267,9 +245,23 @@ function ready(){
         
         for( let j = 0; j < 10; j++){
 
-            let classList = (td[10*i+j].firstElementChild == null)? [] : td[10*i+j].firstElementChild.getAttribute("class").split(' ');
-            
-            if(classList.some(elem => elem == "p2")){
+            let classVal = (td[10*i+j].firstElementChild == null)? "" : td[10*i+j].firstElementChild.className;//getAttribute("class").split(' ');
+
+            if(classVal == "" || classVal == "lake"){
+                table[i][j] = 30;
+                
+            }
+            else if(classVal.search("bomb") != -1){
+                table[i][j] = -1;
+            }
+            else{
+                let pos = classVal.search("p");
+                let num = Number(classVal[pos+1]);
+
+                table[i][j] = (num != 1) ? num : (classVal[pos+2] != '0') ? 1 : 10;
+            }
+
+           /* if(classList.some(elem => elem == "p2")){
                 table[i][j] = 2;
             }
             else if(classList.some(elem => elem == "bomb")){
@@ -307,7 +299,7 @@ function ready(){
             }
             else{
                 table[i][j] = 30;
-            }
+            }*/
         }
     }
 
@@ -376,7 +368,10 @@ socket.on('display', (table, rest) => {
 
                 if(table[i][j][1] == color && turn == true){
                     div.draggable = true;
-                    div.addEventListener("click", event => test(event));
+                    td[10*i+j].addEventListener("click", event => {
+                        console.log("click");
+                        moveOnClick(event)
+                    });
                     div.addEventListener("dragstart", event => {
                         dragInProgress = true;
                         dragGame(event)
@@ -444,10 +439,10 @@ function createLine(move){
         col.classList.add('case');
         
         if(move == true){
-            /*col.addEventListener("drop", event => drop(event));
+            col.addEventListener("drop", event => drop(event));
             col.addEventListener("dragenter", event => dragEnter(event));
             col.addEventListener("dragleave", event => dragLeave(event));
-            col.addEventListener("dragover", event=> allowDrop(event));*///////////////////////////
+            col.addEventListener("dragover", event=> allowDrop(event));
         }
 
         line.appendChild(col);
