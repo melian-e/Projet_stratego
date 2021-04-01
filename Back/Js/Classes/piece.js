@@ -33,8 +33,8 @@ class Piece extends Entity {
         this.playerConvert(player, color, otherColor);
     }
     playerConvert(player, color, otherColor){
-        return (this.owner != player && this.visible == false)? [15, otherColor]:
-        [this.power, (player == this.owner) ? color : otherColor];
+        //return (this.owner != player && this.visible == false)? [15, otherColor]:
+        return [this.power, (player == this.owner) ? color : otherColor];
     }
     spectatorConvert(player2, color, otherColor){
         return [(this.visible == false) ? 15 : this.power, 

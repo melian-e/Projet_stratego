@@ -139,8 +139,6 @@ io.on('connection',(socket) =>{
 
 		let x = research.roomById(socket.handshake.session.id, allRooms);
 
-		console.log('click');////////////////////////////////////////////////////
-
 		allRooms[x].display(io.sockets.sockets, lobby);
 
 		if(lobby.isFinished()){

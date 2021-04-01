@@ -17,13 +17,24 @@ function dragLeave(ev){
     if(ev.target.nodeName == "TD"){
         ev.target.style.border = "2px solid #3A5B2A";
     }
-    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
+    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.id == "game-table"){
         ev.target.parentNode.style.border = "2px solid #3A5B2A";
     }
 }
 
 function drag(ev) {
     ev.dataTransfer.setData("div", ev.target.id); 
+}
+
+function dragGame(event) {
+    let td = document.getElementsByClassName("case");
+    let numData;
+
+    for(let i = 0; i < td.length; i++){
+        if( td[i].firstElementChild == event.currentTarget) numData = i;
+    }
+
+    event.dataTransfer.setData("numPiece", numData); 
 }
 
 function getCase(pion){
@@ -92,15 +103,13 @@ function drop(ev) {
 
 function dropGame(event){  
     event.preventDefault();
-    let data = event.dataTransfer.getData("div");
-    let pion = document.getElementById(data);
 
+    let numPiece = event.dataTransfer.getData("numPiece");
     let td = document.getElementsByClassName("case");
-    let numPiece, numMove;
+    let numMove;
 
     for(let i = 0; i < td.length; i++){
-        if( td[i] == event.target) numMove = i;
-        if( td[i].firstElementChild == pion) numPiece = i;
+        if( td[i] == event.currentTarget) numMove = i;
     }
 
     socket.emit('click', numPiece, numMove);
@@ -214,6 +223,7 @@ function start(){
     let td = document.getElementsByClassName('case');
     for(let i = 99; i > 59; i--){
         td[i].removeEventListener('drop', event => drop(event));
+        td[i].removeEventListener('dragstart', event => drag(event));
     }
 
     randGrid();
@@ -300,13 +310,37 @@ function ready(){
             }
         }
     }
-  ///////////////////
-    console.log(table);
-    /////////////////
+
     socket.emit('ready', table);
 }
 
+let dragInProgress = false;
+
 socket.on('start', () => {
+    let td = document.getElementsByClassName("case");
+    for(let i = 0; i < td.length; i++){
+        td[i].addEventListener("drop", event =>{
+            if(dragInProgress == true){
+                dragInProgress = false;
+                dropGame(event);
+            }
+        });
+        td[i].addEventListener("dragenter", event => {
+            if(dragInProgress == true){
+                dragEnter(event);
+            }
+        });
+        td[i].addEventListener("dragleave", event => {
+            if(dragInProgress == true){
+                dragLeave(event);
+            }
+        });
+        td[i].addEventListener("dragover", event=> {
+            if(dragInProgress == true){
+                allowDrop(event);
+            }
+        });
+    }
     document.getElementById("chrono").setAttribute("display", "none");
 });
 
@@ -315,104 +349,50 @@ socket.on('display', (table, rest) => {
     let color = rest[0];
     let turn = rest[1];
 
-    console.log("display");
-    //console.log(rest);
-    /*let tab = table.slice();
-    tab.reverse();
-    tab.forEach(elem => elem.reverse());*/
-
     for( let i = 0; i < 10; i++){
         for( let j = 0; j < 10; j++){  
 
-            let old = td[10*i+j].firstElementChild;
-            if(old != null) td[10*i+j].firstElementChild.remove();
+            if(td[10*i+j].firstElementChild != null) td[10*i+j].firstElementChild.remove();
 
             let div = document.createElement("div");
             div.classList.add("dot");
             div.classList.add(table[i][j][1]);
-            div.addEventListener("dragstart", event => drag(event));
-            div.addEventListener("click", event => test(event));
-            //div.draggable = false;
-            div.draggable = true;
-
-            /*if( table[i][j][1] != color && table[i][j][0] != 22){
-                td[i*10+j].addEventListener("drop", event => dropGame(event));
-                td[i*10+j].addEventListener("dragenter", event => dragEnter(event));
-                td[i*10+j].addEventListener("dragleave", event => dragLeave(event));
-                td[i*10+j].addEventListener("dragover", event=> allowDrop(event));
-            }*/
-            td[i*10+j].addEventListener("drop", event => dropGame(event));
-            td[i*10+j].addEventListener("dragenter", event => dragEnter(event));
-            td[i*10+j].addEventListener("dragleave", event => dragLeave(event));
-            td[i*10+j].addEventListener("dragover", event=> allowDrop(event));
+            div.draggable = false;            
 
             if(table[i][j][0] == 15){
                 div.classList.add("back");
             }
-            else if(table[i][j][0] > -1 && table[i][j][0] < 11){
-                div.classList.add("p"+table[i][j][0]);
-                div.id = "sp"+table[i][j][0];
-            }
-            /*else if(table[i][j][0] == 2){
-                div.classList.add("p2");
-                div.id = "sp2";
-            }*/
             else if(table[i][j][0] == -1){
                 div.classList.add("bomb");
                 div.id = "sb";
-            }
-            /*else if(table[i][j][0] == 6){
-                div.classList.add("p6");
-                div.id = "sp6";
-            }
-            else if(table[i][j][0] == 5){
-                div.classList.add("p5");
-                div.id = "sp5";
-            }
-            else if(table[i][j][0] == 4){
-                div.classList.add("p4");
-                div.id = "sp4";
-            }
-            else if(table[i][j][0] == 3){
-                div.classList.add("p3");
-                div.id = "sp3";
-            }
-            else if(table[i][j][0] == 7){
-                div.classList.add("p7");
-                div.id = "sp7";
-            }
-            else if(table[i][j][0] == 8){
-                div.classList.add("p8");
-                div.id = "sp8";
-            }
-            else if(table[i][j][0] == 1){
-                div.classList.add("p1");
-                div.id = "sp1";
-            }
-            else if(table[i][j][0] == 9){
-                div.classList.add("p9");
-                div.id = "sp9";
             }
             else if(table[i][j][0] == 0){
                 div.classList.add("p0");
                 div.id = "sp0";
             }
-            else if(table[i][j][0] == 10){
-                div.classList.add("p10");
-                div.id = "sp10";
-            }*/
+            else if(table[i][j][0] < 11){
+                div.classList.add("p"+table[i][j][0]);
+                div.id = "sp"+table[i][j][0];
+
+                if(table[i][j][1] == color && turn == true){
+                    div.draggable = true;
+                    div.addEventListener("click", event => test(event));
+                    div.addEventListener("dragstart", event => {
+                        dragInProgress = true;
+                        dragGame(event)
+                    });
+                }
+            }
 
             if(table[i][j][0] < 20){
                 div.style.border = "none";
                 div.style.width = "90%";
                 div.style.heigth = "100%";
                 div.style.position = "relative";
-                //if(table[i][j][1] == color && turn == true) div.draggable = true;
 
-                //let old = td[10*i+j].firstElementChild;
-                //(old == null) ? td[10*i+j].appendChild(div) : td[10*i+j].replaceChild(div, old);
                 td[10*i+j].appendChild(div);
             }
+
         }
     }
 });
@@ -464,10 +444,10 @@ function createLine(move){
         col.classList.add('case');
         
         if(move == true){
-            col.addEventListener("drop", event => drop(event));
+            /*col.addEventListener("drop", event => drop(event));
             col.addEventListener("dragenter", event => dragEnter(event));
             col.addEventListener("dragleave", event => dragLeave(event));
-            col.addEventListener("dragover", event=> allowDrop(event));
+            col.addEventListener("dragover", event=> allowDrop(event));*///////////////////////////
         }
 
         line.appendChild(col);
