@@ -21,7 +21,7 @@ const research = require('./Back/js/research.js');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.use("/", express.static(__dirname + '/Front/')); 
+app.use("/", express.static(__dirname + '/Front/'));
 
 
 app.use(urlencodedParser);
@@ -33,7 +33,7 @@ io.use(sharedsession(session, {
 
 
 app.get('/', (req,res) =>{
-	res.sendFile(__dirname + '/Front/wait.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
+	res.sendFile(__dirname + '/Front/html/wait.html');	// quand on essaie d'accèder au site sans chemin d'accès précis, on est renvoyé sur la frontpage.html 
 																	//(peut venir à être changé si on oblige la création de compte)
 
 });

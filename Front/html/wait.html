@@ -4,6 +4,7 @@
 <meta charset="utf-8">      
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <script src="/socket.io/socket.io.js"></script>
+<link rel="icon" type="image/png" href="./Pictures/flags.png">
 <title>Stratego wait</title>
 </head>
 <body>
@@ -13,10 +14,10 @@
     <script>
         let socket = io();
 
-        socket.emit('search-game', true, true, true);
+        socket.emit('search-game', false, true, true);
 
         socket.on('game-redirect', () => {
-            window.location.href = "game.html";
+            window.location.href = "html/game.html";
         });
     </script>
 </body>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr"> 
+    <head>      
+        <meta charset="utf-8">      
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="icon" type="image/png" href="../Pictures/flags.png">
+        <link rel="stylesheet" href="../css/style.css">
+        <title>Stratego</title>   
+    </head>
+    <body>
+        <div id="row">
+        <div class="column" id="menu"></div>
+        <div class="column" id="game-board">
+        </div>
+        <div class="column" id="pions">
+            <div id="chrono">2:00</div>
+            <button id="reset" title="Vide le plateau">Reset</button>
+            <button id="random" title="Remplit la grille aléatoirement">Random</button>
+            <button id="start" title="Valide votre placement">Start</button>
+        </div>
+        </div>
+        <script>
+            let socket = io();
+        </script>
+        <script type="text/javascript" src="../js/modifyDisplay.js"></script>
+        <script type="text/javascript" src="../js/createTableGame.js"></script>
+        <script type="text/javascript" src="../js/dragNDrop.js"></script>
+        <script type="text/javascript" src="../js/click.js"></script>
+        <script type="text/javascript" src="../js/interaction.js"></script>
+    </body>
+</html>

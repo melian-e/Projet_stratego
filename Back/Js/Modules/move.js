@@ -1,4 +1,5 @@
 let Coordinates = require('../Classes/coordinates.js');
+let attack = require('../Modules/attack.js');
 
 module.exports = (function(){
     function isPiece(piece){    // Vérifie que le joueur veut bouger un pion ets non ne case vide
