@@ -50,7 +50,7 @@ html, body{
     background-color: grey;
 }
 
-#chrono{
+#chrono, #timer{
     border: 1px solid black;
     font-size: 2em;
     width: 99%;

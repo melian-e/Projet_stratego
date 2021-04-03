@@ -1,4 +1,6 @@
-function preparation(color){
+
+function preparation(color,rule){
+    scoutRule = rule;
     let table = document.createElement("table");
     table.id = 'game-table';
 
@@ -35,18 +37,18 @@ function createLine(move){
     let line = document.createElement('tr');
 
     for(let i = 0; i < 10; i++){
-        let col = document.createElement('td');
+        let td = document.createElement('td');
 
-        col.classList.add('case');
+        td.classList.add('case');
         
         if(move == true){
-            col.addEventListener("drop", drop);
-            col.addEventListener("dragenter", dragEnter);
-            col.addEventListener("dragleave", dragLeave);
-            col.addEventListener("dragover", allowDrop);
+            td.addEventListener("drop", drop);
+            td.addEventListener("dragenter", dragEnter);
+            td.addEventListener("dragleave", dragLeave);
+            td.addEventListener("dragover", allowDrop);
         }
 
-        line.appendChild(col);
+        line.appendChild(td);
     }
     return line;
 }

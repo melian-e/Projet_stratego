@@ -1,13 +1,25 @@
 socket.emit('preparation');
 
 socket.on('end', message =>{
+    let td = document.getElementsByClassName("case");
+    
+    removeClicks();
+    for(let x = 0; x < td.length; x++){
+        td[x].style.backgroundColor = "transparent";
+        td[x].removeEventListener("click", moveOnClick);
+        if(td[x].firstElementChild != undefined){
+            td[x].firstElementChild.removeEventListener("dragstart", dragGame);
+        }
+    }
+
     console.log(message);
 });
 
-socket.on('preparation', color => preparation(color));
+socket.on('preparation', (color,rule) => preparation(color, rule));
 socket.on('display', (table, rest) => display(table, rest));
 
-socket.on('new-spectator', grid => {
+socket.on('new-spectator', (grid,time) => {
+
     let table = document.createElement("table");
     table.id = 'game-table';
 
@@ -21,8 +33,28 @@ socket.on('new-spectator', grid => {
     document.getElementById("reset").remove();
     document.getElementById("random").remove();
     document.getElementById("start").remove();
-    document.getElementById("chrono").style.display = "none";
-    
+
+    time = (+new Date) - time;
+
+    if(grid.every(row => row.every(tab => tab[0] > 15))){
+        
+        let minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+        counter(2 - (minutes + ((seconds * 0.5)/30)));
+    }
+    else{
+        document.getElementById("timer").style.display = "none";     
+
+        let pion = document.getElementById("pions");
+        let clock = document.createElement("div");
+        
+        clock.id = "chrono";
+        pion.appendChild(clock);
+
+        chrono(time);
+    }
+
     display(grid, ['none', false]);
 });
 
@@ -37,17 +69,18 @@ socket.on('start', () => {
                 dropGame(event);
             }
         });
-        td[i].addEventListener("dragenter", event => {
-            if(dragInProgress == true) dragEnter(event);
-        });
-        td[i].addEventListener("dragleave", event => {
-            if(dragInProgress == true) dragLeave(event);
-        });
-        td[i].addEventListener("dragover", event=> {
-            if(dragInProgress == true) allowDrop(event);
-        });
+        td[i].addEventListener("dragenter", wrapperEnter);
+        td[i].addEventListener("dragleave", wrapperLeave);
+        td[i].addEventListener("dragover", wrapperOver);
     }
-    document.getElementById("chrono").setAttribute("display", "none");
+
+    document.getElementById("timer").style.display = "none";
+    let clock = document.createElement("div");
+    let pion = document.getElementById("pions");
+
+    clock.id = "chrono";
+    pion.appendChild(clock);
+    chrono(0);
 });
 
 function getCase(pion){

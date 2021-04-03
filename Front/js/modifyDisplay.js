@@ -19,6 +19,9 @@ function start(){
     for(let i = 99; i > 59; i--){
         td[i].removeEventListener('drop', drop);
         td[i].removeEventListener('dragstart', drag);
+        td[i].removeEventListener("dragenter", dragEnter);
+        td[i].removeEventListener("dragleave", dragLeave);
+        td[i].removeEventListener("dragover", allowDrop);
     }
 
     randGrid();
@@ -70,8 +73,11 @@ function display(table, rest){
             let div = document.createElement("div");
             div.classList.add("dot");
             div.classList.add(table[i][j][1]);
-            div.draggable = false;            
+            div.draggable = false;     
 
+            div.addEventListener("dragenter", wrapperEnter);
+            div.addEventListener("dragleave", wrapperLeave);      
+///////////////////////
             if(table[i][j][0] == 15){
                 div.classList.add("back");
             }
@@ -115,20 +121,36 @@ function counter(time){
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
         if(seconds < 10){
-            document.getElementById("chrono").innerHTML = minutes + ":0" + seconds;
+            document.getElementById("timer").innerHTML = minutes + ":0" + seconds;
         }
         else{
-            document.getElementById("chrono").innerHTML = minutes + ":" + seconds;
+            document.getElementById("timer").innerHTML = minutes + ":" + seconds;
         }
     
-    if(document.getElementById("chrono").getAttribute("display") == "none" || distance < 1){
+    if(document.getElementById("timer").getAttribute("display") == "none" || distance < 1){
         clearInterval(x);
-        document.getElementById("chrono").innerHTML = "";
-        document.getElementById("chrono").style.border = "none";
+        document.getElementById("timer").innerHTML = "";
+        document.getElementById("timer").style.border = "none";
     }
 
     if (distance < 1) {
         start();
       }
+    }, 1000);
+}
+
+function chrono(time){
+    let start = (+new Date) - time;
+    let x = setInterval(function() {        
+        let distance = (+new Date) - start;
+
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        if(seconds < 10){
+            document.getElementById("chrono").innerHTML = minutes + ":0" + seconds;
+        }
+        else{
+            document.getElementById("chrono").innerHTML = minutes + ":" + seconds;
+        }
     }, 1000);
 }

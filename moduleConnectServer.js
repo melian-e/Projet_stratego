@@ -91,8 +91,8 @@ io.on('connection',(socket) =>{
 		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
 
 		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
-		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color) : 
-		io.to(socket.id).emit('new-spectator', lobby.convertGrid('spectator'));
+		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color, lobby.scoutRule) : 
+		io.to(socket.id).emit('new-spectator', lobby.convertGrid('spectator'), lobby.startTime);
 	});
 
 	// Quand le joueur a placé ces pions		

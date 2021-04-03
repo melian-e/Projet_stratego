@@ -1,26 +1,46 @@
+function wrapperEnter(event){
+    if(dragInProgress == true) dragEnter(event);
+}
+
+function wrapperLeave(event){
+    if(dragInProgress == true) dragLeave(event);
+}
+
+function wrapperOver(event){
+    if(dragInProgress == true) allowDrop(event);
+}
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
 function dragEnter(ev){
+    console.log(dragInProgress);
     if(ev.target.nodeName == "TD" && ev.target.className != "case lake" ){
-        //ev.target.style.border = "solid #B76554";
-        ev.target.style.backgroundColor = "#598d40";
+        ev.target.style.backgroundColor = "#65b142";
     }
-    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
-        //ev.target.parentNode.style.border = "solid #B76554";
-        ev.target.parentNode.style.backgroundColor = "#598d40";
+    if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.id == "game-table"){
+        ev.target.parentNode.style.backgroundColor = "#65b142";
     }
 }
 
 function dragLeave(ev){
+    let td = document.getElementsByClassName("case");
+    let x = 0;
+
+    while(td[x] != ev.currentTarget && td[x] != ev.currentTarget.parentNode){
+        x++
+    }
+
+    allClicks.forEach(tab => x == tab[1])
+
+    let inside = (allClicks.some(tab => x == tab[1])) ? true : false
+
     if(ev.target.nodeName == "TD"){
-        //ev.target.style.border = "2px solid #3A5B2A";
-        ev.target.style.backgroundColor = "transparent";
+        ev.target.style.backgroundColor = (inside)? "#598d40" :"transparent";
     }
     if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.id == "game-table"){
-        //ev.target.parentNode.style.border = "2px solid #3A5B2A";
-        ev.target.parentNode.style.backgroundColor = "transparent";
+        ev.target.parentNode.style.backgroundColor = (inside)? "#598d40" :"transparent";
     }
 }
 
@@ -31,13 +51,15 @@ function drag(ev) {
 function dragGame(event) {
     dragInProgress = true;
     let td = document.getElementsByClassName("case");
-    let numData;
+    let i = 0;
 
-    for(let i = 0; i < td.length; i++){
-        if( td[i].firstElementChild == event.currentTarget) numData = i;
+    while(td[i].firstElementChild != event.currentTarget){
+        i++;
     }
 
-    event.dataTransfer.setData("numPiece", numData); 
+    move(event);
+
+    event.dataTransfer.setData("numPiece", i); 
 }
 
 
@@ -89,8 +111,8 @@ function drop(ev) {
 
 function dropGame(event){  
     event.preventDefault();
-    ///////////event.target.style = "2px solid #3A5B2A";
-    event.target.style.backgroundColor = "transparent";
+    resetGameBoard();
+    allClicks = [];
 
     let numPiece = event.dataTransfer.getData("numPiece");
     let td = document.getElementsByClassName("case");
@@ -99,6 +121,7 @@ function dropGame(event){
     for(let i = 0; i < td.length; i++){
         if( td[i] == event.currentTarget) numMove = i;
     }
-
-    socket.emit('click', numPiece, numMove);
+    if(numMove != numPiece){
+        socket.emit('click', numPiece, numMove);
+    }
 }
