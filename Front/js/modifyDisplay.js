@@ -17,8 +17,8 @@ function start(){
 
     let td = document.getElementsByClassName('case');
     for(let i = 99; i > 59; i--){
-        td[i].removeEventListener('drop', event => drop(event));
-        td[i].removeEventListener('dragstart', event => drag(event));
+        td[i].removeEventListener('drop', drop);
+        td[i].removeEventListener('dragstart', drag);
     }
 
     randGrid();
@@ -55,7 +55,8 @@ function ready(){
     socket.emit('ready', table);
 }
 
-socket.on('display', (table, rest) => {
+function display(table, rest){
+    removeClicks();
     let td = document.getElementsByClassName("case");
     let color = rest[0];
     let turn = rest[1];
@@ -64,6 +65,7 @@ socket.on('display', (table, rest) => {
         for( let j = 0; j < 10; j++){  
 
             if(td[10*i+j].firstElementChild != null) td[10*i+j].firstElementChild.remove();
+            td[10*i+j].removeEventListener("click", moveOnClick);
 
             let div = document.createElement("div");
             div.classList.add("dot");
@@ -87,14 +89,8 @@ socket.on('display', (table, rest) => {
 
                 if(table[i][j][1] == color && turn == true){
                     div.draggable = true;
-                    td[10*i+j].addEventListener("click", event => {
-                        console.log("click");
-                        moveOnClick(event)
-                    });
-                    div.addEventListener("dragstart", event => {
-                        dragInProgress = true;
-                        dragGame(event)
-                    });
+                    td[10*i+j].addEventListener("click", moveOnClick);
+                    div.addEventListener("dragstart", dragGame);
                 }
             }
 
@@ -109,7 +105,7 @@ socket.on('display', (table, rest) => {
 
         }
     }
-});
+}
 
 function counter(time){
     let end = time * 60000 + (+new Date);

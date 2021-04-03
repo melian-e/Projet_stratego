@@ -3,20 +3,24 @@ function allowDrop(ev) {
 }
 
 function dragEnter(ev){
-    if(ev.target.nodeName == "TD"){
-        ev.target.style.border = "solid #B76554";
+    if(ev.target.nodeName == "TD" && ev.target.className != "case lake" ){
+        //ev.target.style.border = "solid #B76554";
+        ev.target.style.backgroundColor = "#598d40";
     }
     if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.parentNode.id == "game-table"){
-        ev.target.parentNode.style.border = "solid #B76554";
+        //ev.target.parentNode.style.border = "solid #B76554";
+        ev.target.parentNode.style.backgroundColor = "#598d40";
     }
 }
 
 function dragLeave(ev){
     if(ev.target.nodeName == "TD"){
-        ev.target.style.border = "2px solid #3A5B2A";
+        //ev.target.style.border = "2px solid #3A5B2A";
+        ev.target.style.backgroundColor = "transparent";
     }
     if(ev.target.nodeName == "DIV" && ev.target.parentNode.parentNode.parentNode.id == "game-table"){
-        ev.target.parentNode.style.border = "2px solid #3A5B2A";
+        //ev.target.parentNode.style.border = "2px solid #3A5B2A";
+        ev.target.parentNode.style.backgroundColor = "transparent";
     }
 }
 
@@ -25,6 +29,7 @@ function drag(ev) {
 }
 
 function dragGame(event) {
+    dragInProgress = true;
     let td = document.getElementsByClassName("case");
     let numData;
 
@@ -84,6 +89,8 @@ function drop(ev) {
 
 function dropGame(event){  
     event.preventDefault();
+    ///////////event.target.style = "2px solid #3A5B2A";
+    event.target.style.backgroundColor = "transparent";
 
     let numPiece = event.dataTransfer.getData("numPiece");
     let td = document.getElementsByClassName("case");

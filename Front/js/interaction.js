@@ -5,6 +5,26 @@ socket.on('end', message =>{
 });
 
 socket.on('preparation', color => preparation(color));
+socket.on('display', (table, rest) => display(table, rest));
+
+socket.on('new-spectator', grid => {
+    let table = document.createElement("table");
+    table.id = 'game-table';
+
+    for(let i = 0; i < 10; i++){
+        table.appendChild(createLine((i < 6) ? false : true));
+    }
+
+    document.getElementById('game-board').appendChild(table);
+    createLake();
+
+    document.getElementById("reset").remove();
+    document.getElementById("random").remove();
+    document.getElementById("start").remove();
+    document.getElementById("chrono").style.display = "none";
+    
+    display(grid, ['none', false]);
+});
 
 let dragInProgress = false;
 
@@ -71,6 +91,6 @@ function randGrid(){
 function resetGameBoard(){
     let grid = document.getElementsByClassName("case");
     for(let i = 0; i < grid.length; i++){
-        grid[i].style.border = (grid[i].className.search("lake") == -1) ? "2px solid #3A5B2A" : "none";
+        grid[i].style.backgroundColor = "transparent";
     }
 }

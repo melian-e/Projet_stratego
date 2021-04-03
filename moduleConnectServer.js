@@ -92,7 +92,7 @@ io.on('connection',(socket) =>{
 
 		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
 		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color) : 
-		io.to(socket.id).emit('display', lobby.convertGrid('spectator'));
+		io.to(socket.id).emit('new-spectator', lobby.convertGrid('spectator'));
 	});
 
 	// Quand le joueur a placé ces pions		

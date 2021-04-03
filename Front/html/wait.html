@@ -9,12 +9,14 @@
 </head>
 <body>
     <div>
-        <p>Wait</p>
+        <Button id = "wait">Wait</Button>
+        <Button id = "spectator">New spectator</Button>
     </div>
     <script>
         let socket = io();
 
-        socket.emit('search-game', false, true, true);
+        document.getElementById('wait').addEventListener('click', () => socket.emit('search-game', false, true, true));
+        document.getElementById('spectator').addEventListener('click', () => socket.emit('new-spectator', 0));
 
         socket.on('game-redirect', () => {
             window.location.href = "html/game.html";

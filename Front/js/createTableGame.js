@@ -40,10 +40,10 @@ function createLine(move){
         col.classList.add('case');
         
         if(move == true){
-            col.addEventListener("drop", event => drop(event));
-            col.addEventListener("dragenter", event => dragEnter(event));
-            col.addEventListener("dragleave", event => dragLeave(event));
-            col.addEventListener("dragover", event=> allowDrop(event));
+            col.addEventListener("drop", drop);
+            col.addEventListener("dragenter", dragEnter);
+            col.addEventListener("dragleave", dragLeave);
+            col.addEventListener("dragover", allowDrop);
         }
 
         line.appendChild(col);
@@ -56,9 +56,9 @@ function buton(){
     let randomBtn = document.getElementById("random");
     let startBtn = document.getElementById("start");
 
-    resetBtn.addEventListener("click", () => reset());
-    randomBtn.addEventListener("click", () => randGrid());
-    startBtn.addEventListener("click", () => start());
+    resetBtn.addEventListener("click", reset);
+    randomBtn.addEventListener("click",randGrid);
+    startBtn.addEventListener("click", start);
 }
 
 
@@ -111,7 +111,7 @@ function createStock(i, color){
             pion.id = name;
             
             pion.draggable = true;
-            pion.addEventListener("dragstart", event => drag(event));
+            pion.addEventListener("dragstart", drag);
             td.appendChild(pion);
         }
         i--;
