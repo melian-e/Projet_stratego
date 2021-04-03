@@ -58,11 +58,9 @@ function ready(){
     socket.emit('ready', table);
 }
 
-function display(table, rest){
+function display(table, color, turn){
     removeClicks();
     let td = document.getElementsByClassName("case");
-    let color = rest[0];
-    let turn = rest[1];
 
     for( let i = 0; i < 10; i++){
         for( let j = 0; j < 10; j++){  

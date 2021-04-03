@@ -14,7 +14,7 @@ const session = require("express-session")({
 const sharedsession = require("express-socket.io-session");
 const bodyParser = require('body-parser');
 
-module.exports = {emitRoom};
+module.exports = {io };///////////////,con};		//////////*A REMETTRE SI TU AS LA CONNEXION A LA BDD*/////////
 const move = require('./Back/Js/Modules/move.js');
 const functions = require('./Back/Js/mainGame');
 const research = require('./Back/js/research.js');
@@ -119,7 +119,7 @@ io.on('connection',(socket) =>{
 			allRooms[x].simpleEvent(srvSockets, 'start');
 		}
 		else{
-			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]), ['none', false]);
+			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]), 'none', false);
 		}
 	});
 
@@ -158,10 +158,6 @@ io.on('connection',(socket) =>{
 		functions.quit(allCurrentsGames, allRooms, socket);
 	});
 });
-
-function emitRoom(player, eventName, arg, ...rest){
-	(rest.length == 0) ? io.to(player).emit(eventName, arg) : io.to(player).emit(eventName, arg, rest);
-}
 
 http.listen(4200, () => {
   console.log('Serveur lancé sur le port 4200');

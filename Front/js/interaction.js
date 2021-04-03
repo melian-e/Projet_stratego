@@ -16,7 +16,7 @@ socket.on('end', message =>{
 });
 
 socket.on('preparation', (color,rule) => preparation(color, rule));
-socket.on('display', (table, rest) => display(table, rest));
+socket.on('display', (table, color, turn) => display(table, color, turn));
 
 socket.on('new-spectator', (grid,time) => {
 
@@ -55,12 +55,13 @@ socket.on('new-spectator', (grid,time) => {
         chrono(time);
     }
 
-    display(grid, ['none', false]);
+    display(grid, 'none', false);
 });
 
 let dragInProgress = false;
 
 socket.on('start', () => {
+    console.log("start");
     let td = document.getElementsByClassName("case");
     for(let i = 0; i < td.length; i++){
         td[i].addEventListener("drop", event =>{

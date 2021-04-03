@@ -21,13 +21,17 @@ function createLake(){
     for(let x = 4; x<6; x++){
         for(let y = 0; y < 5; y+=4){
             for(let i = y+2; i < y+4; i++){
-                let lake1 = td[x*10+i];
-                let lake = document.createElement('div');
-                
-                lake.classList.add('lake');
-                lake1.classList.add('lake');
+                let lake = td[x*10+i];
 
-                lake1.appendChild(lake);
+                let num = (x == 4) ? ((i % 2 == 0) ? 1 : 2) : ((i % 2 == 0) ? 3 : 4);
+
+                //let lake1 = document.createElement('div');
+                
+                //lake1.classList.add('lake');
+                lake.classList.add('lake');
+                lake.classList.add("l"+num);
+
+                //lake.appendChild(lake1);
             }
         }
     }
