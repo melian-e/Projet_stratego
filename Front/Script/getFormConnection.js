@@ -1,33 +1,41 @@
-let form = document.getElementById('FormInscription');
+let form = document.getElementById('form');
 let input1 = document.getElementById('username');
 let input2 = document.getElementById('password');
+let divresultatappel = document.getElementById('resultatappel');
 
 // Envoi du login via le module de connexion
 form.addEventListener('submit', event => {
     event.preventDefault();
-    connect.connectAccount(input1.value,input2.value);
+    connectAccount.testAccount(input1.value,input2.value);
 });
 
 
-let createAccount = (function(){
+let connectAccount = (function(){
 
-    function connection(username,password) {
+    function connection(username,password,traitementReponse) {
         $.ajax({
             type: "POST",
-            url: "/connect.html",
+            url: "/Front/Script/getFormConnection.js",
             data: {
                 user: username,
                 mdp: password
             },
-            success: () => {
-                window.location.href = "/index.html";
+            success: (reponse) => {
+                traitementReponse(reponse);
+            },
+            error: (err) =>{
+                console.log(err);
+                console.log("l'appel ajax n'a pas fonctionné");
             },
         });
     }
 
     return {
-        connectAccount(username,password) {
-            connection(username,password);
+        testAccount(username,password) {
+            connection(username,password,(reponse)=>{
+                divresultatappel.innerHTML = reponse;
+                console.log(reponse);
+            });
         }
     }
 })();

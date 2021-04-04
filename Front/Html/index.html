@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../Css/style.css">
+	<link rel="stylesheet" href="/Front/Css/styleindex.css">
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -18,7 +18,7 @@
 	<nav class="navbar navbar-expand-md" style="background-color:grey; height:100px;">
 		<div class="navbar-collapse collapse" id="collapsingNavbar">
 			<ul class="navbar-nav">
-				<a href="index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
+				<a href="/Front/Html/index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
 			</ul>
 
 			<ul class="navbar-nav mx-auto">
@@ -48,13 +48,13 @@
 								<form class="col" method="post" id="form" action=""><!--Connexion-->
 									<div class="form-group">
 										<label for="email" class="form-control-label">Pseudo</label>
-										<input type="text" class="form-control" name ="pseudo" placeholder="Pseudo" required>
+										<input type="text" class="form-control" name ="pseudo" id="username" placeholder="Pseudo" required>
 									</div>
 										
 									<label for="password" class="form-control-label">Mot de passe</label>
 										
 									<div class="input-group mb-3">
-										<input type="password" class="form-control" name="password1" id="password1" placeholder="Password" required>
+										<input type="password" class="form-control" name="password1" id="password" placeholder="Password" required>
 										<div class="input-group-append">
 											<button type="button" class="btn" id="togglePassword">Voir</button>
 										</div>
@@ -66,15 +66,15 @@
 										<input type="checkbox" name="remember" value="true">Remember me
 									</div>
 	-->
-
+									<div class="input-group mb-3" id="resultatappel"></div>
 									<div align="center">
-										<button type="submit" class="btn center-block">Log in</button>
+										<input type="submit" name="modif" class="btn btn-primary" id="modif" value="Log in"/>
 									</div>
 								</form>
 							</div>
 								
 							<div class="modal-body col" align="center">
-								<p> No account ? Go register yourself <a href="createAccount.html">here</a> ! </p>
+								<p> No account ? Go register yourself <a href="/Front/Html/createAccount.html">here</a> ! </p>
 							</div>
 						</div>
 					</div>
@@ -84,7 +84,7 @@
 	</nav>
 	
 	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); background-color: lightgrey; height:150px">
-		<img style="height: 100px; margin-top: 25px;" src="../Images/stratego_logo.png">
+		<img style="height: 100px; margin-top: 25px;" src="/Front/Images/stratego_logo.png">
 	</div>
 	<!--fin de l'entête-->
 
@@ -95,7 +95,7 @@
 			Classement
 		</div>
 
-		<button type="button" class="jouer">jouer</button>
+		<button type="button" id="jouer" class="jouer">jouer</button>
 
 		<button type="button" class="spectate">regarder</button>
 		<div class="profil" style="background-color: white;">
@@ -111,5 +111,6 @@
 
 </body>
 
-<script type="text/javascript" src="../Script/moduleConnection.js"></script>
+<script type="text/javascript" src="/Front/Script/moduleConnection.js"></script>
+<script type="text/javascript" src="/Front/Script/getFormConnection.js"></script>
 </html>
