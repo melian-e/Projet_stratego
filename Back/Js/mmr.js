@@ -1,5 +1,5 @@
-let research = require("./research.js");
-let bdd = require("../../moduleConnectServer.js");
+const research = require("./research.js");
+const bdd = require("../../moduleConnectServer.js");
 
 /**
  * Calcule le gain ou la perte de mmr du'n joueur

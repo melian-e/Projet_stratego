@@ -6,15 +6,11 @@ class Person {
     }
     addMove(piece, coord){
         
-        if(this.historyMove.length == 0){
-            this.historyMove.push([piece.getPower(), piece.getCoord()]);
-        }
+        if(this.historyMove.length == 0) this.historyMove.push([piece.getPower(), piece.getCoord()]);
 
         this.historyMove.push([piece.getPower(), coord]);
 
-        if(this.historyMove.length > 6){
-            this.historyMove.shift();
-        }
+        if(this.historyMove.length > 6) this.historyMove.shift();
     }
 }
 

@@ -15,7 +15,7 @@
     <script>
         let socket = io();
 
-        document.getElementById('wait').addEventListener('click', () => socket.emit('search-game', false, true, true));
+        document.getElementById('wait').addEventListener('click', () => socket.emit('search-game', false, false, false));
         document.getElementById('spectator').addEventListener('click', () => socket.emit('new-spectator', 0));
 
         socket.on('game-redirect', () => {

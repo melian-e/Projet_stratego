@@ -15,7 +15,6 @@ function allowDrop(ev) {
 }
 
 function dragEnter(ev){
-    console.log(dragInProgress);
     if(ev.target.nodeName == "TD" && ev.target.className != "case lake" ){
         ev.target.style.backgroundColor = "#65b142";
     }
@@ -57,7 +56,7 @@ function dragGame(event) {
         i++;
     }
 
-    move(event);
+    move(event, "drop");
 
     event.dataTransfer.setData("numPiece", i); 
 }
@@ -100,13 +99,6 @@ function drop(ev) {
         pion.style.heigth = "100%";
         pion.style.position = "relative";
     }
-    /////////////////////////////////////////////pion mis dans le stock de pièces
-    /*if(ev.target == document.getElementById("pionStock") || ev.target.parentNode.parentNode.parentNode.parentNode == document.getElementById("pionStock") || ev.target.parentNode.parentNode == document.getElementById("pionStock") || ev.target.parentNode.parentNode.parentNode == document.getElementById("pionStock")){
-        pionStock[getCase(pion)].appendChild(pion);   
-        pion.style.width = "55px";
-        pion.style.heigth = "55px";
-        pion.style.position = "absolute";   
-    }*/
 }
 
 function dropGame(event){  

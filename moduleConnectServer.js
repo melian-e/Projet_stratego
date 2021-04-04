@@ -91,7 +91,7 @@ io.on('connection',(socket) =>{
 		let lobby = research.gameByRoom(allRooms[x], allCurrentsGames);
 
 		(lobby.getPlayers().some(player => player == socket.handshake.session.id)) ? 
-		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color, lobby.scoutRule) : 
+		io.to(socket.id).emit('preparation', (lobby.player1.id == socket.handshake.session.id) ? lobby.player1.color : lobby.player2.color) : 
 		io.to(socket.id).emit('new-spectator', lobby.convertGrid('spectator'), lobby.startTime);
 	});
 
@@ -122,6 +122,12 @@ io.on('connection',(socket) =>{
 			io.to(research.idOf(srvSockets,ready[0])).emit('display', lobby.convertGrid(ready[0]), 'none', false);
 		}
 	});
+
+	socket.on("cases", (numCase, event) => {
+		let lobby = research.game(socket.handshake.session.id, allCurrentsGames);
+		if(socket.handshake.session.id == lobby.player1.id) numCase = 99 - numCase;
+		io.to(socket.id).emit("cases", functions.getCases(lobby, numCase), event);
+	})
 
 	// Lors d'un mouvement
 	socket.on('click', (numPiece, numMove) => {

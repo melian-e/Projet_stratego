@@ -1,6 +1,5 @@
 
-function preparation(color,rule){
-    scoutRule = rule;
+function preparation(color){
     let table = document.createElement("table");
     table.id = 'game-table';
 
