@@ -1,0 +1,177 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    background-image: url(../Pictures/Fond.png);
+}
+#row{
+    height: 100%;  
+    margin: 0;
+}
+.column{
+    float: left;
+    height: 100%;
+    
+}
+#menu{
+    width: 25%;
+}
+#game-board{
+    width: 50%;
+}
+
+#game-table{
+    border: 5px solid #3A5B2A;
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+.case {
+    border: 2px solid #3A5B2A;
+    width: 10%;
+    height: 10%;
+}
+
+#pions{
+    width: 25%;
+}
+.dot {
+    height: 55px;
+    width: 55px;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: no-repeat;
+    padding: 0;
+
+    position: absolute;
+}
+
+.grey {
+    background-color: grey;
+}
+
+#chrono, #timer{
+    border: 1px solid black;
+    font-size: 2em;
+    width: 99%;
+    margin-left: 0px;
+    text-align: center;
+    display: block;
+}
+
+.blue.p10{
+    background-image: url(../Pictures/blue/marechal.jpg);
+}
+.blue.p9{
+    background-image: url(../Pictures/blue/general.png);
+}
+.blue.p8{
+    background-image: url(../Pictures/blue/colonel.png);
+}
+.blue.p7{
+    background-image: url(../Pictures/blue/major.png);
+}
+.blue.p6{
+    background-image: url(../Pictures/blue/capitain.png);
+}
+.blue.p5{
+    background-image: url(../Pictures/blue/lieutenant.png);
+}
+.blue.p4{
+    background-image: url(../Pictures/blue/sergeant.png);
+}
+.blue.p3{
+    background-image: url(../Pictures/blue/demineur.png);
+}
+.blue.p2{
+    background-image: url(../Pictures/blue/scout.png);
+}
+.blue.p1{
+    background-image: url(../Pictures/blue/spy.png);
+}
+.blue.p0{
+    background-image: url(../Pictures/blue/flag.png);
+}
+.blue.bomb{
+    background-image: url(../Pictures/blue/bomb.png);
+}
+.blue.back{
+    background-image: url(../Pictures/blue/back.png);
+}
+
+.red.p10{
+    background-image: url(../Pictures/red/marechal.png);
+}
+.red.p9{
+    background-image: url(../Pictures/red/general.png);
+}
+.red.p8{
+    background-image: url(../Pictures/red/colonel.png);
+}
+.red.p7{
+    background-image: url(../Pictures/red/major.png);
+}
+.red.p6{
+    background-image: url(../Pictures/red/capitain.png);
+}
+.red.p5{
+    background-image: url(../Pictures/red/lieutenant.png);
+}
+.red.p4{
+    background-image: url(../Pictures/red/sergeant.png);
+}
+.red.p3{
+    background-image: url(../Pictures/red/demineur.png);
+}
+.red.p2{
+    background-image: url(../Pictures/red/scout.png);
+}
+.red.p1{
+    background-image: url(../Pictures/red/spy.png);
+}
+.red.p0{
+    background-image: url(../Pictures/red/flag.png);
+}
+.red.bomb{
+    background-image: url(../Pictures/red/bomb.png);
+}
+.red.back{
+    background-image: url(../Pictures/red/back.png);
+}
+
+button{
+    width: 49%;
+}
+#random{
+    right: 0;
+}
+#start{
+    width: 99%;
+}
+
+#pionStock{
+    height: 40%;
+    width: 99%;
+    margin-bottom: 30px;
+}
+
+.lake{
+    border: 0px;
+    background-image: url(../Pictures/lakeSvg.svg);
+    background-repeat: no-repeat
+}
+
+.l1{
+    
+}
+.l2{
+
+}
+
+.l2{
+
+}
+
+.l2{
+
+}
