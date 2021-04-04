@@ -56,7 +56,14 @@ class Game extends GameGrid {
         if(movableR == true || flagR == false) return this.player2.id;
     }
     getHistoryMove(player){
-        return (player == this.player1.id) ? this.player1.historyMove : this.player2.historyMove;
+        return (player == this.player1) ? this.player1.historyMove : this.player2.historyMove;
+    }
+    isAlternation(piece, destinationCoord){  // Vérifie l'alternance entre 2 cases
+        let historyMove = this.getHistoryMove(this.getCurrentPlayerName());
+        let currentBox = historyMove.filter(elem => (elem[0] === piece.getPower() && piece.getCoord().isEqual(elem[1])));
+        let destinationBox = historyMove.filter(elem => (elem[0] === piece.getPower() && destinationCoord.isEqual(elem[1])));
+    
+        return (currentBox.length == 3 && destinationBox.length == 3) ? true : false;
     }
 }
 

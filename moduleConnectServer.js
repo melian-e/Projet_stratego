@@ -40,7 +40,7 @@ io.use(sharedsession(session, {
 	autoSave: true
   }));
 
-app.use(express.static(__dirname + '/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
+app.use(express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
 
 app.get('/', (req, res) => {
 	console.log(req.session);
@@ -51,6 +51,9 @@ app.get('/', (req, res) => {
 		res.sendFile(__dirname + '/Front/Html/game.html');
 	}
 });
+
+let allCurrentsGames = Array();
+let allRooms = Array();
 
 io.on('connection',(socket) =>{
 

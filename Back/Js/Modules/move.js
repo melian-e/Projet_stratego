@@ -1,4 +1,5 @@
 let Coordinates = require('../Classes/coordinates.js');
+let attack = require('../Modules/attack.js');
 
 module.exports = (function(){
     function isPiece(piece){    // Vérifie que le joueur veut bouger un pion ets non ne case vide
@@ -16,13 +17,6 @@ module.exports = (function(){
     function isAuthorizedMove(boxEntity, currentPlayer){    // Vérifie que la case de destination est libre ou occupé par l'ennemi
         return (boxEntity.getOccupy() == 2 || 
         (boxEntity.getOccupy() == 1 && boxEntity.getOwner() == currentPlayer)) ? false : true;
-    }
-    function isAlternation(game, piece, destinationCoord){  // Vérifie l'alternance entre 2 cases
-        let historyMove = game.getHistoryMove(game.getCurrentPlayer());
-        let currentBox = historyMove.filter(elem => (elem[0] === piece.getPower() && piece.getCoord().isEqual(elem[1])));
-        let destinationBox = historyMove.filter(elem => (elem[0] === piece.getPower() && destinationCoord.isEqual(elem[1])));
-
-        return (currentBox.length == 3 && destinationBox.length == 3) ? true : false;
     }
     function scoutMove(game, piece, x, y){
         let canMove = false;
@@ -46,12 +40,13 @@ module.exports = (function(){
 
             if(isPiece(piece) && isMovable(piece) && isMovement(piece, x, y) && 
             isMyPiece(game, piece) && isAuthorizedMove(game.getBox(x, y), game.getCurrentPlayerName()) 
-            && !isAlternation(game, piece, new Coordinates(x,y))){
+            && !game.isAlternation(piece, new Coordinates(x,y))){
 
                 let canMove = (piece.getPower() == 2) ? scoutMove(game, piece, x, y) : pieceMove(piece, x, y);
 
                 if(canMove){
                     game.getCurrentPlayerName().addMove(piece, new Coordinates(x,y));
+
                     (game.isAttack(game.getCurrentPlayerName().id,x,y)) ? attack.eventAttack(game, piece, game.getBox(x,y)) : game.move(piece,x,y);
                     game.play();
                 }

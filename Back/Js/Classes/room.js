@@ -1,4 +1,5 @@
 const research = require("../research.js");
+const mmr = require("../mmr.js");
 const emit = require('../../../moduleConnectServer.js');
 
 class Room {
@@ -23,11 +24,13 @@ class Room {
                 color = (playerId == lobby.player1.id) ? lobby.player1.color : (playerId == lobby.player2.id) ? lobby.player2.color : 'none'
                 turn = (playerId == lobby.getCurrentPlayerName().id) ? true : false;
                 
-                emit.emitRoom(user.id, 'display', grid, color, turn);
+                emit.io.to(user.id).emit('display', grid, color, turn);
             }
         });
     }
     end(srvSockets, lobby){
+        mmr.end(srvSockets, lobby);
+        
         let winner = lobby.getWinner();
         let loser = (winner == lobby.player1.id) ? lobby.player2.id : lobby.player1.id;
         
@@ -37,10 +40,12 @@ class Room {
                 if(winner != undefined){
                     let message = (playerId == winner) ? 'Tu as gagné.' : (playerId == loser) ? 'Tu as perdu.':
                     research.getName(io.sockets.sockets, winner) + ' as gagné.';
-                    emit.emitRoom(user.id, 'end', message);
+
+                    emit.io.to(user.id).emit('end', message);
                 }
                 else{
-                    emit.emitRoom(user.id, 'end', research.getName(io.sockets.sockets, winner));
+
+                    emit.io.to(user.id).emit('end', research.getName(io.sockets.sockets, winner));
                 }
             }
         });
@@ -51,7 +56,8 @@ class Room {
                 if(eventName == 'game-redirect'){
                     user.handshake.session.redirect = true;
                 }
-                emit.emitRoom(user.id, eventName, arg);
+
+                emit.io.to(user.id).emit(eventName, arg);
             }
         });
     }

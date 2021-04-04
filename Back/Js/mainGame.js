@@ -1,3 +1,4 @@
+const Coordinates = require('./Classes/coordinates.js');
 const Game = require('./Classes/game.js');
 const Room = require('./Classes/room.js');
 const research = require('./research.js');
@@ -72,7 +73,7 @@ function currentGames(srvSockets, allCurrentsGames){
  * @param { String } playerId 
  * @param { Game } lobby
  */
-    function ready(table,playerId,lobby){
+function ready(table,playerId,lobby){
     if(lobby.getPlayers()[0] == playerId){
         table.reverse();
         table.forEach(elem => elem.reverse());
@@ -86,7 +87,7 @@ function currentGames(srvSockets, allCurrentsGames){
  * @param { Array } allCurrentsGames 
  * @param { Array } allRooms 
  */
-    function suppress(lobby,allCurrentsGames, allRooms){
+function suppress(lobby,allCurrentsGames, allRooms){
     
     let x = research.roomById(lobby.player1.id, allRooms);
     
@@ -118,4 +119,89 @@ function quit(allCurrentsGames, allRooms, socket){
     }
 }
 
-module.exports = {currentGames, waiting, newGame, ready, suppress, quit}
+/**
+ * Recherche les cases sur lesquelles peut se déplacer le pion donné
+ * @param { Game } lobby 
+ * @param { int } numPiece 
+* @returns { Array }
+ */
+function getCases(lobby, numPiece){
+    let cases = Array();
+    let xPiece = Math.floor(numPiece / 10);
+    let yPiece = numPiece % 10;
+
+    for(let x = -1; x < 2; x+=2){
+        for(let y = -1; y < 2; y += 2){
+            let i = (x < 0) ? xPiece + x*y : xPiece;
+            let j = (x > 0) ? yPiece + x*y : yPiece;
+
+            if(lobby.getBox(xPiece, yPiece).getPower() != 2) {
+                if( i > -1 && j > -1 && i < 10 && j < 10 && canMove(lobby,xPiece,yPiece,i,j)){
+                    (lobby.getBox(xPiece, yPiece).getOwner() == lobby.player1.id) ? cases.push([99 - numPiece, 99 - (i*10+j)]) : cases.push([numPiece, i*10+j]);
+                }
+            }
+
+            else{
+                let p = 1;
+                
+                while(i > -1 && j > -1 && i < 10 && j < 10 && scoutMove(lobby,xPiece,yPiece,i,j,p)){
+                    (lobby.getBox(xPiece, yPiece).getOwner() == lobby.player1.id) ? cases.push([99 - numPiece, 99 - (i*10+j)]) : cases.push([numPiece, i*10+j]);
+                    p++;
+                    i = (x < 0) ? xPiece + x*y*p : xPiece;
+                    j = (x > 0) ? yPiece + x*y*p : yPiece;
+                }
+            }
+        }
+    }
+    return cases;
+}
+
+/**
+ * Vérifie si le pion scout peut se déplacer sur la case
+ * @param { Game } lobby
+ * @param { int } x 
+ * @param { int } y 
+ * @param { int } i
+ * @param { int } j
+ * @param { int } p
+ * @returns { boolean }
+ */
+function scoutMove(lobby,x,y,i,j,p){    
+    let move = true;
+    let ownerPiece = lobby.getBox(x,y).getOwner();
+    
+    if(lobby.getBox(i,j).getOccupy() == 1){
+        let ownerMove = lobby.getBox(i,j).getOwner();
+        move = ((ownerMove != ownerPiece) && (p == 1 || lobby.scoutRule)) ? true : false;
+    }
+
+    if(lobby.isObstacleOnTheWay(new Coordinates(x,y), new Coordinates(i,j))) move = false;
+
+    return (!lobby.isAlternation(lobby.getBox(x,y),new Coordinates(i,j)) && move && lobby.getBox(i,j).getOccupy() != 2) ? true : false;
+}
+
+/**
+ * Vérifie si le pion non scout peut se déplacer sur la case
+ * @param { Game } lobby 
+ * @param { int } x 
+ * @param { int } y 
+ * @param { int } i 
+ * @param { int } j 
+ * @returns { boolean }
+ */
+function canMove(lobby,x,y,i,j){
+    
+    let lake, ownerPiece, ownerMove;
+
+    if(lobby.getBox(i,j).getOccupy() == 1){
+        ownerPiece = lobby.getBox(x,y).getOwner();
+        ownerMove = lobby.getBox(i,j).getOwner();
+    }
+    else{
+        lake = (lobby.getBox(i,j).getOccupy() == 2) ? true : false; 
+    }
+
+    return (!lobby.isAlternation(lobby.getBox(x,y),new Coordinates(i,j)) && ((lobby.getBox(i,j).getOccupy() != 1 && !lake) || (ownerMove != ownerPiece))) ? true : false;
+}
+
+module.exports = {currentGames, waiting, newGame, ready, suppress, quit, getCases}

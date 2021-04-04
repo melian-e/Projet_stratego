@@ -4,19 +4,22 @@
 <meta charset="utf-8">      
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <script src="/socket.io/socket.io.js"></script>
+<link rel="icon" type="image/png" href="/Front/Images/flags.png">
 <title>Stratego wait</title>
 </head>
 <body>
     <div>
-        <p>Wait</p>
+        <Button id = "wait">Wait</Button>
+        <Button id = "spectator">New spectator</Button>
     </div>
     <script>
         let socket = io();
 
-        socket.emit('search-game', true, true, true);
+        document.getElementById('wait').addEventListener('click', () => socket.emit('search-game', false, false, false));
+        document.getElementById('spectator').addEventListener('click', () => socket.emit('new-spectator', 0));
 
         socket.on('game-redirect', () => {
-            window.location.href = "game.html";
+            window.location.href = "html/game.html";
         });
     </script>
 </body>

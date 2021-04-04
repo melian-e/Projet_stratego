@@ -8,6 +8,6 @@ mdpbutton.addEventListener('click', event=> {
 });
 
 jouerbutton.addEventListener('click', event => {
-    window.location.href = "wait.html";
+    window.location.href = "/Html/wait.html";
 })
 
