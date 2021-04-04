@@ -22,15 +22,11 @@ function createLake(){
             for(let i = y+2; i < y+4; i++){
                 let lake = td[x*10+i];
 
-                let num = (x == 4) ? ((i % 2 == 0) ? 1 : 2) : ((i % 2 == 0) ? 3 : 4);
-
-                //let lake1 = document.createElement('div');
+                let lakeNum = (y == 0) ? 1 : 2;
+                let caseNum = (x == 4) ? ((i % 2 == 0) ? 1 : 2) : ((i % 2 == 0) ? 3 : 4);
                 
-                //lake1.classList.add('lake');
                 lake.classList.add('lake');
-                lake.classList.add("l"+num);
-
-                //lake.appendChild(lake1);
+                lake.classList.add("l"+lakeNum+"-"+caseNum);
             }
         }
     }
