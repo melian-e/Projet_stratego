@@ -1,9 +1,8 @@
 let mdp = document.getElementById('password');
 let mdpButton = document.getElementById('togglePassword');
-let jouerButton = document.getElementById('jouer');
-let regarderButton = document.getElementById('regarder');
 let boutonCon = document.getElementById('boutonCon');
 let divPseudo = document.getElementById('divPseudo');
+let tableBody = document.getElementById("tableGame");
 let socket = io();
 
 mdpButton.addEventListener('click', event=> {
@@ -11,21 +10,22 @@ mdpButton.addEventListener('click', event=> {
     mdp.focus();
 });
 
-jouerButton.addEventListener('click', event => {
-    socket.emit('user-name');
-    socket.on('user-name',(username)=>{
-        if(username != undefined) {
-            window.location.href = "/Html/choice.html";
-        }
-        else {
-            alert("Vous devez vous connecter pour pouvoir jouer !");
+let setPartie = (function(){
+    socket.emit('current-games');
+    socket.on('current-games',(table)=>{
+        for (let i = 0; i < table.length; i++) {
+            let row = document.createElement("tr");
+
+            for (let j = 0; j < 3; j++) {
+                let cell = document.createElement("td");
+                let cellText = document.createTextNode("cell in row "+i+", column "+j);        
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+            }
+            tableBody.appendChild(row);
         }
     });
 });
-
-regarderButton.addEventListener('click', event => {
-    window.location.href = "/Html/spectate.html";
-})
 
 let getPseudo = (function(){
     socket.emit('user-name');
@@ -39,3 +39,4 @@ let getPseudo = (function(){
 });
 
 getPseudo();
+setPartie();

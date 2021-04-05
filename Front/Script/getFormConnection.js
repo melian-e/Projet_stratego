@@ -23,7 +23,6 @@ let connectAccount = (function(){
             },
             success: (reponse) => {
                 traitementReponse(reponse);
-                window.location.href = "/Html/index.html";
             },
             error: (err) =>{
                 console.log(err);
@@ -36,7 +35,12 @@ let connectAccount = (function(){
         testAccount(username,password) {
             connection(username,password,(reponse)=>{
                 divresultatappel.innerHTML = reponse;
-                console.log(reponse);
+                if(reponse == "Pseudo déjà utilisé !" || reponse == "Email déjà utilisé !"){
+                
+                }
+                else {
+                    window.location.href = "/Html/index.html";
+                }
             });
         }
     }
