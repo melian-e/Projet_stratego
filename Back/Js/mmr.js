@@ -43,18 +43,14 @@ function end(srvSockets, lobby){
         if (err) throw err;
 
         let mmrj1 = result[0].mmr;
-        console.log("j1",mmrj1);
         
         bdd.con.query("SELECT mmr FROM users WHERE username=?",[j2], (err, result) => {
             if (err) throw err;
 
             let mmrj2 = result[0].mmr;
-            console.log("j2",mmrj2);
-
             let winner = lobby.getWinner();
             let time = (Date.now() - lobby.startTime) / 1000;
-            let min = Math.floor(Math.floor(Math.floor(time/1000) / 60) % 60);
-
+            let min = Math.floor(Math.floor(Math.floor(time) / 60) % 60);
             let tempj1 = mmr(mmrj1, mmrj2, min, lobby.numStrokes, winner == lobby.player1.id);
             let tempj2 = mmr(mmrj1, mmrj2, min, lobby.numStrokes, winner == lobby.player2.id);
         
@@ -68,38 +64,29 @@ function end(srvSockets, lobby){
                     let score_winner = (winner == lobby.player1.id) ? tempj1 : tempj2;
                     let score_loser = (winner == lobby.player1.id) ? tempj2 : tempj1;
 
-                    let clock = (Date.now() - lobby.startTime)/1000;
-                    let sec = Math.floor((clock / 1000) % 60);
-                    let minutes = Math.floor(Math.floor(Math.floor(clock/1000) / 60) % 60);
-                    let hours = Math.floor( Math.floor(clock/1000) / 3600);
-
-                    console.log(hours, ", ", minutes, ", ", sec);
+                    let sec = Math.floor((time) % 60);
+                    let hours = Math.floor( Math.floor(time) / 3600);
                     
                     let playTime = "";
                     if(hours > 0)  playTime += hours + ":";
-                    playTime += minutes + ":" + sec;
+                    playTime += min + ":" + sec;
                 
                     bdd.con.query("UPDATE users SET mmr=? WHERE username=?",[tempj1+mmrj1,j1], (err, result) =>{
                         if (err) throw err;
-                        console.log("j1",tempj1+mmrj1);
                         
                         bdd.con.query("UPDATE users SET mmr=? WHERE username=?",[tempj2+mmrj2,j2], (err, result) => {
                             if (err) throw err;
                             let date = new Date(lobby.startTime).toLocaleString().split('/');
-                            console.log(new Date(lobby.startTime).toLocaleString());
                             let year = date[2].split(' ')[0];
                             let month = date[1];
                             let today = date[0];
 
                             sql = "INSERT INTO `games` (`id_winner`, `id_loser`, `score_winner`, `score_loser`, `date`, `play_time`) VALUES (?,?,?,?,?,?)";
                             let component = [idWinner, idLoser, score_winner, score_loser,year+"-"+month+"-"+today , playTime];
-                            
-                            console.log("j2",tempj2+mmrj2);
-                            console.log(new Date(lobby.startTime).toLocaleString());
-                            console.log(component);
+
                             bdd.con.query(sql, component, (err, result) =>{
                                 if (err) throw err;
-                                console.log("Nouvelle partie dans la bdd.");
+                                console.log("Une partie viens de se terminer, elle a bien été ajouté à la bdd.");
                             });
                         });
                     }); 
