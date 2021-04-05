@@ -84,7 +84,7 @@ io.on('connection',(socket) =>{
 
 		let srvSockets = io.sockets.sockets;
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
-
+		
 
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
 			
@@ -234,7 +234,7 @@ con.connect(function(err) {
 		});
 	});
 
-	
+
 });
 
 http.listen(4200, () => {

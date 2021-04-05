@@ -1,7 +1,6 @@
 let mdpButton = document.getElementById('togglePassword');
 let jouerButton = document.getElementById('jouer');
 let regarderButton = document.getElementById('regarder');
-let socket = io();
 
 mdpButton.addEventListener('click', event=> {
     let mdp = document.getElementById('password');
@@ -26,6 +25,7 @@ regarderButton.addEventListener('click', event => {
 })
 
 let getPseudo = (function(){
+    let socket = io();
     let boutonCon = document.getElementById('boutonCon');
     let divPseudo = document.getElementById('divPseudo');
     socket.emit('user-name');
