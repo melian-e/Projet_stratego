@@ -1,6 +1,7 @@
 let mdp = document.getElementById('password');
 let mdpbutton = document.getElementById('togglePassword');
 let jouerbutton = document.getElementById('jouer');
+let regarderbutton = document.getElementById('regarder');
 let boutonCon = document.getElementById('boutonCon');
 let divPseudo = document.getElementById('divPseudo');
 let socket = io();
