@@ -7,6 +7,7 @@ let divresultatappel = document.getElementById('resultatappel');
 form.addEventListener('submit', event => {
     event.preventDefault();
     connectAccount.testAccount(input1.value,input2.value);
+    
 });
 
 
@@ -22,6 +23,7 @@ let connectAccount = (function(){
             },
             success: (reponse) => {
                 traitementReponse(reponse);
+                window.location.href = "/Html/index.html";
             },
             error: (err) =>{
                 console.log(err);

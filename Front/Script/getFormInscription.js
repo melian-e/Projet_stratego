@@ -10,6 +10,7 @@ let divresultatappel = document.getElementById('resultatappel');
 form.addEventListener('submit', event => {
     event.preventDefault();
     createAccount.sendAccount(input1.value,input2.value,input3.value);
+    
 });
 
 mdpbutton.addEventListener('click', event=> {
@@ -29,6 +30,7 @@ let createAccount = (function(){
             },
             success: (reponse) => {
                 traitementReponse(reponse);
+                window.location.href = "/Html/index.html";
             },
             error: (err) =>{
                 console.log(err);
