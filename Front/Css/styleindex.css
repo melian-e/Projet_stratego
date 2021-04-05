@@ -176,3 +176,19 @@ tr {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.loading{
+    grid-column: 2;
+    grid-row: 2 ;
+    border: none;
+    margin: auto;
+    text-align: center;
+}
+
+.texteAccomp{
+    grid-column: 2;
+    grid-row: 3;
+    border: none;
+    margin: auto;
+    text-align: center;
+}
