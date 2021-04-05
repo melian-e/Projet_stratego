@@ -80,9 +80,11 @@ function end(srvSockets, lobby){
                             let year = date[2].split(' ')[0];
                             let month = date[1];
                             let today = date[0];
+                            let nameWinner = (winner == lobby.player1.id) ? j1 : j2;
+                            let nameLoser = (winner == lobby.player1.id) ? j2 : j1;
 
-                            sql = "INSERT INTO `games` (`id_winner`, `id_loser`, `score_winner`, `score_loser`, `date`, `play_time`) VALUES (?,?,?,?,?,?)";
-                            let component = [idWinner, idLoser, score_winner, score_loser,year+"-"+month+"-"+today , playTime];
+                            sql = "INSERT INTO `games` (`id_winner`, `id_loser`, `score_winner`, `score_loser`, `date`, `play_time`,`name_winner`, `name_loser`) VALUES (?,?,?,?,?,?,?,?)";
+                            let component = [idWinner, idLoser, score_winner, score_loser,year+"-"+month+"-"+today , playTime, nameWinner, nameLoser];
 
                             bdd.con.query(sql, component, (err, result) =>{
                                 if (err) throw err;
@@ -95,5 +97,6 @@ function end(srvSockets, lobby){
         });
     });
 }
+
 
 module.exports = {end};
