@@ -36,6 +36,6 @@ let classement = (function(){
             });
         }
     }
-});
+})();
 
 classement.getClassement();

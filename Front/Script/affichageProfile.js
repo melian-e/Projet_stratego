@@ -26,3 +26,5 @@ let profile = (function(){
         }
     }
 })();
+
+profile.getProfile();
