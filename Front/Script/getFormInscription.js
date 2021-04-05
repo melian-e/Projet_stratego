@@ -30,7 +30,6 @@ let createAccount = (function(){
             },
             success: (reponse) => {
                 traitementReponse(reponse);
-                window.location.href = "/Html/index.html";
             },
             error: (err) =>{
                 console.log(err);
@@ -42,7 +41,9 @@ let createAccount = (function(){
         sendAccount(username,mailAdress,password) {
             postAccount(username,mailAdress,password,(reponse)=>{
                 divresultatappel.innerHTML = reponse;
-                console.log(reponse);
+                if(reponse != "Email déjà utilisé !" && reponse != "Pseudo déjà utilisé !"){
+                    window.location.href = "/Html/index.html";
+                }
             });
         }
     }

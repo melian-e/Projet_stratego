@@ -35,10 +35,7 @@ let connectAccount = (function(){
         testAccount(username,password) {
             connection(username,password,(reponse)=>{
                 divresultatappel.innerHTML = reponse;
-                if(reponse == "Pseudo déjà utilisé !" || reponse == "Email déjà utilisé !"){
-                
-                }
-                else {
+                if(reponse != "Pseudo ou mot de passe incorrecte !"){
                     window.location.href = "/Html/index.html";
                 }
             });
