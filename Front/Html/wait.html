@@ -19,7 +19,7 @@
         document.getElementById('spectator').addEventListener('click', () => socket.emit('new-spectator', 0));
 
         socket.on('game-redirect', () => {
-            window.location.href = "Html/game.html";
+            window.location.href = "game.html";
         });
     </script>
 </body>

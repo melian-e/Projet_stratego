@@ -26,7 +26,7 @@ const con = mysql.createConnection({
 const sharedsession = require("express-socket.io-session");
 const bodyParser = require('body-parser');
 
-module.exports = {io};
+module.exports = {io, con};
 const move = require('./Back/Js/Modules/move.js');
 const functions = require('./Back/Js/mainGame');
 const research = require('./Back/js/research.js');
@@ -185,11 +185,11 @@ con.connect(function(err) {
 		const mailAdress = req.body.mail;
 		const mdp = req.body.mdp;
 
-		sqls1 = "SELECT * FROM users WHERE username='"+user+"'";
-		sqls2 = "SELECT * FROM users WHERE email='"+mailAdress+"'";
-		sqli = "INSERT INTO users (username, email, password, mmr) VALUES ('" + user + "','" + mailAdress + "','" + mdp + "','200')";
+		sqls1 = "SELECT * FROM users WHERE username=?";
+		sqls2 = "SELECT * FROM users WHERE email=?";
+		sqli = "INSERT INTO users (username, email, password, mmr) VALUES (?,?,?,'200')";
 
-		con.query(sqls1, function(err, result){
+		con.query(sqls1,[user+""] ,(err, result) => {
 			if (err) throw err;
 			if (result && result.length){
 				console.log(result);
@@ -197,7 +197,7 @@ con.connect(function(err) {
 				res.end('Pseudo déjà utilisé !');
 			}
 			else {
-				con.query(sqls2, function(err, result) {
+				con.query(sqls2,[mailAdress+""], (err, result) => {
 					if (err) throw err;
 					if (result && result.length){
 						console.log(result);
@@ -205,7 +205,9 @@ con.connect(function(err) {
 						res.end('Email déjà utilisé !');
 					}
 					else {
-						con.query(sqli);
+						con.query(sqli, [user+"", mailAdress+"", mdp+""], (err, result) =>{
+							if (err) throw err;
+						});
 						res.end('Nouveau compte bien créé !');
 					}
 				});
@@ -216,8 +218,8 @@ con.connect(function(err) {
 	app.post('/Front/Script/getFormConnection.js', (req, res) => {
 		user = req.body.user;
 		mdp = req.body.mdp;
-		sqls1 = "SELECT * FROM users WHERE username='"+user+"' AND password='"+mdp+"'";
-		con.query(sqls1, function(err, result){
+		sqls1 = "SELECT * FROM users WHERE username=? AND password=?";
+		con.query(sqls1, [user+"",mdp+""] ,(err, result) => {
 			if (err) throw err;
 			if (result && result.length){
 				req.session.userName = user;
@@ -231,6 +233,8 @@ con.connect(function(err) {
 			}
 		});
 	});
+
+	
 });
 
 http.listen(4200, () => {

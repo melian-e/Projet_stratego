@@ -1,7 +1,7 @@
 html, body{
     height: 100%;
     margin: 0;
-    background-image: url(../Pictures/svg/Fond.svg);
+    background-image: url(../Images/svg/Fond.svg);
     background-size: cover;
 }
 #row{

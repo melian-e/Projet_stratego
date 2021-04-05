@@ -15,7 +15,7 @@ jouerButton.addEventListener('click', event => {
     socket.emit('user-name');
     socket.on('user-name',(username)=>{
         if(username != undefined) {
-            window.location.href = "/Html/choice.html";
+            window.location.href = "/Html/wait.html";
         }
         else {
             alert("Vous devez vous connecter pour pouvoir jouer !");
