@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 24 mars 2021 à 13:01
+-- Généré le :  lun. 05 avr. 2021 à 14:55
 -- Version du serveur :  5.7.28
 -- Version de PHP :  5.6.40
 
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `score_winner` int(11) NOT NULL,
   `score_loser` int(11) NOT NULL,
   `date` date NOT NULL,
+  `play_time` text NOT NULL,
   PRIMARY KEY (`id_game`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -55,7 +56,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `mmr`) VALUES
+(6, 'test', 'test1@test.test', 'test', 200),
+(5, 'test1', 'test@test.test', 'test', 200),
+(7, 'test2', 'test2@test.test', 'test', 200),
+(8, 'test4', 'test4@test.test', 'test', 200);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

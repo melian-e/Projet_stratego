@@ -14,7 +14,7 @@ let setPartie = (function(){
     socket.emit('current-games');
 
     socket.on('current-games', table =>{
-        //table = [["alexis","Axel", "2:03"],["IéIé", "Flora", "12:02"]];
+        table = [["alexis","Axel", "2:03"],["IéIé", "Flora", "12:02"]]; // ligne de test
 
         let location = document.getElementById("games");
 
@@ -30,13 +30,6 @@ let setPartie = (function(){
                 cell.addEventListener("click", selectGame);
                 cell.appendChild(text);
                 row.appendChild(cell);
-                /*for (let j = 0; j < 3; j++) {
-                    let cell = document.createElement("td");
-                    let cellText = document.createTextNode("cell in row "+i+", column "+j);        
-                    cell.appendChild(cellText);
-                    row.appendChild(cell);
-                }
-                tableBody.appendChild(row);*/
                 tab.appendChild(row);
             }
             location.appendChild(tab);

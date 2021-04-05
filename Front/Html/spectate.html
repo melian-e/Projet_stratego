@@ -17,10 +17,10 @@
 
 <body style="background-color: darkgrey;">
 	<!--début de l'entête-->
-	<nav class="navbar navbar-expand-md" style="background-color:grey; height:100px;">
+	<div class="header">
+	<nav class="navbar navbar-expand-md" style="height:100px;">
 		<div class="navbar-collapse collapse" id="collapsingNavbar">
 			<ul class="navbar-nav">
-				<a href="/Html/index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
 			</ul>
 
 			<ul class="navbar-nav mx-auto">
@@ -87,13 +87,13 @@
 									</div>
 	-->
 									<div class="input-group mb-3" id="resultatappel"></div>
-									<div style = "text-align: center">
-										<input type="submit" name="modif" class="btn btn-primary" id="modif" value="Log in"/>
+									<div align="center">
+										<input type="submit" name="modif" class="btn btn-secondary" id="modif" value="Log in"/>
 									</div>
 								</form>
 							</div>
 								
-							<div class="modal-body col" style = "text-align: center">
+							<div class="modal-body col" align="center">
 								<p> No account ? Go register yourself <a href="/Html/createAccount.html">here</a> ! </p>
 							</div>
 						</div>
@@ -103,19 +103,15 @@
 		</div>
 	</nav>
 	
-	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); background-color: lightgrey; height:150px">
-		<img style="height: 100px; margin-top: 25px;" src="/Images/stratego_logo.png">
+	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); height:150px">
+		<img style="height: 100px; margin-top: 25px; position:absolute; z-index: -1; width: 100%; height: 70%;" src="../Images/flags_v2.png">
+		<a href="./index.html"><img class="logo" style="height: 100px; margin-top: 25px;" src="../Images/stratego_logo.png"></a>
 	</div>
+	</div>
+	<!--fin de l'entête-->
 
-	<div id = "games">
-		<!--<table class="table">
-			<tr>
-				<td>Joueur 1</td>
-				<td>vs</td>
-				<td>Joueur 2</td>
-				<td>Temps de jeu</td>
-			</tr>
-		</table>-->
+
+	<div id = "games" class="divTable">
 	</div>    
 
 </body>
