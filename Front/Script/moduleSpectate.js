@@ -1,16 +1,13 @@
-let mdp = document.getElementById('password');
 let mdpButton = document.getElementById('togglePassword');
-let boutonCon = document.getElementById('boutonCon');
-let divPseudo = document.getElementById('divPseudo');
-let tableBody = document.getElementById("tableGame");
-let socket = io();
 
 mdpButton.addEventListener('click', event=> {
+    let mdp = document.getElementById('password');
     mdp.type = (mdp.type == "password") ? "text" : "password";
     mdp.focus();
 });
 
 let setPartie = (function(){
+    let socket = io();
     socket.emit('current-games');
 
     socket.on('current-games', table =>{
@@ -39,6 +36,9 @@ let setPartie = (function(){
 });
 
 let getPseudo = (function(){
+    let socket = io();
+    let boutonCon = document.getElementById('boutonCon');
+    let divPseudo = document.getElementById('divPseudo');
     socket.emit('user-name');
     socket.on('user-name',(username)=>{
         if(username != undefined){
