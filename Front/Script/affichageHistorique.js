@@ -22,9 +22,16 @@ let historique = (function(){
                     let tab = document.createElement("table");
         
                     for (let i = 0; i < table.length; i++) {
+                        console.log(table[i]);
                         let row = document.createElement("tr");
                         let cell = document.createElement("td");
-                        let text = document.createTextNode("Le " + table[i][0] + " contre " + table[i][1] + " pendant " + table[i][2] + " min, score : " + table[i][3]);
+                        let text;
+                        if(table[i].name_winner == undefined){
+                            text = document.createTextNode("Le " + table[i].date + " contre " + table[i].name_loser + " pendant " + table[i].play_time + " min, score : " + table[i].score_winner);
+                        }
+                        else{
+                            text = document.createTextNode("Le " + table[i].date + " contre " + table[i].name_winner + " pendant " + table[i].play_time + " min, score : " + table[i].score_loser);
+                        }
                         
                         cell.appendChild(text);
                         row.appendChild(cell);
@@ -32,7 +39,7 @@ let historique = (function(){
                     }
                     location.appendChild(tab);
                 }
-                else location.innerHTML += "Aucune partie de fait";
+                else location.innerHTML += "Aucune partie de faite";
             });
         }
     }

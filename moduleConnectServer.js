@@ -234,7 +234,86 @@ con.connect(function(err) {
 		});
 	});
 
+	app.get('/Front/Script/affichageHistorique.js', (req, res) => {
+		user = req.session.userName;
+		sqls1 = "SELECT id FROM users WHERE username=?"
+		sqls21 = "SELECT date,name_loser,play_time,score_winner FROM games WHERE id_winner=? ORDER BY id_game DESC LIMIT 5";
+		sqls22 = "SELECT date,name_winner,play_time,score_loser FROM games WHERE id_loser=? ORDER BY id_game DESC LIMIT 5";
+		
+		con.query(sqls1, [user+""] ,(err, result) => {
+			if (err) throw err;
+			if (result && result.length){
+				let idUser = result[0].id;
+				console.log(idUser);
+				con.query(sqls21, [idUser+""],(err, result) => {
+					if (err) throw err;
+					if (result && result.length){
+						console.log(result);
+						res.send(result);
+					}
+					else{
+						con.query(sqls22, [idUser+""],(err, result) => {
+							if (err) throw err;
+							if (result && result.length){
+								console.log(result);
+								res.send(result);
+							}
+							else{
+								console.log("Pas de partie joué");
+								res.end();
+							}
+						});
+					}
+				});
+			}
+			else{
+				console.log("Utilisateur non connecté");
+				res.end();
+			}
+		});
+	});
 
+	app.get('/Front/Script/affichageClassement.js', (req, res) => {
+		sqls1 = "SELECT username,mmr FROM users ORDER BY mmr DESC LIMIT 10"
+		
+		con.query(sqls1, (err, result) => {
+			if (err) throw err;
+			if (result && result.length){
+				console.log(result);
+				res.send(result);
+				res.end();
+			}
+			else{
+				console.log("Pas de parties");
+				res.end();
+			}
+		});
+	});	
+
+	app.get('/Front/Script/affichageProfile.js', (req, res) => {
+		user = req.session.userName;
+		sqls1 = "SELECT username,mmr FROM users ORDER BY mmr DESC"
+
+		
+		con.query(sqls1, (err, result) => {
+			if (err) throw err;
+			if (result && result.length && user != undefined){
+				let i = 0;
+				while(result[i].username != user){
+					i++
+				}
+				let table = [];
+				table[0] = i + 1;
+				table[1] = result[i].mmr;
+				res.send(table);
+				res.end();
+			}
+			else{
+				console.log("Pas d'utilisateur connecté");
+				res.end();
+			}
+		});
+	});	
 });
 
 http.listen(4200, () => {

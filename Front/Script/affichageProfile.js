@@ -17,9 +17,8 @@ let profile = (function(){
         getProfile() {
             profileAjax((table)=>{
                 let location = document.getElementById("profile");
-
                 if(table.length != 0){
-                    location += "Vous êtes n°" + table[0] + ", avec un score de " + table[1];
+                    location.innerHTML += "Vous êtes n°" + table[0] + ", avec un score de " + table[1];
                 }
                 else location.innerHTML += "Vous n'êtes pas connecté !";
             });

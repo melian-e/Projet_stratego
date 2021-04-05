@@ -24,7 +24,7 @@ let classement = (function(){
                     for (let i = 0; i < table.length; i++) {
                         let row = document.createElement("tr");
                         let cell = document.createElement("td");
-                        let text = document.createTextNode(i +" : " + table[i][0] + " , score : " + table[i][1]);
+                        let text = document.createTextNode((i+1) +" : " + table[i].username + " , score : " + table[i].mmr);
                         
                         cell.appendChild(text);
                         row.appendChild(cell);
