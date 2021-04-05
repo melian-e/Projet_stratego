@@ -14,7 +14,7 @@ let setPartie = (function(){
     socket.emit('current-games');
 
     socket.on('current-games', table =>{
-        table = [["alexis","Axel", "2:03"],["IéIé", "Flora", "12:02"]]; // ligne de test
+        /////////////////table = [["alexis","Axel", "2:03"],["IéIé", "Flora", "12:02"]]; // ligne de test
 
         let location = document.getElementById("games");
 
