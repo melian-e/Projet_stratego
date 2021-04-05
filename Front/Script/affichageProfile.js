@@ -1,5 +1,3 @@
-let location = document.getElementById("profile");
-
 let profile = (function(){
     function profileAjax(traitementReponse) {
         $.ajax({
@@ -16,12 +14,14 @@ let profile = (function(){
     }
 
     return {
-        getProfile(username,password) {
+        getProfile() {
             profileAjax((table)=>{
+                let location = document.getElementById("profile");
+
                 if(table.length != 0){
-                    let text = document.createTextNode("Vous êtes n°" + table[0] + ", avec un score de " + table[1]);
+                    location += "Vous êtes n°" + table[0] + ", avec un score de " + table[1];
                 }
-                else location.innerHTML = "Vous n'êtes pas connecté !";
+                else location.innerHTML += "Vous n'êtes pas connecté !";
             });
         }
     }

@@ -1,5 +1,3 @@
-let location = document.getElementById("historique");
-
 let historique = (function(){
     function historiqueAjax(traitementReponse) {
         $.ajax({
@@ -18,6 +16,8 @@ let historique = (function(){
     return {
         getHistorique() {
             historiqueAjax((table)=>{
+                let location = document.getElementById("historique");
+
                 if(table.length != 0){
                     let tab = document.createElement("table");
         
@@ -32,7 +32,7 @@ let historique = (function(){
                     }
                     location.appendChild(tab);
                 }
-                else location.innerHTML = "Aucune partie de fait";
+                else location.innerHTML += "Aucune partie de fait";
             });
         }
     }

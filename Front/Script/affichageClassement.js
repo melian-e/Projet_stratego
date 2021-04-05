@@ -1,5 +1,3 @@
-let location = document.getElementById("classement");
-
 let classement = (function(){
     function classementAjax(traitementReponse) {
         $.ajax({
@@ -18,6 +16,8 @@ let classement = (function(){
     return {
         getClassement() {
             classementAjax((table)=>{
+                let location = document.getElementById("classement");
+
                 if(table.length != 0){
                     let tab = document.createElement("table");
         
@@ -32,7 +32,7 @@ let classement = (function(){
                     }
                     location.appendChild(tab);
                 }
-                else location.innerHTML = "Aucun classement pour l'instant";
+                else location.innerHTML += "Aucun classement pour l'instant";
             });
         }
     }
