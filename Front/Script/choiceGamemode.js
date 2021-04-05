@@ -8,7 +8,7 @@ form.addEventListener('submit', event => {
     let bomb1 = document.getElementById("bomb1");
 
     event.preventDefault();
-    socket.emit("search-game",piece1.checked,piece2.checked,piece1.checked);
+    socket.emit("search-game",piece1.checked,eclaireur1.checked,bomb1.checked);
     window.location.href = "/Html/wait.html";
 });
 
