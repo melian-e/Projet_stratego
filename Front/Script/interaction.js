@@ -30,18 +30,23 @@ socket.on('new-spectator', (grid,time) => {
     document.getElementById('game-board').appendChild(table);
     createLake();
 
-    document.getElementById("reset").remove();
-    document.getElementById("random").remove();
-    document.getElementById("start").remove();
-
     time = (+new Date) - time;
+    let allPieces = [];
 
-    if(grid.every(row => row.every(tab => tab[0] > 15))){
+    for(let x = 0; x < 10; x++){
+        allPieces = allPieces.concat(grid[x].filter(elem => elem[0] < 16 ));
+    }
+    
+    if(allPieces.length != 80){
         
         let minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((time % (1000 * 60)) / 1000);
 
         counter(2 - (minutes + ((seconds * 0.5)/30)));
+
+        document.getElementById("reset").style.display = "none";
+        document.getElementById("random").style.display = "none";
+        document.getElementById("start").style.display = "none";
     }
     else{
         document.getElementById("timer").style.display = "none";     
@@ -53,6 +58,9 @@ socket.on('new-spectator', (grid,time) => {
         pion.appendChild(clock);
 
         chrono(time);
+        document.getElementById("reset").remove();
+        document.getElementById("random").remove();
+        document.getElementById("start").remove();
     }
 
     display(grid, 'none', false);
@@ -76,11 +84,15 @@ socket.on('start', () => {
     }
 
     document.getElementById("timer").style.display = "none";
+    let turn = document.createElement("div");
     let clock = document.createElement("div");
     let pion = document.getElementById("pions");
 
+    turn.id = "turn";
     clock.id = "chrono";
+
     pion.appendChild(clock);
+    pion.appendChild(turn);
     chrono(0);
 });
 

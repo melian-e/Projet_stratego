@@ -10,7 +10,6 @@ function reset(){
 }
 
 function start(){
-
     document.getElementById("reset").remove();
     document.getElementById("random").remove();
     document.getElementById("start").remove();
@@ -23,6 +22,16 @@ function start(){
         td[i].removeEventListener("dragleave", dragLeave);
         td[i].removeEventListener("dragover", allowDrop);
     }
+
+    let info = document.createElement("div");
+    let turn = document.createElement("p");
+    let pion = document.getElementById("pions");
+
+    info.id = "info";
+    turn.id = "turn";
+
+    info.appendChild(turn);
+    pion.appendChild(info);
 
     randGrid();
     ready();
@@ -54,11 +63,14 @@ function ready(){
             }
         }
     }
-
     socket.emit('ready', table);
 }
 
 function display(table, color, turn){
+    if(color != "none") {
+        updateData(table, color);
+        document.getElementById("turn").innerHTML = (turn == true) ? "A vous de jouer." : "En attente de votre adversaire."
+    }
     removeClicks();
     let td = document.getElementsByClassName("case");
 
@@ -75,7 +87,7 @@ function display(table, color, turn){
 
             div.addEventListener("dragenter", wrapperEnter);
             div.addEventListener("dragleave", wrapperLeave);      
-///////////////////////
+
             if(table[i][j][0] == 15){
                 div.classList.add("back");
             }
@@ -106,7 +118,6 @@ function display(table, color, turn){
 
                 td[10*i+j].appendChild(div);
             }
-
         }
     }
 }
@@ -131,7 +142,7 @@ function counter(time){
         document.getElementById("timer").style.border = "none";
     }
 
-    if (distance < 1) {
+    if (distance < 1 && document.getElementById("timer").style.display != "none") {
         start();
       }
     }, 1000);
@@ -151,4 +162,23 @@ function chrono(time){
             document.getElementById("chrono").innerHTML = minutes + ":" + seconds;
         }
     }, 1000);
+}
+
+function updateData(grid, color){
+    let quantity = Array();
+    let allPieces = [];
+    let cell = document.getElementsByClassName("quantity");
+
+    for(let x = 0; x < 12; x++){
+        quantity[x] = 0;
+    }
+    for(let x = 0; x < 10; x++){
+        allPieces = allPieces.concat(grid[x].filter(elem => elem[1] == color));
+    }  
+    allPieces.forEach(elem => {
+        quantity[elem[0] + 1]++;
+    });
+    for(let x = 0; x < cell.length; x++){
+        cell[x].innerHTML = ""+quantity[x];
+    }
 }

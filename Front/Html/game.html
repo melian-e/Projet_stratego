@@ -5,12 +5,80 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <script src="/socket.io/socket.io.js"></script>
         <link rel="icon" type="image/png" href="/Front/Images/flags.png">
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/Css/style.css">
         <title>Stratego</title>   
     </head>
     <body>
         <div id="row">
-        <div class="column" id="menu"></div>
+        <div class="column" id="menu">
+            <table id="dataPion">
+                <tr class = "data">
+                    <td></td>
+                    <td>Nom</td>
+                    <td>Puissance</td>
+                </tr>
+                <tr class ="data b">
+                    <td><img src ="../Images/svg/black/bomb.svg"></td>
+                    <td>Bombe</td>
+                    <td>Aucune</td>
+                </tr>
+                <tr class ="data s0">
+                    <td><img src ="../Images/svg/black/flag.svg"></td>
+                    <td>Drapeau</td>
+                    <td>Ne doit pas être pris</td>
+                </tr>
+                <tr class ="data s1">
+                    <td><img src ="../Images/svg/black/spy.svg"></td>
+                    <td>Espion</td>
+                    <td>1</td>
+                </tr>
+                <tr class ="data s2">
+                    <td><img src ="../Images/svg/black/scout.svg"></td>
+                    <td>Eclaireur</td>
+                    <td>2</td>
+                </tr>
+                <tr class ="data s3">
+                    <td><img src ="../Images/svg/black/minesweeper.svg"></td>
+                    <td>Démineur</td>
+                    <td>3</td>
+                </tr>
+                <tr class ="data s4">
+                    <td><img src ="../Images/svg/black/sergeant.svg"></td>
+                    <td>Sergent</td>
+                    <td>4</td>
+                </tr>
+                <tr class ="data s5">
+                    <td><img src ="../Images/svg/black/lieutenant.svg"></td>
+                    <td>Lieutenant</td>
+                    <td>5</td>
+                </tr>
+                <tr class ="data s6">
+                    <td><img src ="../Images/svg/black/captain.svg"></td>
+                    <td>Capitaine</td>
+                    <td>6</td>
+                </tr>
+                <tr class ="data s7">
+                    <td><img src ="../Images/svg/black/major.svg"></td>
+                    <td>Major</td>
+                    <td>7</td>
+                </tr>
+                <tr class ="data s8">
+                    <td><img src ="../Images/svg/black/colonel.svg"></td>
+                    <td>colonel</td>
+                    <td>8</td>
+                </tr>
+                <tr class ="data s9">
+                    <td><img src ="../Images/svg/black/general.svg"></td>
+                    <td>Général</td>
+                    <td>9</td>
+                </tr>
+                <tr class ="data s10">
+                    <td><img src ="../Images/svg/black/marshal.svg"></td>
+                    <td>Maréchal</td>
+                    <td>10</td>
+                </tr>           
+            </table>
+        </div>
         <div class="column" id="game-board">
         </div>
         <div class="column" id="pions">

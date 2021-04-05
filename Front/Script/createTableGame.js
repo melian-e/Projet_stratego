@@ -1,4 +1,3 @@
-
 function preparation(color){
     let table = document.createElement("table");
     table.id = 'game-table';
@@ -12,6 +11,7 @@ function preparation(color){
     createLake();
     buton();
     stock(color);
+    completDataPion();
 }
 
 function createLake(){
@@ -83,21 +83,7 @@ function createStock(i, color){
         td.classList.add("stock");
         td.id = "s";
         td.id += (i != -1) ? "p"+i : "b";
-        let j;
-        switch(i){
-            case 10: j = 1; break;
-            case 8: j = 2; break;
-            case 9: j = 1; break;
-            case 7: j = 3; break;
-            case 6: j = 4; break;
-            case 5: j = 4; break;
-            case 4: j = 4; break;
-            case 3: j = 5; break;
-            case 2: j = 8; break;
-            case 1: j = 1; break;
-            case 0: j = 1; break;
-            case -1: j = 6; break;
-        }
+        let j = getValue(i);
 
         for(y = 1; y < j+1; y++){
             let pion = document.createElement("div");
@@ -120,4 +106,41 @@ function createStock(i, color){
     }
 
     return tr;
+}
+
+function getValue(i){
+    let j;
+    switch(i){
+        case 10: j = 1; break;
+        case 8: j = 2; break;
+        case 9: j = 1; break;
+        case 7: j = 3; break;
+        case 6: j = 4; break;
+        case 5: j = 4; break;
+        case 4: j = 4; break;
+        case 3: j = 5; break;
+        case 2: j = 8; break;
+        case 1: j = 1; break;
+        case 0: j = 1; break;
+        case -1: j = 6; break;
+    }
+    return j;
+}
+
+function completDataPion(){
+    let table = document.getElementById("dataPion");
+    let tr = table.getElementsByClassName("data");
+
+    for(let x = 0; x < tr.length; x++){
+        let td = document.createElement("td");
+        let text
+        if(x == 0) text = document.createTextNode("Nombre restant");
+        else{
+            let classes = tr[x].className.split('s');
+            text = document.createTextNode(""+getValue((classes.length == 1) ? -1 : Number(classes[1])));
+            td.classList.add("quantity");
+        }
+        td.appendChild(text);
+        tr[x].appendChild(td);
+    }
 }
