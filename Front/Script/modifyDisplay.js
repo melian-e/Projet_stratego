@@ -1,3 +1,6 @@
+/** 
+ * Remmets les pions disposés sur la grille dans le stock
+*/
 function reset(){
     let pion = document.getElementsByClassName("dot");
     let pionStock = document.getElementsByClassName("stock");
@@ -9,6 +12,10 @@ function reset(){
     }
 }
 
+/**
+ * Quand le joueur a placé tout ces pions sur la grille ou que le temps est écoulé
+ * elle complète la grille et déclanche l'envoie au back. Le joueur ne peut plus appuyer sur les bouttons
+ */
 function start(){
     document.getElementById("reset").remove();
     document.getElementById("random").remove();
@@ -37,6 +44,9 @@ function start(){
     ready();
 }
 
+/**
+ * Convertie la grille de jeu et l'envoie au back
+ */
 function ready(){
     let td = document.getElementsByClassName("case");
     let table = Array(10);
@@ -66,6 +76,12 @@ function ready(){
     socket.emit('ready', table);
 }
 
+/**
+ * Affiche le tableau modifier par le back
+ * @param { Array } table 
+ * @param { String } color 
+ * @param { boolean } turn 
+ */
 function display(table, color, turn){
     if(color != "none") {
         updateData(table, color);
@@ -122,6 +138,10 @@ function display(table, color, turn){
     }
 }
 
+/**
+ * Timer de 2min pour placer ces pions avant que la partie commence
+ * @param { Number } time 
+ */
 function counter(time){
     let end = time * 60000 + (+new Date);
     let x = setInterval(function() {
@@ -148,6 +168,10 @@ function counter(time){
     }, 1000);
 }
 
+/**
+ * Chronomètre de la partie
+ * @param { Number } time 
+ */
 function chrono(time){
     let start = (+new Date) - time;
     let x = setInterval(function() {        
@@ -164,6 +188,11 @@ function chrono(time){
     }, 1000);
 }
 
+/**
+ * Mets les pions restant du joueur
+ * @param { Array } grid 
+ * @param { String } color 
+ */
 function updateData(grid, color){
     let quantity = Array();
     let allPieces = [];
