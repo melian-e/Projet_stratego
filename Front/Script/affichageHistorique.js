@@ -22,7 +22,6 @@ let historique = (function(){
                     let tab = document.createElement("table");
         
                     for (let i = 0; i < table.length; i++) {
-                        console.log(table[i]);
                         let row = document.createElement("tr");
                         let cell = document.createElement("td");
                         let text;

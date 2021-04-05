@@ -18,9 +18,8 @@ let classement = (function(){
             classementAjax((table)=>{
                 let location = document.getElementById("classement");
 
-                if(table.length != 0){
+                if(table.length != 0){        
                     let tab = document.createElement("table");
-        
                     for (let i = 0; i < table.length; i++) {
                         let row = document.createElement("tr");
                         let cell = document.createElement("td");
