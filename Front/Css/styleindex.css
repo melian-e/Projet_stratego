@@ -1,9 +1,6 @@
 body{
     background-image: url("../Images/map-texture.jpg");
 }
-table, tr, td {
-    border: 1px solid black;
-}
 .header{
     background-image: url("../Images/header.jpg");
     background-repeat: no-repeat;
