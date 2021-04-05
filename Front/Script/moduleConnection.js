@@ -9,5 +9,11 @@ mdpbutton.addEventListener('click', event=> {
 
 jouerbutton.addEventListener('click', event => {
     window.location.href = "/Html/wait.html";
-})
+});
 
+let getPseudo = (function(){
+    let pseudo = socket.emit('user-name');
+    return{
+        pseudo,
+    }
+});

@@ -25,15 +25,40 @@
 			</ul>
 			
 			<ul class="navbar-nav">
-				<button class="btn dropdown dropdown-toggle" style="margin:20px;" data-toggle="dropdown">
-					Scores
-					<div class="dropdown-menu dropdown-default"> <!-- accès aux scores-->
-						<a class="dropdown-item" href=""></a>
-						<a class="dropdown-item" href=""></a>
+				<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#regles">Règles</button>
+				<div class="modal fade" id="regles">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Règles :</h4>              
+								<button type="button" class="close" data-dismiss="modal">
+									<span>&times;</span>
+								</button>             
+							</div>
+							<div style="margin: 20px;">
+								Stratego est un jeu de stratégie dont le but est de capturer le drapeau ennemi.<br>
+								Les joueurs doivent respecter plusieurs règles :<br>
+								-    Chaque joueur peut déplacer un de ses pions d’une case par tour.<br>
+								-    Lors d’une attaque, la plus faible puissance meurt, si les deux sont égaux, les deux pions meurent.<br>
+								-    Aucune pièce ne peut bouger entre deux déplacements pour trois tours.<br>
+								-    Interdiction de pourchasser une pièce qui s’enfuit.<br>
+								-    Si le drapeau ou toutes les pièces déplaçables d’un joueur sont capturés, victoire de l’adversaire.<br>
+								Certaines règles sont choisies par les joueurs en début de partie.
+							</div>
+						</div>
 					</div>
-				</button>
+
+				</div>
+
+				<script>
+					if (getPseudo() == null){
+						<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
+					}
+					else {
+						
+					}
+				</script>
 				
-				<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
 				<div class="modal fade" id="connection">
 					<div class="modal-dialog">
 						<div class="modal-content">
