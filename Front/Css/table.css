@@ -1,6 +1,15 @@
 .divTable {
     text-align: center;
     margin: 50px auto;
-    width: auto; 
+    padding: 5px;
+    width: auto;
+    border: 1px solid black;
 }
 
+tr {
+    margin : 2px auto;
+    border: 1px solid black;
+}
+tr:hover {
+    border: 1px solid red;
+}
