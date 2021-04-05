@@ -93,7 +93,7 @@
     <div class="wrapper2">
         <div></div>
         <div class="parameterForm" style="background-color: white;">
-            <form  method="post">
+            <form id="form">
                 <h2>Paramètres de jeu :</h2>
                 <div class="switch">
                 <input type="radio" name="parameter1" class="choice" id="piece1" checked><label for="piece1">Les pièces sont révélées lors des attaques et le restent ensuite</label>
@@ -108,9 +108,11 @@
                 <input type="radio" name="parameter3" class="choice choice2" id="bomb2"><label for="bomb2">La bombe peut faire des victimes tant qu'elle n'est pas déminée</label>
                 </div>
 
-                <input type="submit" class="submit" value="Jouer !">
+                <input type="submit" name="modif" class="btn btn-secondary" value="Jouer !"/>
             </form>
         </div>
 		<div><img src="..\Images\napoleon.png"></div>
     </div>
+
+	<script type="text/javascript" src="/Script/choiceGamemode.js"></script>
 </body>

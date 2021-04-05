@@ -1,7 +1,13 @@
 let piece1 = document.getElementById("piece1");
-let piece2 = document.getElementById("piece2");
 let eclaireur1 = document.getElementById("eclaireur1");
-let eclaireur2 = document.getElementById("eclaireur2");
 let bomb1 = document.getElementById("bomb1");
-let bomb2 = document.getElementById("bomb2");
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+    console.log(piece1,eclaireur1,bomb1);
+    socket.emit("search-game",(piece1 ? true : false),(piece1 ? true : false),(piece1 ? true : false));
+    
+});
+
+
 
