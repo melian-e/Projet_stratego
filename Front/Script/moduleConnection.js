@@ -9,6 +9,7 @@ mdpButton.addEventListener('click', event=> {
 });
 
 jouerButton.addEventListener('click', event => {
+    let socket = io();
     socket.emit('user-name');
     socket.on('user-name', username => {
         if(username != undefined) {
