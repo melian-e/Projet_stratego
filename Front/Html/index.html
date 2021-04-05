@@ -81,18 +81,18 @@
 
 	<!-- cookie à programmer pour se rappeler de la session ------||| ajout à faire plus tard |||
 
-									<div align="center">
+									<div >
 										<input type="checkbox" name="remember" value="true">Remember me
 									</div>
 	-->
 									<div class="input-group mb-3" id="resultatappel"></div>
-									<div align="center">
+									<div >
 										<input type="submit" name="modif" class="btn btn-secondary" id="modif" value="Log in"/>
 									</div>
 								</form>
 							</div>
 								
-							<div class="modal-body col" align="center">
+							<div class="modal-body col" >
 								<p> No account ? Go register yourself <a href="/Html/createAccount.html">here</a> ! </p>
 							</div>
 						</div>
@@ -112,18 +112,18 @@
 
 
 	<div class="wrapper">
-		<div class="classement" style="background-color: white;">
-			Classement
+		<div class="classement" id="classement" style="background-color: white;">
+			Classement<br>
 		</div>
 
 		<button type="button" id="jouer" class="jouer"><img class="jouerImg" src="../Images/jouer.png"></button>
 
 		<button type="button" id="regarder" class="spectate"><img class="spectateImg" src="../Images/regarder.png"></button>
 		<div class="profil" style="background-color: white;">
-			Profil
+			Profil<br>
 		</div>
-		<div class="history" style="background-color: white;">
-			Historique			
+		<div class="history" id="historique" style="background-color: white;">
+			Historique<br>
 		</div>
 	</div>
 
@@ -134,4 +134,7 @@
 
 <script type="text/javascript" src="/Script/moduleConnection.js"></script>
 <script type="text/javascript" src="/Script/getFormConnection.js"></script>
+<script type="text/javascript" src="/Script/affichageHistorique.js"></script>
+<script type="text/javascript" src="/Script/affichageProfile.js"></script>
+<script type="text/javascript" src="/Script/affichageClassement.js"></script>
 </html>
