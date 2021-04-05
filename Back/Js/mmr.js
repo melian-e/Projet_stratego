@@ -1,6 +1,7 @@
 const research = require("./research.js");
 const bdd = require("../../moduleConnectServer.js");
 
+
 /**
  * Calcule le gain ou la perte de mmr du'n joueur
  * @param { int } mmrj1 
@@ -88,6 +89,7 @@ function end(srvSockets, lobby){
 
                             bdd.con.query(sql, component, (err, result) =>{
                                 if (err) throw err;
+                                
                                 console.log("Une partie viens de se terminer, elle a bien été ajouté à la bdd.");
                             });
                         });
@@ -98,5 +100,4 @@ function end(srvSockets, lobby){
     });
 }
 
-
-module.exports = {end};
+module.exports = {end, mmr};

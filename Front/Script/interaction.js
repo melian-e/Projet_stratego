@@ -1,6 +1,7 @@
 socket.emit('preparation');
+let stopwatch;
 
-socket.on('end', message =>{
+socket.on('end', (message, score, revealedRule, scoutRule,bombRule) =>{
     let td = document.getElementsByClassName("case");
     
     removeClicks();
@@ -12,7 +13,30 @@ socket.on('end', message =>{
         }
     }
 
-    console.log(message);
+    document.getElementById("turn").innerHTML = "La partie est finie.";
+    clearInterval(stopwatch);
+
+    let mes = document.getElementById("message");
+    let result = document.getElementById("result");
+    
+    mes.innerHTML = message;
+    result.innerHTML = (message == "Tu as gagné.") ? "Tu as gagné" : score[0][0];
+    result.innerHTML += " " + score[0][1] + " et ";
+    result.innerHTML += (message == "Tu as gagné.") ? score[1][0] : "tu as perdu ";
+    result.innerHTML += Math.abs(score[1][1]) + ".";
+    
+
+    if(message == "Tu as gagné." || message == "Tu as perdu."){
+        let button = document.getElementById("rejouer");
+        button.innerHTML = "Rejouer !";
+        button.addEventListener("click", (revealedRule, scoutRule,bombRule) => {
+            socket.emit('search-game', revealedRule,scoutRule,bombRule);
+            window.location.href = "wait.html";
+        });
+    }
+    
+    $("#endGame").modal('show');
+    console.log(message, score);
 });
 
 socket.on('preparation', color => preparation(color));
@@ -57,7 +81,7 @@ socket.on('new-spectator', (grid,time) => {
         clock.id = "chrono";
         pion.appendChild(clock);
 
-        chrono(time);
+        stopwatch = chrono(time);
         document.getElementById("reset").remove();
         document.getElementById("random").remove();
         document.getElementById("start").remove();
@@ -93,7 +117,7 @@ socket.on('start', () => {
 
     pion.appendChild(clock);
     pion.appendChild(turn);
-    chrono(0);
+    stopwatch = chrono(0);
 });
 
 function getCase(pion){

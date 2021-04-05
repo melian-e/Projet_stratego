@@ -3,12 +3,33 @@
     <head>      
         <meta charset="utf-8">      
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <link rel="icon" type="image/png" href="/Images/flags.png">
         <link rel="stylesheet" href="/Css/style.css">
         <title>Stratego</title>   
     </head>
     <body>
+
+        <div class="modal fade" id = "endGame">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">La partie est finie !</h4>         
+                    </div>
+                    <div class="modal-body" style="margin: 20px;">
+                        <p id="message"></p>
+                        <p id="result"></p>
+                    </div>
+                    <div class="button modal-footer">
+                        <button id="rejouer" type="button" class="btn btn-primary"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="row">
         <div class="column" id="menu">
             <table id="dataPion">

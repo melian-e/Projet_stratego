@@ -186,6 +186,8 @@ function chrono(time){
             document.getElementById("chrono").innerHTML = minutes + ":" + seconds;
         }
     }, 1000);
+
+    return x;
 }
 
 /**
