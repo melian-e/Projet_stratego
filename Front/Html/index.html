@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/Css/styleindex.css">
-	
+	<link rel="icon" type="image/png" href="../Images/flags.png">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -15,50 +15,25 @@
 
 <body style="background-color: darkgrey;">
 	<!--début de l'entête-->
-	<nav class="navbar navbar-expand-md" style="background-color:grey; height:100px;">
+	<div class="header">
+	<nav class="navbar navbar-expand-md" style=" height:100px;">
 		<div class="navbar-collapse collapse" id="collapsingNavbar">
 			<ul class="navbar-nav">
-				<a href="/Html/index.html" class="btn" style="font-size:30px" type="button"><i class="fa fa-home fa-3" style="font-size: 30px; color:white" aria-hidden="true"></i></a>
 			</ul>
 
 			<ul class="navbar-nav mx-auto">
 			</ul>
 			
 			<ul class="navbar-nav">
-				<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#regles">Règles</button>
-				<div class="modal fade" id="regles">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h4 class="modal-title">Règles :</h4>              
-								<button type="button" class="close" data-dismiss="modal">
-									<span>&times;</span>
-								</button>             
-							</div>
-							<div style="margin: 20px;">
-								Stratego est un jeu de stratégie dont le but est de capturer le drapeau ennemi.<br>
-								Les joueurs doivent respecter plusieurs règles :<br>
-								-    Chaque joueur peut déplacer un de ses pions d’une case par tour.<br>
-								-    Lors d’une attaque, la plus faible puissance meurt, si les deux sont égaux, les deux pions meurent.<br>
-								-    Aucune pièce ne peut bouger entre deux déplacements pour trois tours.<br>
-								-    Interdiction de pourchasser une pièce qui s’enfuit.<br>
-								-    Si le drapeau ou toutes les pièces déplaçables d’un joueur sont capturés, victoire de l’adversaire.<br>
-								Certaines règles sont choisies par les joueurs en début de partie.
-							</div>
-						</div>
+				<button class="btn dropdown dropdown-toggle" style="margin:20px;" data-toggle="dropdown">
+					Scores
+					<div class="dropdown-menu dropdown-default"> <!-- accès aux scores-->
+						<a class="dropdown-item" href=""></a>
+						<a class="dropdown-item" href=""></a>
 					</div>
-
-				</div>
-
-				<script>
-					if (getPseudo() == null){
-						<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
-					}
-					else {
-						
-					}
-				</script>
+				</button>
 				
+				<button type="button" class="btn" style="margin:20px;" data-toggle="modal" data-target="#connection">Connexion</button>
 				<div class="modal fade" id="connection">
 					<div class="modal-dialog">
 						<div class="modal-content">
@@ -93,7 +68,7 @@
 	-->
 									<div class="input-group mb-3" id="resultatappel"></div>
 									<div align="center">
-										<input type="submit" name="modif" class="btn btn-primary" id="modif" value="Log in"/>
+										<input type="submit" name="modif" class="btn btn-secondary" id="modif" value="Log in"/>
 									</div>
 								</form>
 							</div>
@@ -108,8 +83,10 @@
 		</div>
 	</nav>
 	
-	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); background-color: lightgrey; height:150px">
-		<img style="height: 100px; margin-top: 25px;" src="/Images/stratego_logo.png">
+	<div class="rounded-circle" style="position: absolute; left:50%; top:-25px; transform: translate(-50%, 0%); height:150px">
+		<img style="height: 100px; margin-top: 25px; position:absolute; z-index: -1; width: 100%; height: 70%;" src="../Images/flags_v2.png">
+		<a href="index.html"><img class="logo" style="height: 100px; margin-top: 25px;" src="/Images/stratego_logo.png"></a>
+	</div>
 	</div>
 	<!--fin de l'entête-->
 
@@ -120,9 +97,10 @@
 			Classement
 		</div>
 
-		<button type="button" id="jouer" class="jouer">jouer</button>
+		<button type="button" id="jouer" class="jouer"><img class="jouerImg" src="../Images/jouer.png"></button>
 
-		<button type="button" class="spectate">regarder</button>
+		<button type="button" class="spectate"><img class="spectateImg" src="../Images/regarder.png"></button>
+		<button type="button" class="rules"><img class="rulesImg" src="../Images/regles.png"></button>
 		<div class="profil" style="background-color: white;">
 			Profil
 		</div>
