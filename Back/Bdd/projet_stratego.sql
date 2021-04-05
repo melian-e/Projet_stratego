@@ -62,13 +62,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `mmr`) VALUES
-(6, 'test', 'test1@test.test', 'test', 200),
-(5, 'test1', 'test@test.test', 'test', 200),
-(7, 'test2', 'test2@test.test', 'test', 200),
-(8, 'test4', 'test4@test.test', 'test', 200);
-COMMIT;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

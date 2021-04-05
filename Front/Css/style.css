@@ -54,7 +54,7 @@ img {
     width: 25%;
 }
 .dot {
-    height: 55px;
+    height: 50px;
     width: 55px;
     margin-left: auto;
     margin-right: auto;
@@ -178,6 +178,8 @@ button{
     border: 0px;
     background-repeat: no-repeat;
     background-size: contain;
+    height: 55px;
+    width: 55px;
 }
 
 .l1-1{
@@ -220,4 +222,5 @@ button{
 
 #turn{
     text-align: center;
+    font-size : 150%;
 }

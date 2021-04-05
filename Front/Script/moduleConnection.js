@@ -11,7 +11,7 @@ mdpButton.addEventListener('click', event=> {
 
 jouerButton.addEventListener('click', event => {
     socket.emit('user-name');
-    socket.on('user-name', sername => {
+    socket.on('user-name', username => {
         if(username != undefined) {
             window.location.href = "/Html/choice.html";
         }
