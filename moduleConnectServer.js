@@ -43,7 +43,7 @@ io.use(sharedsession(session, {
 app.use(express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
 
 app.get('/', (req, res) => {
-	/////////////console.log(req.session);
+
 	if (req.session.inGame == false || req.session.inGame == undefined) {
 		res.sendFile(__dirname + '/Front/Html/index.html');
 	}
@@ -78,8 +78,6 @@ io.on('connection',(socket) =>{
 
 		allRooms[room].join(socket.handshake.session.id);
 
-		console.log("......",numGame,"\n......;",allRooms, socket.handshake.session.redirect);
-
 		io.to(socket.id).emit('game-redirect');		
 	});
 	
@@ -87,7 +85,7 @@ io.on('connection',(socket) =>{
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 		
 		functions.quit(allCurrentsGames, allRooms, socket);
-		console.log(revealedRule,scoutRule,bombRule);
+
 		let srvSockets = io.sockets.sockets;
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
 		socket.handshake.session.redirect = true;
@@ -196,15 +194,14 @@ con.connect(function(err) {
 		con.query(sqls1,[user+""] ,(err, result) => {
 			if (err) throw err;
 			if (result && result.length){
-				////////////////console.log(result);
-				console.log("pseudo déjà utilisé");
+
 				res.end('Pseudo déjà utilisé !');
 			}
 			else {
 				con.query(sqls2,[mailAdress+""], (err, result) => {
 					if (err) throw err;
 					if (result && result.length){
-						////////////////console.log(result);
+
 						console.log("email déjà utilisé");
 						res.end('Email déjà utilisé !');
 					}
@@ -227,7 +224,7 @@ con.connect(function(err) {
 			if (err) throw err;
 			if (result && result.length){
 				req.session.userName = user;
-				console.log(result);
+
 				console.log("Vous êtes bien connecté !");
 				res.end('Vous êtes bien connecté !');
 			}
@@ -248,18 +245,18 @@ con.connect(function(err) {
 			if (err) throw err;
 			if (result && result.length){
 				let idUser = result[0].id;
-				//////////////console.log(idUser);
+
 				con.query(sqls21, [idUser+""],(err, result) => {
 					if (err) throw err;
 					if (result && result.length){
-						/////////////console.log(result);
+
 						res.send(result);
 					}
 					else{
 						con.query(sqls22, [idUser+""],(err, result) => {
 							if (err) throw err;
 							if (result && result.length){
-								/////////////console.log(result);
+
 								res.send(result);
 							}
 							else{
@@ -283,7 +280,7 @@ con.connect(function(err) {
 		con.query(sqls1, (err, result) => {
 			if (err) throw err;
 			if (result && result.length){
-				/////////////console.log(result);
+
 				res.send(result);
 				res.end();
 			}

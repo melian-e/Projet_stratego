@@ -93,8 +93,6 @@ function suppress(lobby,allCurrentsGames, allRooms){
     
     allRooms.splice(x, 1);
     allCurrentsGames.splice(allCurrentsGames.indexOf(lobby), 1);
-    
-    console.log("suppresion de partie et room => suppress");
 }
 
 /**
@@ -112,13 +110,8 @@ function quit(allCurrentsGames, allRooms, socket){
         allRooms[x].leave(socket);
 
         if(lobby != undefined && !(lobby.getPlayers().some(player => allRooms[x].isPresent(player)))){
-            console.log("Partie Suppr => quit");
             suppress(lobby, allCurrentsGames, allRooms);
         }
-        /*else if(allRooms[x].people.length == 0){
-            allRooms.splice(x,1);
-        }*/
-        console.log("les rooms", allRooms);
     }
 }
 
