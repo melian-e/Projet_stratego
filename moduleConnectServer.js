@@ -64,6 +64,8 @@ io.on('connection',(socket) =>{
 
 	// Pour connaitre toutes les parties en cours sous forme de tableau [[player1,player2,temps],[player1,player2,temps]]
 	socket.on('current-games', () => {
+		functions.quit(allCurrentsGames, allRooms, socket);
+
 		let srvSockets = io.sockets.sockets;
 		let table = functions.currentGames(srvSockets, allCurrentsGames);
 		io.to(socket.id).emit('current-games', table);
@@ -71,17 +73,20 @@ io.on('connection',(socket) =>{
 	
 	// Pour ajouter un spectateur à une partie
 	socket.on('new-spectator', numGame =>{
+		socket.handshake.session.redirect = true;
 		let room = research.roomById(allCurrentsGames[numGame].player1.id, allRooms);
 
 		allRooms[room].join(socket.handshake.session.id);
-		socket.handshake.session.redirect = true;
+
+		console.log("......",numGame,"\n......;",allRooms, socket.handshake.session.redirect);
 
 		io.to(socket.id).emit('game-redirect');		
 	});
 	
 	// Lorsque on ets en attente d'adversaire
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
-
+		
+		functions.quit(allCurrentsGames, allRooms, socket);
 		console.log(revealedRule,scoutRule,bombRule);
 		let srvSockets = io.sockets.sockets;
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
@@ -174,17 +179,7 @@ io.on('connection',(socket) =>{
 	// Quand on veut partir de la partie
 	socket.on('quit', () => {
 		functions.quit(allCurrentsGames, allRooms, socket);
-
-	});
-	// Quand on quitte la page
-	socket.on('disconnect', ()=>{
-		/*(socket.handshake.session.redirect == true) ? socket.handshake.session.redirect = false :
-		functions.quit(allCurrentsGames, allRooms, socket);*/
-		if(socket.handshake.session.redirect == true) socket.handshake.session.redirect = false;
-		else {
-			console.log("disconect function");
-			functions.quit(allCurrentsGames, allRooms, socket);
-		}
+		io.to(socket.id).emit('index-redirect');
 	});
 });
 

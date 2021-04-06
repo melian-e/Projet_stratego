@@ -74,15 +74,12 @@ function stock(color){
     let quit = document.createElement("button");
     quit.id = "leave";
     quit.innerHTML = "Quitter";
-    quit.style.textAlign = "center";
     quit.addEventListener("click", () => {
-        window.location.href = "index.html";
+        socket.emit('quit');
     })
 
     document.getElementById("pions").appendChild(stock);
     document.getElementById("pions").appendChild(quit);
-
-    
 }
 
 function createStock(i, color){

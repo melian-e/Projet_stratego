@@ -44,7 +44,7 @@ class Room {
                 
                 if(winner != undefined){
                     let message = (playerId == winner) ? 'Tu as gagné.' : (playerId == loser) ? 'Tu as perdu.':
-                    winnerName + ' as gagné.';
+                    winnerName + ' a gagné.';
 
                     emit.con.query("SELECT mmr FROM users WHERE username=?",[winnerName], (err, result) => {
                         if (err) throw err;

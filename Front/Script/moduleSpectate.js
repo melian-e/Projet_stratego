@@ -11,7 +11,6 @@ let setPartie = (function(){
     socket.emit('current-games');
 
     socket.on('current-games', table =>{
-        /////////////////table = [["alexis","Axel", "2:03"],["IéIé", "Flora", "12:02"]]; // ligne de test
 
         let location = document.getElementById("games");
 
@@ -58,6 +57,13 @@ let selectGame = (function(event){
     }
 
     socket.emit("new-spectator", i);
+});
+
+socket.on('game-redirect', () => {
+    window.location.href = "game.html";
+});
+socket.on('wait-redirect', () => {
+    window.location.href = "/Html/wait.html";
 });
 
 getPseudo();

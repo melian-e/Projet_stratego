@@ -20,15 +20,15 @@ socket.on('end', (message, score, revealedRule,scoutRule,bombRule) =>{
     let result = document.getElementById("result");
     
     mes.innerHTML = message;
-    result.innerHTML = (message == "Tu as gagné.") ? "Tu as gagné" : score[0][0];
-    result.innerHTML += " " + score[0][1] + " et ";
-    result.innerHTML += (message == "Tu as gagné.") ? score[1][0] : "tu as perdu ";
-    result.innerHTML += Math.abs(score[1][1]) + ".";
+    result.innerHTML = (message == "Tu as gagné.") ? "Tu as" : score[0][0];
+    result.innerHTML += " a gagné " + score[0][1] + " et ";
+    result.innerHTML += (message == "Tu as perdu.") ? "tu as" : score[1][0];
+    result.innerHTML += " a perdu " + Math.abs(score[1][1]) + ".";
     
     let quit = document.getElementById("quit");
     quit.innerHTML = "Quitter";
     quit.addEventListener("click", () => {
-        window.location.href = "index.html";
+        socket.emit('quit');
     });
 
     if(message == "Tu as gagné." || message == "Tu as perdu."){
@@ -54,6 +54,9 @@ socket.on('game-redirect', () => {
 socket.on('wait-redirect', () => {
     window.location.href = "/Html/wait.html";
 });
+socket.on('index-redirect', () => {
+    window.location.href = "index.html";
+});
 
 socket.on('preparation', color => preparation(color));
 socket.on('display', (table, color, turn) => display(table, color, turn));
@@ -69,6 +72,15 @@ socket.on('new-spectator', (grid,time) => {
 
     document.getElementById('game-board').appendChild(table);
     createLake();
+
+    let quit = document.createElement("button");
+    quit.id = "leave";
+    quit.innerHTML = "Quitter";
+    quit.addEventListener("click", () => {
+        socket.emit('quit');
+    })
+
+    document.getElementById("pions").appendChild(quit);
 
     time = (+new Date) - time;
     let allPieces = [];
@@ -95,12 +107,24 @@ socket.on('new-spectator', (grid,time) => {
         let clock = document.createElement("div");
         
         clock.id = "chrono";
+        
         pion.appendChild(clock);
 
         stopwatch = chrono(time);
         document.getElementById("reset").remove();
         document.getElementById("random").remove();
         document.getElementById("start").remove();
+        
+        let info = document.createElement("div");
+        let turn = document.createElement("p");
+
+        
+
+        info.id = "info";
+        turn.id = "turn";
+
+        info.appendChild(turn);
+        pion.insertBefore(info, quit);
     }
 
     display(grid, 'none', false);
@@ -124,20 +148,14 @@ socket.on('start', () => {
     }
 
     document.getElementById("timer").style.display = "none";
-    
-    /*let info = document.createElement("div");
-    let turn = document.createElement("p");*/
+
     let quit = document.getElementById("leave");
     let clock = document.createElement("div");
     let pion = document.getElementById("pions");
 
-    /*info.id = "info";
-    turn.id = "turn";*/
     clock.id = "chrono";
 
     pion.insertBefore(clock, quit);
-    /*info.appendChild(turn);
-    pion.insertBefore(info, clock);*/
     stopwatch = chrono(0);    
 });
 
