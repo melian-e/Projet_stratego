@@ -121,19 +121,19 @@ socket.on('start', () => {
 
     document.getElementById("timer").style.display = "none";
     
-    let info = document.createElement("div");
-    let turn = document.createElement("p");
+    /*let info = document.createElement("div");
+    let turn = document.createElement("p");*/
     let quit = document.getElementById("leave");
     let clock = document.createElement("div");
     let pion = document.getElementById("pions");
 
-    info.id = "info";
-    turn.id = "turn";
+    /*info.id = "info";
+    turn.id = "turn";*/
     clock.id = "chrono";
 
     pion.insertBefore(clock, quit);
-    info.appendChild(turn);
-    pion.insertBefore(info, quit);
+    /*info.appendChild(turn);
+    pion.insertBefore(info, clock);*/
     stopwatch = chrono(0);    
 });
 

@@ -74,6 +74,7 @@ function stock(color){
     let quit = document.createElement("button");
     quit.id = "leave";
     quit.innerHTML = "Quitter";
+    quit.style.textAlign = "center";
     quit.addEventListener("click", () => {
         window.location.href = "index.html";
     })
