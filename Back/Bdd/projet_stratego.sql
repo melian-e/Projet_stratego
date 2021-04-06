@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mar. 06 avr. 2021 à 21:43
+-- Généré le :  mar. 06 avr. 2021 à 21:54
 -- Version du serveur :  5.7.17
 -- Version de PHP :  5.6.30
 
@@ -68,6 +68,30 @@ INSERT INTO `games` (`id_game`, `id_winner`, `id_loser`, `score_winner`, `score_
 (43, 10, 9, 35, -10, '2021-04-06', '20:28', 'axel', 'alexis'),
 (44, 11, 10, 35, -10, '2021-04-06', '13:34', 'IéIé', 'axel');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(12) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(12) NOT NULL,
+  `mmr` int(11) NOT NULL COMMENT 'valeur permettant le classement du joueur'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `mmr`) VALUES
+(9, 'alexis', 'alexis@gmail.com', 'azerty', 530),
+(10, 'axel', 'axel@hotmail.com', 'qsdfgh', 990),
+(11, 'IéIé', 'Lemalian@gmail.com', 'mpol', 610),
+(12, 'mika', 'mika@jaimejunia.com', 'kiuj', 460);
+
 --
 -- Index pour les tables déchargées
 --
@@ -79,6 +103,14 @@ ALTER TABLE `games`
   ADD PRIMARY KEY (`id_game`);
 
 --
+-- Index pour la table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
@@ -86,7 +118,12 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT pour la table `games`
 --
 ALTER TABLE `games`
-  MODIFY `id_game` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;COMMIT;
+  MODIFY `id_game` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+--
+-- AUTO_INCREMENT pour la table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
