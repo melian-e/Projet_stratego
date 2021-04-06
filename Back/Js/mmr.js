@@ -83,7 +83,8 @@ function end(srvSockets, lobby){
                         bdd.con.query("UPDATE users SET mmr=? WHERE username=?",[tempj2+mmrj2,j2], (err, result) => {
                             if (err) throw err;
                             let date = new Date(lobby.startTime).toLocaleString().split('/');
-                            let year = date[2].split(' ')[0];
+                            let tabYear = date[2].split(' ');
+                            let year = tabYear[0];
                             let month = date[1];
                             let today = date[0];
                             let nameWinner = (winner == lobby.player1.id) ? j1 : j2;
