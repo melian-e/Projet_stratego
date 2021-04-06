@@ -41,6 +41,10 @@ socket.on('end', (message, score, revealedRule,scoutRule,bombRule) =>{
     }
 
     
+    $('#endGame').modal({
+        keyboard: false,
+        backdrop: false
+    });
     $("#endGame").modal('show');
 });
 

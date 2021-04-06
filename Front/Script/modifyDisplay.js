@@ -13,7 +13,7 @@ function reset(){
 }
 
 /**
- * Quand le joueur a placé tout ces pions sur la grille ou que le temps est écoulé
+ * Quand le joueur a placé tout ses pions sur la grille ou que le temps est écoulé
  * elle complète la grille et déclanche l'envoie au back. Le joueur ne peut plus appuyer sur les bouttons
  */
 function start(){
