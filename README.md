@@ -2,10 +2,8 @@
 
 Stratego est un projet étudiant de 2ème année de prépa informatique (2020-2021) qui vise à recréer le jeu de plateau Stratego. Il propose des parties en multijoueur ranked ou casual, avec la possibilité de regarder les matchs en direct en plus d'un sytème de compte pour sauvegarder vos meilleurs scores et les exhiber à tous dans notre tableau des records !  
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/58146047/113582146-50991500-9628-11eb-9ab8-24711e0b4269.png" />
-  <img src="https://cdn.discordapp.com/attachments/759101091198664754/829062653652893736/unknown.png" />
-</p>
+![image](https://user-images.githubusercontent.com/60597338/113762934-65a1a100-9719-11eb-82ce-6ee45386af22.png)
+
 ## Installation
 
 Cloner le repositoire et faite en sorte d'avoir node.js d'installer.
