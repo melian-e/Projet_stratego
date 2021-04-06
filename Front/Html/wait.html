@@ -140,16 +140,12 @@
 
 
 </body>
-
+<script>
+    let socket = io();
+</script>
 <script type="text/javascript" src="/Script/moduleWait.js"></script>
 <script type="text/javascript" src="/Script/getFormConnection.js"></script>
 <script type="text/javascript" src="/Script/affichageHistorique.js"></script>
 <script type="text/javascript" src="/Script/affichageProfile.js"></script>
 <script type="text/javascript" src="/Script/affichageClassement.js"></script>
-<script>
-    let socket = io();
-    socket.on('game-redirect', () => {
-        window.location.href = "game.html";
-    });
-</script>
 </html>

@@ -1,5 +1,4 @@
 let getPseudo = (function(){
-    let socket = io();
     let boutonCon = document.getElementById('boutonCon');
     let divPseudo = document.getElementById('divPseudo');
     socket.emit('user-name');
@@ -10,6 +9,10 @@ let getPseudo = (function(){
             divPseudo.innerHTML = "Bienvenue " + username + " !";
         }
     });
+});
+
+socket.on('game-redirect', () => {
+    window.location.href = "game.html";
 });
 
 getPseudo();

@@ -9,8 +9,9 @@ class Room {
     join(playerId){
         this.people.push(playerId);
     }
-    leave(playerId){
-        this.people.splice(this.people.indexOf(playerId), 1);
+    leave(socket){
+        socket.handshake.session.inGame = false;
+        this.people.splice(this.people.indexOf(socket.handshake.session.id), 1);
     }
     isPresent(playerId){
         return this.people.some(user => user == playerId);
@@ -39,6 +40,8 @@ class Room {
         srvSockets.forEach(user => {
             let playerId = user.handshake.session.id;
             if(this.people.some(elem => playerId == elem)){
+                user.handshake.session.inGame = false;
+                
                 if(winner != undefined){
                     let message = (playerId == winner) ? 'Tu as gagné.' : (playerId == loser) ? 'Tu as perdu.':
                     winnerName + ' as gagné.';

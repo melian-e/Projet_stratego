@@ -84,7 +84,6 @@ io.on('connection',(socket) =>{
 
 		let srvSockets = io.sockets.sockets;
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
-		
 
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
 			
@@ -93,6 +92,9 @@ io.on('connection',(socket) =>{
 			let x = research.roomById(socket.handshake.session.id, allRooms);
 
 			allRooms[x].simpleEvent(srvSockets, 'game-redirect');
+		}
+		else{
+			io.to(socket.id).emit('wait-redirect');
 		}
 	});
 
@@ -163,7 +165,7 @@ io.on('connection',(socket) =>{
 
 		if(lobby.isFinished()){
 			allRooms[x].end(io.sockets.sockets, lobby);
-			socket.handshake.session.inGame = false;
+			functions.suppress(lobby, allCurrentsGames, allRooms);
 		}
 	});
 
