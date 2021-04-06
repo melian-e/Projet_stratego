@@ -43,7 +43,7 @@ io.use(sharedsession(session, {
 app.use(express.static(__dirname + '/Front/')); // on start toutes les opérations avec des chemins d'accés à partir de /project/ .
 
 app.get('/', (req, res) => {
-	console.log(req.session);
+	/////////////console.log(req.session);
 	if (req.session.inGame == false || req.session.inGame == undefined) {
 		res.sendFile(__dirname + '/Front/Html/index.html');
 	}
@@ -82,8 +82,10 @@ io.on('connection',(socket) =>{
 	// Lorsque on ets en attente d'adversaire
 	socket.on('search-game', (revealedRule,scoutRule,bombRule) => {		// Joueurs en recherche
 
+		console.log(revealedRule,scoutRule,bombRule);
 		let srvSockets = io.sockets.sockets;
 		let table = functions.waiting(srvSockets,socket,revealedRule,scoutRule,bombRule);
+		socket.handshake.session.redirect = true;
 
 		if(table.length == 2 && table[0] != table[1]) {				// 2 joueurs veulent jouer
 			
@@ -176,8 +178,13 @@ io.on('connection',(socket) =>{
 	});
 	// Quand on quitte la page
 	socket.on('disconnect', ()=>{
-		(socket.handshake.session.redirect == true) ? socket.handshake.session.redirect = false :
-		functions.quit(allCurrentsGames, allRooms, socket);
+		/*(socket.handshake.session.redirect == true) ? socket.handshake.session.redirect = false :
+		functions.quit(allCurrentsGames, allRooms, socket);*/
+		if(socket.handshake.session.redirect == true) socket.handshake.session.redirect = false;
+		else {
+			console.log("disconect function");
+			functions.quit(allCurrentsGames, allRooms, socket);
+		}
 	});
 });
 
@@ -194,7 +201,7 @@ con.connect(function(err) {
 		con.query(sqls1,[user+""] ,(err, result) => {
 			if (err) throw err;
 			if (result && result.length){
-				console.log(result);
+				////////////////console.log(result);
 				console.log("pseudo déjà utilisé");
 				res.end('Pseudo déjà utilisé !');
 			}
@@ -202,7 +209,7 @@ con.connect(function(err) {
 				con.query(sqls2,[mailAdress+""], (err, result) => {
 					if (err) throw err;
 					if (result && result.length){
-						console.log(result);
+						////////////////console.log(result);
 						console.log("email déjà utilisé");
 						res.end('Email déjà utilisé !');
 					}
@@ -246,18 +253,18 @@ con.connect(function(err) {
 			if (err) throw err;
 			if (result && result.length){
 				let idUser = result[0].id;
-				console.log(idUser);
+				//////////////console.log(idUser);
 				con.query(sqls21, [idUser+""],(err, result) => {
 					if (err) throw err;
 					if (result && result.length){
-						console.log(result);
+						/////////////console.log(result);
 						res.send(result);
 					}
 					else{
 						con.query(sqls22, [idUser+""],(err, result) => {
 							if (err) throw err;
 							if (result && result.length){
-								console.log(result);
+								/////////////console.log(result);
 								res.send(result);
 							}
 							else{
@@ -281,7 +288,7 @@ con.connect(function(err) {
 		con.query(sqls1, (err, result) => {
 			if (err) throw err;
 			if (result && result.length){
-				console.log(result);
+				/////////////console.log(result);
 				res.send(result);
 				res.end();
 			}

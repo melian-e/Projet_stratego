@@ -7,7 +7,7 @@ let classement = (function(){
                 traitementReponse(reponse);
             },
             error: (err) =>{
-                console.log(err);
+                //////////////console.log(err);
                 console.log("l'appel ajax n'a pas fonctionné");
             },
         });

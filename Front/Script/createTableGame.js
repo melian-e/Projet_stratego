@@ -58,7 +58,7 @@ function buton(){
     let startBtn = document.getElementById("start");
 
     resetBtn.addEventListener("click", reset);
-    randomBtn.addEventListener("click",randGrid);
+    randomBtn.addEventListener("click", randGrid);
     startBtn.addEventListener("click", start);
 }
 
@@ -71,7 +71,16 @@ function stock(color){
         stock.appendChild(createStock(4*x-2,color));
     }
 
+    let quit = document.createElement("button");
+    quit.id = "leave";
+    quit.innerHTML = "Quitter";
+    quit.addEventListener("click", () => {
+        window.location.href = "index.html";
+    })
+
     document.getElementById("pions").appendChild(stock);
+    document.getElementById("pions").appendChild(quit);
+
     
 }
 

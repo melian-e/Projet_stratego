@@ -33,12 +33,13 @@ function start(){
     let info = document.createElement("div");
     let turn = document.createElement("p");
     let pion = document.getElementById("pions");
+    let quit = document.getElementById("leave");
 
     info.id = "info";
     turn.id = "turn";
 
     info.appendChild(turn);
-    pion.appendChild(info);
+    pion.insertBefore(info, quit);
 
     randGrid();
     ready();

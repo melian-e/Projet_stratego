@@ -40,7 +40,7 @@ function currentGames(srvSockets, allCurrentsGames){
     
 
     let table = [];
-    console.log("Quelqu'un s'est connecté, il y a maintenant",srvSockets.size,"personnes connectés");
+    console.log("Une nouvelle personne recherche une partie.");
 
     srvSockets.forEach(user => {		// Recherche des personnes en recherche d'une partie
 

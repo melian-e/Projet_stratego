@@ -1,7 +1,7 @@
 socket.emit('preparation');
 let stopwatch;
 
-socket.on('end', (message, score, revealedRule, scoutRule,bombRule) =>{
+socket.on('end', (message, score, revealedRule,scoutRule,bombRule) =>{
     let td = document.getElementsByClassName("case");
     
     removeClicks();
@@ -25,18 +25,30 @@ socket.on('end', (message, score, revealedRule, scoutRule,bombRule) =>{
     result.innerHTML += (message == "Tu as gagné.") ? score[1][0] : "tu as perdu ";
     result.innerHTML += Math.abs(score[1][1]) + ".";
     
+    let quit = document.getElementById("quit");
+    quit.innerHTML = "Quitter";
+    quit.addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
 
     if(message == "Tu as gagné." || message == "Tu as perdu."){
-        let button = document.getElementById("rejouer");
-        button.innerHTML = "Rejouer !";
-        button.addEventListener("click", (revealedRule, scoutRule,bombRule) => {
+        let replay = document.getElementById("replay");
+        replay.style.display = "block";
+        replay.innerHTML = "Rejouer !";
+        replay.addEventListener("click", () => {
             socket.emit('search-game', revealedRule,scoutRule,bombRule);
-            window.location.href = "wait.html";
         });
     }
+
     
     $("#endGame").modal('show');
-    console.log(message, score);
+});
+
+socket.on('game-redirect', () => {
+    window.location.href = "game.html";
+});
+socket.on('wait-redirect', () => {
+    window.location.href = "/Html/wait.html";
 });
 
 socket.on('preparation', color => preparation(color));
@@ -108,16 +120,21 @@ socket.on('start', () => {
     }
 
     document.getElementById("timer").style.display = "none";
-    let turn = document.createElement("div");
+    
+    let info = document.createElement("div");
+    let turn = document.createElement("p");
+    let quit = document.getElementById("leave");
     let clock = document.createElement("div");
     let pion = document.getElementById("pions");
 
+    info.id = "info";
     turn.id = "turn";
     clock.id = "chrono";
 
-    pion.appendChild(clock);
-    pion.appendChild(turn);
-    stopwatch = chrono(0);
+    pion.insertBefore(clock, quit);
+    info.appendChild(turn);
+    pion.insertBefore(info, quit);
+    stopwatch = chrono(0);    
 });
 
 function getCase(pion){
