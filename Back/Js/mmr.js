@@ -69,8 +69,18 @@ function end(srvSockets, lobby){
                     let hours = Math.floor( Math.floor(time) / 3600);
                     
                     let playTime = "";
-                    if(hours > 0)  playTime += hours + ":";
-                    playTime += min + ":" + (sec > 9)? sec : "0"+sec;
+                    if(hours > 0) {
+                        playTime += (hours > 9) ? ""+hours : "0"+hours;
+                        playTime += ":";
+                        console.log(playTime);
+                    }
+                    playTime += (min > 9) ? (""+min) : ("0"+min);
+                    
+                    console.log(playTime);
+                    
+                    playTime += ":" + ((sec > 9)? (""+sec) : ("0"+sec));
+
+                    console.log(playTime);
                 
                     bdd.con.query("UPDATE users SET mmr=? WHERE username=?",[tempj1+mmrj1,j1], (err, result) =>{
                         if (err) throw err;
